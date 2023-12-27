@@ -49,12 +49,14 @@ public class UserController {
     public ResponseEntity<LoginResponse> login(@PathVariable String email, @PathVariable String password) {
         User user =  userService.login(email, password);
         String jwtToken = "";
+        LoginResponse loginResponse = new LoginResponse();
         if(user != null){
             jwtToken = jwtService.generateToken(new org.springframework.security.core.userdetails.User(user.getEmail(),
                     user.getPassword(),
                     mapRolesToAuthorities(user.getUserRole())));
+            loginResponse.setUsername(user.getUsername());
+            loginResponse.setRoleName(user.getUserRole().getRoleName());
         }
-        LoginResponse loginResponse = new LoginResponse();
         loginResponse.setToken(jwtToken);
         loginResponse.setExpiresIn(jwtService.getExpirationTime());
         return ResponseEntity.ok(loginResponse);
