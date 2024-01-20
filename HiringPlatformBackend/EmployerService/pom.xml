@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.hiringPlatform</groupId>
-	<artifactId>authentication</artifactId>
+	<artifactId>employer</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>authentication</name>
-	<description>Authentication Service</description>
+	<name>employer</name>
+	<description>Employer Service</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>

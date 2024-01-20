@@ -1,4 +1,4 @@
-package com.hiringPlatform.authentication.config;
+package com.hiringPlatform.employer.config;
 
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
@@ -41,10 +41,7 @@ public class SecurityConfig   {
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorize) ->
-                        authorize.requestMatchers("/login/{email}/{password}").permitAll()
-                                .requestMatchers("/signUp").permitAll()
-                                .requestMatchers("/logoutUser").permitAll()
-                                .requestMatchers("/seeUsers").hasAnyAuthority("ROLE_ADMIN")
+                        authorize.requestMatchers("/employer/seeUsers").hasAnyAuthority("ROLE_ADMIN")
                 )
                 .exceptionHandling().authenticationEntryPoint(accessDeniedHandler())
                 .and()

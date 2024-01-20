@@ -1,7 +1,7 @@
-package com.hiringPlatform.authentication.service;
+package com.hiringPlatform.employer.service;
 
-import com.hiringPlatform.authentication.model.User;
-import com.hiringPlatform.authentication.repository.UserRepository;
+import com.hiringPlatform.employer.model.User;
+import com.hiringPlatform.employer.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

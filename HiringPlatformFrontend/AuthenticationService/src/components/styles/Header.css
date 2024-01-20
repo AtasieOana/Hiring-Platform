@@ -1,0 +1,66 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #698576;
+    color: #fff;
+    overflow: hidden;
+}
+
+.company-name {
+    font-family: 'Georgia', serif;
+    animation: slideAnimation 10s linear infinite;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    margin-left: 15px;
+    font-weight: bolder;
+    font-size: large;
+}
+
+@keyframes slideAnimation {
+    0%, 100% {
+        transform: translateX(0%);
+    }
+    5% {
+        transform: translateX(0%);
+    }
+    15% {
+        transform: translateX(40%);
+    }
+    25% {
+        transform: translateX(0%);
+    }
+    35%, 95% {
+        transform: translateX(0%);
+    }
+    100% {
+        transform: translateX(0%);
+    }
+}
+
+.navigation {
+    display: flex;
+    align-items: center;
+}
+
+.nav-item {
+    margin-left: 15px;
+    padding-right: 15px;
+    display: flex;
+    align-items: center;
+    color: #fff;
+    text-decoration: none;
+    font-family: 'Georgia', serif;
+}
+
+.nav-item:not(:last-child) {
+    border-right: 2px solid #fff;
+}
+
+.nav-item:hover {
+    color: #b5eed3;
+}
+
+.nav-icon {
+    margin-right: 3px;
+}

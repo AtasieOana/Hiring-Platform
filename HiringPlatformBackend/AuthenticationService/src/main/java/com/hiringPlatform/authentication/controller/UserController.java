@@ -3,6 +3,7 @@ package com.hiringPlatform.authentication.controller;
 import com.hiringPlatform.authentication.model.LoginResponse;
 import com.hiringPlatform.authentication.model.User;
 import com.hiringPlatform.authentication.security.JwtService;
+import com.hiringPlatform.authentication.service.RedisService;
 import com.hiringPlatform.authentication.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,17 +16,17 @@ import static com.hiringPlatform.authentication.security.JpaUserDetailsService.m
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
-@RequestMapping(value = "/user")
 public class UserController {
 
     private final UserService userService;
     private final JwtService jwtService;
-
+    private final RedisService redisService;
 
     @Autowired
-    public UserController(UserService userService, JwtService jwtService) {
+    public UserController(UserService userService, JwtService jwtService, RedisService redisService) {
         this.userService = userService;
         this.jwtService = jwtService;
+        this.redisService = redisService;
     }
 
     /**
@@ -56,10 +57,21 @@ public class UserController {
                     mapRolesToAuthorities(user.getUserRole())));
             loginResponse.setUsername(user.getUsername());
             loginResponse.setRoleName(user.getUserRole().getRoleName());
+            redisService.saveData("userToken", jwtToken);
         }
         loginResponse.setToken(jwtToken);
         loginResponse.setExpiresIn(jwtService.getExpirationTime());
         return ResponseEntity.ok(loginResponse);
+    }
+
+    /**
+     * Method used for logout from an account
+     * @return a message
+     */
+    @GetMapping("/logoutUser")
+    public ResponseEntity<String> logout() {
+        redisService.removeData("userToken");
+        return ResponseEntity.ok("User logout");
     }
 
     /**
