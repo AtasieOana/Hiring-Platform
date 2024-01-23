@@ -6,5 +6,8 @@
   "home_candidates": "Candidates",
   "home_desc_emp": "you can find the most outstanding talent to elevate your success.",
   "home_emps": "Employers",
-  "home_go_to_register": "Start by creating an account"
+  "home_go_to_register": "Start by creating an account",
+  "home": "Home",
+  "login": "Login",
+  "register": "Register"
 }

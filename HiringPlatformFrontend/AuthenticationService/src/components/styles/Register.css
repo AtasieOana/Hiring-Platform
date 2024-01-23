@@ -1,0 +1,32 @@
+.register-container {
+    background-color: rgba(224, 156, 115, 0.2);
+    padding: 10px 20px;
+    width: 50vw;
+    margin: 10vh auto;
+}
+
+.register-title{
+    text-align: center;
+    color: #415d4d;
+    font-style: italic;
+    text-decoration: underline;
+    font-weight: bolder;
+    font-size: 25px;
+    padding-bottom: 10px;
+    padding-top: 15px;
+}
+
+.register-subtitle{
+    text-align: center;
+    color: #415d4d;
+    font-style: italic;
+    font-weight: bold;
+    font-size: 20px;
+    padding-bottom: 15px;
+}
+
+.register-forms{
+    margin-left:10%;
+    margin-right:10%;
+}
+

@@ -5,7 +5,7 @@ import com.hiringPlatform.authentication.model.User;
 import com.hiringPlatform.authentication.security.JwtService;
 import com.hiringPlatform.authentication.service.RedisService;
 import com.hiringPlatform.authentication.service.UserService;
-import jakarta.validation.Valid;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

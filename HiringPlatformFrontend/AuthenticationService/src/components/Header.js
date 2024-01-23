@@ -22,16 +22,16 @@ const Header = () => {
 
             <div className="navigation">
                 <Link className="nav-item" to="" isActive={false} onClick={changeLanguage}>
-                    <Icon size={14} icon="translate" color="white" className="nav-icon"/>  En/Ro
+                    <Icon size={13} icon="translate" color="white" className="nav-icon"/>  En/Ro
                 </Link>
                 <Link to="" className="nav-item">
-                    <Icon size={14} icon="home" color="white" className="nav-icon"/> Home
+                    <Icon size={13} icon="home" color="white" className="nav-icon"/> {t('home')}
                 </Link>
                 <Link to="login" className="nav-item">
-                    <Icon size={14} icon="user" color="white" className="nav-icon"/> Login
+                    <Icon size={13} icon="user" color="white" className="nav-icon"/> {t('login')}
                 </Link>
                 <Link to="register" className="nav-item">
-                    <Icon size={14} icon="new-person" color="white" className="nav-icon"/> Register
+                    <Icon size={13} icon="new-person" color="white" className="nav-icon"/> {t('register')}
                 </Link>
             </div>
         </div>

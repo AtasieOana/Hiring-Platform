@@ -12,7 +12,7 @@ const Home = () => {
     return (
         <div className="container">
             <div className="left-side">
-                <img src={Image} alt="Home" width="400" height="400" />
+                <img src={Image} alt="Home" />
             </div>
             <div className="right-side">
                 <div className="title">{t('home_title')}</div>

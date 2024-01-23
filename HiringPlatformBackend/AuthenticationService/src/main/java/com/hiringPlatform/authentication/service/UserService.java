@@ -16,13 +16,16 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final AuthenticationTokenService authenticationTokenService;
+
 
     @Autowired
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, AuthenticationTokenService authenticationTokenService) {
         this.userRepository = userRepository;
+        this.authenticationTokenService = authenticationTokenService;
     }
 
     /**
@@ -33,7 +36,7 @@ public class UserService {
     public User signUp(User user) {
         Optional<User> optionalUser = userRepository.findByEmail(user.getEmail());
         if(optionalUser.isPresent()){
-            //this.authenticationTokenService.sendAuthenticationEmail(optionalUser.get(), true);
+            this.authenticationTokenService.sendAuthenticationEmail(optionalUser.get(), true);
             return optionalUser.get();
         }
         else {
@@ -43,7 +46,7 @@ public class UserService {
             user.setRegistrationDate(new Date());
             user.setAccountEnabled(0);
             User userDB = userRepository.save(user);
-            //this.authenticationTokenService.sendAuthenticationEmail(userDB, false);
+            this.authenticationTokenService.sendAuthenticationEmail(userDB, false);
             return userDB;
         }
     }
