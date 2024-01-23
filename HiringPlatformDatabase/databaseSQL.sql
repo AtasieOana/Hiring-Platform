@@ -3,6 +3,7 @@
 -- Stergerea tabelelor
 DROP TABLE roluri;
 DROP TABLE utilizatori;
+DROP TABLE token_autentificare;
 
 -- Crearea tabelelor
 CREATE TABLE roluri (
@@ -23,6 +24,14 @@ CREATE TABLE utilizatori (
     CONSTRAINT utilizator_email_unic UNIQUE (email)
 );
 
+CREATE TABLE token_autentificare (
+    id_token VARCHAR2(36) CONSTRAINT pk_token PRIMARY KEY,
+    data_expirare DATE NOT NULL,
+    token VARCHAR2(100) NOT NULL,
+    id_utilizator VARCHAR2(36) CONSTRAINT fk_utilizator_token REFERENCES utilizatori(id_utilizator)
+);
+
 -- Verificarea datelor
 SELECT * FROM roluri;
 SELECT * FROM utilizatori;
+SELECT * FROM token_autentificare;
