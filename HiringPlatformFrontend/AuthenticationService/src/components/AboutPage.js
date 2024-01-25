@@ -1,18 +1,17 @@
-// Header.js
 import React from 'react';
-import './styles/Home.css';
+import './styles/About.css';
 import Image from "../resources/HomeImg.png";
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-const Home = () => {
+const AboutPage = () => {
 
     const { t } = useTranslation()
 
     return (
         <div className="container">
             <div className="left-side">
-                <img src={Image} alt="Home" />
+                <img src={Image} alt="CV" />
             </div>
             <div className="right-side">
                 <div className="title">{t('home_title')}</div>
@@ -31,4 +30,4 @@ const Home = () => {
     );
 };
 
-export default Home;
+export default AboutPage;

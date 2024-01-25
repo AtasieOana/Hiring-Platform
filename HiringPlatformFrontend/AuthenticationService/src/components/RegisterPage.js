@@ -1,15 +1,29 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FormGroup, InputGroup, Intent, RadioGroup, Button, Radio } from '@blueprintjs/core';
+import {FormGroup, InputGroup, Intent, RadioGroup, Button, Radio} from '@blueprintjs/core';
 import "./styles/Register.css"
+import AuthenticationService from "../services/authentication.service";
+import {RegisterRequest} from "../types/auth.types";
+import {CANDIDATE_ACCOUNT, EMPLOYER_ACCOUNT} from "../util/constants";
 
-const Register = () => {
+const RegisterPage = () => {
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [userType, setUserType] = useState('candidate');
+    const [userType, setUserType] = useState(CANDIDATE_ACCOUNT);
     const [errors, setErrors] = useState({});
+
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfPassword, setShowConfPassword] = useState(false);
+
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    };
+
+    const toggleConfPasswordVisibility = () => {
+        setShowConfPassword(!showConfPassword);
+    };
 
     const handleRegister = () => {
         // Validation for fields
@@ -41,26 +55,34 @@ const Register = () => {
         if (!newErrors.password && password !== confirmPassword) {
             newErrors.confirmPassword = 'Password and Confirm Password must match.';
         }
-        if (!userType) {
-            newErrors.userType = 'User Type is required.';
-        }
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
             return;
         }
 
-        // Restul logicii pentru înregistrare...
-        // Aici puteți trimite datele către server sau realiza alte acțiuni necesare
-
+        // Call the API for register
+        registerUser();
         // Reset the errors if successful
         setErrors({});
     };
 
+    const registerUser = () => {
+        let registerRequest: RegisterRequest;
+        registerRequest.email = email;
+        registerRequest.password = password;
+        registerRequest.username = username;
+        registerRequest.accountType = userType;
+
+        AuthenticationService.register(registerRequest).then((response) => {
+            console.log(response)
+        })
+
+    }
+
     return (
         <div className="register-container">
-            <div className="register-title">Welcome to Joblistic!</div>
-            <div className="register-subtitle">Register</div>
-
+            <div className="register-title">Register to Joblistic!</div>
+            <div className="register-container-form">
             <form className="register-forms">
                 <FormGroup
                     label="Email address"
@@ -86,6 +108,7 @@ const Register = () => {
                     <InputGroup
                         type="text"
                         value={username}
+                        placeholder="Enter 3 characters or more"
                         autoComplete="new-user"
                         onChange={(e:any) => setUsername(e.target.value)}
                     />
@@ -98,13 +121,23 @@ const Register = () => {
                     labelInfo="(required)"
                 >
                     <InputGroup
-                        type="password"
+                        type={showPassword ? 'text' : 'password'}
                         value={password}
                         autoComplete="new-password"
+                        placeholder="Enter 5 characters or more"
                         onChange={(e:any) => setPassword(e.target.value)}
+                        rightElement={
+                            <Button
+                                className="password-button"
+                                icon={showPassword ? 'eye-off' : 'eye-open'}
+                                minimal={true}
+                                onClick={togglePasswordVisibility}
+                                small={true}
+                                fill
+                            />
+                        }
                     />
                 </FormGroup>
-
                 <FormGroup
                     label="Confirm Password"
                     intent={errors.confirmPassword ? Intent.DANGER : Intent.NONE}
@@ -113,24 +146,47 @@ const Register = () => {
                     labelInfo="(required)"
                 >
                     <InputGroup
-                        type="password"
+                        type={showConfPassword ? 'text' : 'password'}
                         value={confirmPassword}
+                        placeholder="Enter the password again"
                         autoComplete="new-password"
                         onChange={(e:any) => setConfirmPassword(e.target.value)}
+                        rightElement={
+                            <Button
+                                className="password-button"
+                                icon={showConfPassword ? 'eye-off' : 'eye-open'}
+                                minimal={true}
+                                onClick={toggleConfPasswordVisibility}
+                                small={true}
+                                fill
+                            />
+                        }
                     />
                 </FormGroup>
-                <RadioGroup label="Account type"
+                <RadioGroup label="Choose the account type you want:"
                             onChange={(e:any) => setUserType(e.target.value)}
                             selectedValue={userType}
-                            inline={true}>
-                    <Radio label="Candidate" value="candidate" />
-                    <Radio label="Employer" value="employer" />
+                            inline={true}
+                            className="register-radio-group"
+                >
+                    <Radio label="Candidate" value={CANDIDATE_ACCOUNT} />
+                    <Radio label="Employer" value={EMPLOYER_ACCOUNT} />
                 </RadioGroup>
             </form>
-            <Button onClick={handleRegister}>Register</Button>
-            <p>Already have an account? <Link to="/login">Login</Link></p>
+            <Button onClick={handleRegister}
+                    small={true}
+                    className="register-button"
+            >
+                Continue
+            </Button>
+            </div>
+            <div className="register-go-to-login">
+                <Link to="login">
+                    Already have an account? Login &#8594;
+                </Link>
+            </div>
         </div>
     );
 };
 
-export default Register;
+export default RegisterPage;

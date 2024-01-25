@@ -7,7 +7,12 @@
   "home_desc_emp": "you can find the most outstanding talent to elevate your success.",
   "home_emps": "Employers",
   "home_go_to_register": "Start by creating an account",
-  "home": "Home",
+  "about": "About",
   "login": "Login",
-  "register": "Register"
+  "register": "Register",
+  "email_address": "Email address",
+  "required": "(required)",
+  "username": "Username",
+  "password": "Password",
+  "confirm_password": "Confirm Password"
 }

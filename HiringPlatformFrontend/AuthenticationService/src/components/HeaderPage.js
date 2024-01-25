@@ -1,11 +1,11 @@
-// Header.js
+// HeaderPage.js
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './styles/Header.css';
 import {Icon} from "@blueprintjs/core";
 import { useTranslation } from 'react-i18next';
 
-const Header = () => {
+const HeaderPage = () => {
 
     const { t, i18n } = useTranslation();
 
@@ -25,7 +25,7 @@ const Header = () => {
                     <Icon size={13} icon="translate" color="white" className="nav-icon"/>  En/Ro
                 </Link>
                 <Link to="" className="nav-item">
-                    <Icon size={13} icon="home" color="white" className="nav-icon"/> {t('home')}
+                    <Icon size={13} icon="home" color="white" className="nav-icon"/> {t('about')}
                 </Link>
                 <Link to="login" className="nav-item">
                     <Icon size={13} icon="user" color="white" className="nav-icon"/> {t('login')}
@@ -38,4 +38,4 @@ const Header = () => {
     );
 };
 
-export default Header;
+export default HeaderPage;

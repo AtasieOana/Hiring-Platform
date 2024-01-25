@@ -51,6 +51,9 @@
     color: #fff;
     text-decoration: none;
     font-family: 'Georgia', serif;
+    background: none !important;
+    cursor: pointer !important;
+    outline: inherit !important;
 }
 
 .nav-item:not(:last-child) {

@@ -14,7 +14,6 @@ import java.util.List;
 
 import static com.hiringPlatform.authentication.security.JpaUserDetailsService.mapRolesToAuthorities;
 
-@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 public class UserController {
 
