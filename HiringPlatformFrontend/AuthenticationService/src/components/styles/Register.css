@@ -6,7 +6,7 @@
 .register-container-form{
     background-color: rgba(224, 156, 115, 0.2);
     padding: 20px 20px;
-    width: 50vw;
+    width: 45vw;
     margin: 20px auto 10px;
 }
 
@@ -21,8 +21,8 @@
 }
 
 .register-forms{
-    margin-left:10%;
-    margin-right:10%;
+    margin-left:8%;
+    margin-right:8%;
 }
 
 .register-form-group input{

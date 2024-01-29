@@ -3,8 +3,9 @@ import { Link } from 'react-router-dom';
 import {FormGroup, InputGroup, Intent, RadioGroup, Button, Radio} from '@blueprintjs/core';
 import "./styles/Register.css"
 import AuthenticationService from "../services/authentication.service";
-import {RegisterRequest} from "../types/auth.types";
+import {RegisterRequest, RegisterResponse} from "../types/auth.types";
 import {CANDIDATE_ACCOUNT, EMPLOYER_ACCOUNT} from "../util/constants";
+import {useTranslation} from "react-i18next";
 
 const RegisterPage = () => {
     const [email, setEmail] = useState('');
@@ -17,6 +18,8 @@ const RegisterPage = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfPassword, setShowConfPassword] = useState(false);
 
+    const { t } = useTranslation()
+
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
     };
@@ -25,35 +28,36 @@ const RegisterPage = () => {
         setShowConfPassword(!showConfPassword);
     };
 
+
     const handleRegister = () => {
         // Validation for fields
         const newErrors = {};
         if (!email) {
-            newErrors.email = 'Email address is required.';
+            newErrors.emailRequired = true;
         } else {
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) {
-                newErrors.email = 'Email address is invalid.';
+                newErrors.emailInvalid = true;
             }
         }
         if (!username) {
-            newErrors.username = 'Username is required.';
+            newErrors.usernameRequired = true;
         } else {
             const usernameRegex = /^[a-zA-Z0-9\- ]*$/;
             if(username.length < 3){
-                newErrors.username = 'Username must have at least 3 characters.';
+                newErrors.usernameLen = true;
             }
             else if (!usernameRegex.test(username)) {
-                newErrors.username = 'Username must contain only letters, digits, - and spaces.';
+                newErrors.usernameInvalid =  true;
             }
         }
         if (!password) {
-            newErrors.password = 'Password is required.';
+            newErrors.passwordRequired =  true;
         } else if (password.length < 5) {
-            newErrors.password = 'Password must have at least 5 characters.';
+            newErrors.passwordLen = true;
         }
         if (!newErrors.password && password !== confirmPassword) {
-            newErrors.confirmPassword = 'Password and Confirm Password must match.';
+            newErrors.confirmPassword = true;
         }
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
@@ -67,64 +71,89 @@ const RegisterPage = () => {
     };
 
     const registerUser = () => {
-        let registerRequest: RegisterRequest;
+        let registerRequest: RegisterRequest = {};
         registerRequest.email = email;
         registerRequest.password = password;
         registerRequest.username = username;
         registerRequest.accountType = userType;
-
-        AuthenticationService.register(registerRequest).then((response) => {
+        console.log(registerRequest);
+        AuthenticationService.register((registerRequest)).then((response: RegisterResponse) => {
             console.log(response)
         })
 
     }
 
+    let mailError = "";
+    if(errors.emailRequired){
+        mailError = t('email_address_req');
+    } else if(errors.emailInvalid){
+        mailError = t('email_address_in');
+    }
+    let usernameError = "";
+    if(errors.usernameRequired){
+        usernameError = t('username_req');
+    } else if(errors.usernameLen){
+        usernameError = t('username_len');
+    } else if(errors.usernameInvalid){
+        usernameError = t('username_content');
+    }
+    let passwordError = "";
+    if(errors.passwordRequired){
+        passwordError = t('password_req');
+    } else if(errors.passwordLen){
+        passwordError = t('password_len');
+    }
+    let confirmError = "";
+    if(errors.confirmPassword){
+        confirmError = t('password_confirm');
+    }
+
     return (
         <div className="register-container">
-            <div className="register-title">Register to Joblistic!</div>
+            <div className="register-title">{t('register_to')} Joblistic!</div>
             <div className="register-container-form">
             <form className="register-forms">
                 <FormGroup
-                    label="Email address"
-                    intent={errors.email ? Intent.DANGER : Intent.NONE}
-                    helperText={errors.email ? errors.email : ""}
+                    label={t('email_address')}
+                    intent={mailError ? Intent.DANGER : Intent.NONE}
+                    helperText={mailError ? mailError : ""}
                     className="register-form-group"
-                    labelInfo="(required)"
+                    labelInfo={t('required')}
                 >
                     <InputGroup
                         value={email}
-                        placeholder="example@gmail.com"
+                        placeholder="mail@gmail.com"
                         onChange={(e:any) => setEmail(e.target.value)}
                         asyncControl={true}
                     />
                 </FormGroup>
                 <FormGroup
-                    label="Username"
-                    intent={errors.username ? Intent.DANGER : Intent.NONE}
-                    helperText={errors.username ? errors.username : ""}
+                    label={t('username')}
+                    intent={usernameError ? Intent.DANGER : Intent.NONE}
+                    helperText={usernameError ? usernameError : ""}
                     className="register-form-group"
-                    labelInfo="(required)"
+                    labelInfo={t('required')}
                 >
                     <InputGroup
                         type="text"
                         value={username}
-                        placeholder="Enter 3 characters or more"
+                        placeholder={t('username_placeholder')}
                         autoComplete="new-user"
                         onChange={(e:any) => setUsername(e.target.value)}
                     />
                 </FormGroup>
                 <FormGroup
-                    label="Password"
-                    intent={errors.password ? Intent.DANGER : Intent.NONE}
-                    helperText={errors.password ? errors.password : ""}
+                    label={t('password')}
+                    intent={passwordError ? Intent.DANGER : Intent.NONE}
+                    helperText={passwordError ? passwordError : ""}
                     className="register-form-group"
-                    labelInfo="(required)"
+                    labelInfo={t('required')}
                 >
                     <InputGroup
                         type={showPassword ? 'text' : 'password'}
                         value={password}
                         autoComplete="new-password"
-                        placeholder="Enter 5 characters or more"
+                        placeholder={t('password_placeholder')}
                         onChange={(e:any) => setPassword(e.target.value)}
                         rightElement={
                             <Button
@@ -139,16 +168,16 @@ const RegisterPage = () => {
                     />
                 </FormGroup>
                 <FormGroup
-                    label="Confirm Password"
-                    intent={errors.confirmPassword ? Intent.DANGER : Intent.NONE}
-                    helperText={errors.confirmPassword  ? errors.confirmPassword : ""}
+                    label={t('confirm_password')}
+                    intent={confirmError ? Intent.DANGER : Intent.NONE}
+                    helperText={confirmError  ? confirmError : ""}
                     className="register-form-group"
-                    labelInfo="(required)"
+                    labelInfo={t('required')}
                 >
                     <InputGroup
                         type={showConfPassword ? 'text' : 'password'}
                         value={confirmPassword}
-                        placeholder="Enter the password again"
+                        placeholder={t('password_confirm_placeholder')}
                         autoComplete="new-password"
                         onChange={(e:any) => setConfirmPassword(e.target.value)}
                         rightElement={
@@ -163,26 +192,26 @@ const RegisterPage = () => {
                         }
                     />
                 </FormGroup>
-                <RadioGroup label="Choose the account type you want:"
+                <RadioGroup label={t('account_type')}
                             onChange={(e:any) => setUserType(e.target.value)}
                             selectedValue={userType}
                             inline={true}
                             className="register-radio-group"
                 >
-                    <Radio label="Candidate" value={CANDIDATE_ACCOUNT} />
-                    <Radio label="Employer" value={EMPLOYER_ACCOUNT} />
+                    <Radio label={t('candidate_label')} value={CANDIDATE_ACCOUNT} />
+                    <Radio label={t('employer_label')} value={EMPLOYER_ACCOUNT} />
                 </RadioGroup>
             </form>
             <Button onClick={handleRegister}
                     small={true}
                     className="register-button"
             >
-                Continue
+                {t('register_button')}
             </Button>
             </div>
             <div className="register-go-to-login">
                 <Link to="login">
-                    Already have an account? Login &#8594;
+                    {t('register_go_to_login')} &#8594;
                 </Link>
             </div>
         </div>

@@ -1,9 +1,9 @@
-import axios from "axios";
+import api from "../util/api";
 
 class AuthenticationService {
 
     async register(registerRequest){
-        return axios.post("/signUp", registerRequest)
+        return api.post("/signUp", registerRequest)
     }
 }
 

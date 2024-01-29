@@ -40,8 +40,8 @@ public class SecurityConfig   {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .httpBasic(AbstractHttpConfigurer::disable)
-                .cors(Customizer.withDefaults())
-                .csrf(AbstractHttpConfigurer::disable)
+                .cors().disable()
+                .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/login/{email}/{password}").permitAll()
                 .antMatchers("/signUp").permitAll()
@@ -78,16 +78,6 @@ public class SecurityConfig   {
     public AuthenticationEntryPoint accessDeniedHandler() {
         return (request, response, authException) -> {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, HttpStatus.UNAUTHORIZED.getReasonPhrase());
-        };
-    }
-
-    @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").allowedOrigins("*");
-            }
         };
     }
 }

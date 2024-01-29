@@ -4,3 +4,9 @@ export interface RegisterRequest {
     username: string;
     accountType: string;
 }
+
+export interface RegisterResponse{
+    email: string;
+    roleName: string;
+    username: string;
+}

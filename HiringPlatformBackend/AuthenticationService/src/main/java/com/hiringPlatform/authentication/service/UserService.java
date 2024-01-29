@@ -1,6 +1,10 @@
 package com.hiringPlatform.authentication.service;
 
+import com.hiringPlatform.authentication.model.Role;
 import com.hiringPlatform.authentication.model.User;
+import com.hiringPlatform.authentication.model.request.RegisterRequest;
+import com.hiringPlatform.authentication.model.response.RegisterResponse;
+import com.hiringPlatform.authentication.repository.RoleRepository;
 import com.hiringPlatform.authentication.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,36 +22,48 @@ public class UserService {
     private final UserRepository userRepository;
     private final AuthenticationTokenService authenticationTokenService;
 
+    private final RoleRepository roleRepository;
+
 
     @Autowired
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    public UserService(UserRepository userRepository, AuthenticationTokenService authenticationTokenService) {
+    public UserService(UserRepository userRepository, AuthenticationTokenService authenticationTokenService, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.authenticationTokenService = authenticationTokenService;
+        this.roleRepository = roleRepository;
     }
 
     /**
      * Method used for creating a new account
-     * @param user: the new user account
+     * @param userRequest: the new user account
      * @return the signed used
      */
-    public User signUp(User user) {
-        Optional<User> optionalUser = userRepository.findByEmail(user.getEmail());
+    public RegisterResponse signUp(RegisterRequest userRequest) {
+        Optional<User> optionalUser = userRepository.findByEmail(userRequest.getEmail());
+        RegisterResponse registerResponse = new RegisterResponse();
+        registerResponse.setEmail(userRequest.getEmail());
+        registerResponse.setUsername(userRequest.getUsername());
+        registerResponse.setRoleName(userRequest.getAccountType());
         if(optionalUser.isPresent()){
             this.authenticationTokenService.sendAuthenticationEmail(optionalUser.get(), true);
-            return optionalUser.get();
+            return registerResponse;
         }
         else {
+            User user = new User();
             BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-            String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
+            String encodedPassword = bCryptPasswordEncoder.encode(userRequest.getPassword());
+            user.setEmail(userRequest.getEmail());
+            user.setUsername(userRequest.getUsername());
             user.setPassword(encodedPassword);
             user.setRegistrationDate(new Date());
             user.setAccountEnabled(0);
+            Optional<Role> role = roleRepository.findByRoleName(userRequest.getAccountType());
+            role.ifPresent(user::setUserRole);
             User userDB = userRepository.save(user);
             this.authenticationTokenService.sendAuthenticationEmail(userDB, false);
-            return userDB;
+            return registerResponse;
         }
     }
 

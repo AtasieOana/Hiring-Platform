@@ -4,5 +4,5 @@ export const LANGUAGES = [
     { label: "Italian", code: "it" },
 ];
 
-export const CANDIDATE_ACCOUNT = "candidate"
-export const EMPLOYER_ACCOUNT = "employer"
+export const CANDIDATE_ACCOUNT = "ROLE_EMPLOYER"
+export const EMPLOYER_ACCOUNT = "ROLE_CANDIDATE"

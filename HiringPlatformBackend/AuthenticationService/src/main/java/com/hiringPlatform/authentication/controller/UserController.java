@@ -2,6 +2,8 @@ package com.hiringPlatform.authentication.controller;
 
 import com.hiringPlatform.authentication.model.LoginResponse;
 import com.hiringPlatform.authentication.model.User;
+import com.hiringPlatform.authentication.model.request.RegisterRequest;
+import com.hiringPlatform.authentication.model.response.RegisterResponse;
 import com.hiringPlatform.authentication.security.JwtService;
 import com.hiringPlatform.authentication.service.RedisService;
 import com.hiringPlatform.authentication.service.UserService;
@@ -15,6 +17,7 @@ import java.util.List;
 import static com.hiringPlatform.authentication.security.JpaUserDetailsService.mapRolesToAuthorities;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 public class UserController {
 
     private final UserService userService;
@@ -34,8 +37,8 @@ public class UserController {
      * @return the signed used
      */
     @PostMapping("/signUp")
-    public ResponseEntity<User> signUp(@Valid @RequestBody User user) {
-        User signedUser =  userService.signUp(user);
+    public ResponseEntity<RegisterResponse> signUp(@Valid @RequestBody RegisterRequest user) {
+        RegisterResponse signedUser =  userService.signUp(user);
         return ResponseEntity.ok(signedUser);
     }
 

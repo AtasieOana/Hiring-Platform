@@ -21,7 +21,7 @@ const HeaderPage = () => {
             <div className="company-name">JOBLISTIC</div>
 
             <div className="navigation">
-                <Link className="nav-item" to="" isActive={false} onClick={changeLanguage}>
+                <Link className="nav-item" to="#" isActive={false} onClick={changeLanguage}>
                     <Icon size={13} icon="translate" color="white" className="nav-icon"/>  En/Ro
                 </Link>
                 <Link to="" className="nav-item">
