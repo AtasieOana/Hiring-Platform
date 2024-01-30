@@ -5,8 +5,16 @@ export interface RegisterRequest {
     accountType: string;
 }
 
-export interface RegisterResponse{
+export interface RegisterResponse {
     email: string;
+    roleName: string;
+    username: string;
+}
+
+
+export interface LoginResponse {
+    token: string;
+    expiresIn: number;
     roleName: string;
     username: string;
 }

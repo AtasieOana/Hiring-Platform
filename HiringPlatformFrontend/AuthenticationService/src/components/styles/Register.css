@@ -1,16 +1,16 @@
-.register-container{
+.register-container {
     margin-top: 20px;
     margin-bottom: 10px;
 }
 
-.register-container-form{
+.register-container-form {
     background-color: rgba(224, 156, 115, 0.2);
     padding: 20px 20px;
     width: 45vw;
     margin: 20px auto 10px;
 }
 
-.register-title{
+.register-title {
     text-align: center;
     color: #415d4d;
     font-style: italic;
@@ -20,37 +20,37 @@
     padding-top: 15px;
 }
 
-.register-forms{
-    margin-left:8%;
-    margin-right:8%;
+.register-forms {
+    margin-left: 8%;
+    margin-right: 8%;
 }
 
-.register-form-group input{
+.register-form-group input {
     height: 25px;
 }
 
-.register-radio-group label:nth-of-type(1){
+.register-radio-group label:nth-of-type(1) {
     display: inline-block !important;
     padding-right: 15px;
 }
 
-.register-forms .bp4-form-helper-text{
+.register-forms .bp4-form-helper-text {
     text-align: center;
     font-weight: 550;
 }
 
-.password-button{
+.password-button {
     padding: 0 !important;
     margin: 0 10px 0 0 !important;
     background: none !important;
     color: inherit !important;
     border: none !important;
-    font: inherit !important ;
+    font: inherit !important;
     cursor: pointer !important;
     outline: inherit !important;
 }
 
-.register-button{
+.register-button {
     margin: 0 auto !important;
     display: block !important;
     background-color: #ffaf84 !important;
@@ -61,7 +61,7 @@
     letter-spacing: 1px;
 }
 
-.register-button:focus{
+.register-button:focus {
     outline: #e56c06 solid 1px !important;
 }
 
@@ -75,18 +75,29 @@
     text-decoration: underline 1px #2c56b9;
 }
 
-.register-go-to-login a{
+.register-go-to-login a {
     color: #2c56b9 !important;
 }
 
-.bp4-control input:focus ~ .bp4-control-indicator{
+.bp4-control input:focus ~ .bp4-control-indicator {
     outline: none !important;
     outline-offset: 0 !important;
 }
 
 @media (max-width: 1200px) {
-    .register-radio-group label:nth-of-type(1){
+    .register-radio-group label:nth-of-type(1) {
         display: block !important;
         padding-right: 0;
+    }
+}
+
+@media (max-width: 1000px) {
+    .register-container-form {
+        width: 75vw;
+    }
+
+    .register-forms {
+        margin-left: 3%;
+        margin-right: 3%;
     }
 }

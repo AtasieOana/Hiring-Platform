@@ -31,5 +31,18 @@
   "candidate_label": "Candidat",
   "employer_label": "Angajator",
   "register_button": "Continuați",
-  "register_go_to_login": "Aveți deja un cont? Autentificați-vă"
+  "register_go_to_login": "Aveți deja un cont? Autentificați-vă",
+  "autocompleted": "(completat automat)",
+  "verify_account": "Verificarea contului",
+  "verify_button": "Verificați token-ul",
+  "token_invalid": "Token-ul este invalid.",
+  "auth_error": "A apărut o eroare la încercarea de înregistrare.",
+  "token_error": "A apărut o eroare la încercarea de a verifica token-ul.",
+  "token_success": "Contul a fost verificat cu succes!",
+  "token_invalid_email": "E-mail invalid pentru verificarea contului. Încercați din nou!",
+  "login_invalid": "Adresa de mail sau parola este incorectă",
+  "login_to": "Intră în contul de pe",
+  "login_button": "Autentificare",
+  "login_go_to_register": "Fără cont? Creați unul",
+  "login_error": "A apărut o eroare la încercarea de autentificare."
 }

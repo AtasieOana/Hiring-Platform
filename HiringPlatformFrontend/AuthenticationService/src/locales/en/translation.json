@@ -31,5 +31,18 @@
   "candidate_label": "Candidate",
   "employer_label": "Employer",
   "register_button": "Continue",
-  "register_go_to_login": "Already have an account? Login"
+  "register_go_to_login": "Already have an account? Login",
+  "autocompleted": "(automatically completed)",
+  "verify_account": "Verify account",
+  "verify_button": "Check token",
+  "token_invalid": "The token is invalid.",
+  "auth_error": "An error occurred when trying to register.",
+  "token_error": "An error occurred when trying to check the token.",
+  "token_success": "The account was verified with success!",
+  "token_invalid_email": "Invalid email for checking the account. Try again!",
+  "login_invalid": "Email or password is incorrect.",
+  "login_to": "Register to",
+  "login_button": "Login",
+  "login_go_to_register": "No account? Create one",
+  "login_error": "An error occurred when trying to login."
 }
