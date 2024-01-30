@@ -45,6 +45,7 @@ public class SecurityConfig   {
                 .authorizeRequests()
                 .antMatchers("/login/{email}/{password}").permitAll()
                 .antMatchers("/signUp").permitAll()
+                .antMatchers("/checkToken/{email}/{token}").permitAll()
                 .antMatchers("/logoutUser").permitAll()
                 .antMatchers("/seeUsers").hasAnyAuthority("ROLE_ADMIN")
                 .anyRequest().authenticated()

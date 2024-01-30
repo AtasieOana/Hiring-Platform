@@ -1,4 +1,4 @@
-package com.hiringPlatform.authentication.model;
+package com.hiringPlatform.authentication.model.response;
 
 import lombok.*;
 

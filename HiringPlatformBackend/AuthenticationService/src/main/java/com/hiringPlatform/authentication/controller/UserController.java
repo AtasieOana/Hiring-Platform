@@ -1,6 +1,6 @@
 package com.hiringPlatform.authentication.controller;
 
-import com.hiringPlatform.authentication.model.LoginResponse;
+import com.hiringPlatform.authentication.model.response.LoginResponse;
 import com.hiringPlatform.authentication.model.User;
 import com.hiringPlatform.authentication.model.request.RegisterRequest;
 import com.hiringPlatform.authentication.model.response.RegisterResponse;
@@ -84,5 +84,17 @@ public class UserController {
     public ResponseEntity<List<User>> getAllUsers(){
         List<User> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
+    }
+
+    /**
+     * Method used for checking a token
+     * @param email the email of the user
+     * @param token the token for the user
+     * @return the validation of the token
+     */
+    @GetMapping("/checkToken/{email}/{token}")
+    public ResponseEntity<Boolean> copyTaskListToAnotherBoard(@PathVariable String email, @PathVariable String token) {
+        Boolean isTokenValid = userService.verifyToken(email, token);
+        return ResponseEntity.ok(isTokenValid);
     }
 }

@@ -1,0 +1,91 @@
+.login-container {
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.login-container-form {
+    background-color: rgba(224, 156, 115, 0.2);
+    padding: 20px 20px;
+    width: 45vw;
+    margin: 20px auto 10px;
+}
+
+.login-title {
+    text-align: center;
+    color: #415d4d;
+    font-style: italic;
+    text-decoration: underline;
+    font-weight: bolder;
+    font-size: 25px;
+    padding-top: 15px;
+}
+
+.login-forms {
+    margin-left: 8%;
+    margin-right: 8%;
+}
+
+.login-form-group input {
+    height: 25px;
+}
+
+.login-forms .bp4-form-helper-text {
+    text-align: center;
+    font-weight: 550;
+}
+
+.password-button {
+    padding: 0 !important;
+    margin: 0 10px 0 0 !important;
+    background: none !important;
+    color: inherit !important;
+    border: none !important;
+    font: inherit !important;
+    cursor: pointer !important;
+    outline: inherit !important;
+}
+
+.login-button {
+    margin: 0 auto !important;
+    display: block !important;
+    background-color: #ffaf84 !important;
+    width: 50%;
+    text-align: center !important;
+    color: black !important;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.login-button:focus {
+    outline: #e56c06 solid 1px !important;
+}
+
+.login-go-to-register {
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    text-decoration: underline 1px #2c56b9;
+}
+
+.login-go-to-register a {
+    color: #2c56b9 !important;
+}
+
+.bp4-control input:focus ~ .bp4-control-indicator {
+    outline: none !important;
+    outline-offset: 0 !important;
+}
+
+@media (max-width: 1000px) {
+    .login-container-form {
+        width: 75vw;
+    }
+
+    .login-forms {
+        margin-left: 3%;
+        margin-right: 3%;
+    }
+}

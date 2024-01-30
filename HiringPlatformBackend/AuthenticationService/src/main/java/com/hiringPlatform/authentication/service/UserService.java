@@ -94,6 +94,32 @@ public class UserService {
         }
     }
 
+    private User activateAccount(String email){
+        Optional<User> userOptional = userRepository.findByEmail(email);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            user.setAccountEnabled(1);
+            return userRepository.save(user);
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Method used for checking a token
+     * @param email the email of the user
+     * @param token the token for the user
+     * @return the validation of the token
+     */
+    public Boolean verifyToken(String email, String token){
+        boolean tokenValid = authenticationTokenService.verifyToken(email, token);
+        if(tokenValid){
+            activateAccount(email);
+            authenticationTokenService.deleteToken(email);
+        }
+        return tokenValid;
+    }
+
     /**
      * Method used for retrieving all users
      * @return the list of users

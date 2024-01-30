@@ -43,7 +43,7 @@ public class EmailService {
             messageFormed.setFrom(new InternetAddress("joblistic@gmail.com"));
             messageFormed.addRecipient(Message.RecipientType.TO, new InternetAddress(emailReceiver));
             messageFormed.setSubject(emailSubject);
-            messageFormed.setText(emailContent);
+            messageFormed.setContent(emailContent, "text/html; charset=utf-8");
 
             System.out.println("Mail prepared!");
             Transport t = mailSession.getTransport("smtp");
