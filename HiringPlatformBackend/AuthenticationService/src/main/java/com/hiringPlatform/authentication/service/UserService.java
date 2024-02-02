@@ -4,6 +4,7 @@ import com.hiringPlatform.authentication.model.Role;
 import com.hiringPlatform.authentication.model.User;
 import com.hiringPlatform.authentication.model.request.RegisterRequest;
 import com.hiringPlatform.authentication.model.request.ResetPasswordRequest;
+import com.hiringPlatform.authentication.model.request.UserGoogleRequest;
 import com.hiringPlatform.authentication.model.response.RegisterResponse;
 import com.hiringPlatform.authentication.repository.RoleRepository;
 import com.hiringPlatform.authentication.repository.UserRepository;
@@ -65,6 +66,34 @@ public class UserService {
             User userDB = userRepository.save(user);
             this.authenticationTokenService.sendAuthenticationEmail(userDB, false);
             return registerResponse;
+        }
+    }
+
+    /**
+     * Method used for creating or login a user with Google
+     * @param userRequest: the user account
+     * @return the signed/logged used
+     */
+    public User authGoogle(UserGoogleRequest userRequest) {
+        String email = userRequest.getEmail();
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+        if(optionalUser.isPresent()){
+            // the user already exist in database, so it is a login operation
+            User user = optionalUser.get();
+            user.setPassword("");
+            return user;
+        }
+        else {
+            // the user don't exist in database, so it is a signup operation
+            User user = new User();
+            user.setEmail(userRequest.getEmail());
+            user.setUsername(userRequest.getUsername());
+            user.setRegistrationDate(new Date());
+            user.setAccountEnabled(1);
+            user.setPassword("");
+            Optional<Role> role = roleRepository.findByRoleName(userRequest.getAccountType());
+            role.ifPresent(user::setUserRole);
+            return userRepository.save(user);
         }
     }
 

@@ -5,7 +5,9 @@ import {Button, FormGroup, InputGroup, Intent, Text} from "@blueprintjs/core";
 import {useTranslation} from "react-i18next";
 import AuthenticationService from "../services/authentication.service";
 import {AppToaster} from "./common/AppToaster";
-import {LoginResponse} from "../types/auth.types";
+import {LoginResponse, UserGoogleRequest} from "../types/auth.types";
+import {signInWithGooglePopup} from "./google/firebase.utils";
+import {CANDIDATE_ACCOUNT, EMPLOYER_ACCOUNT} from "../util/constants";
 
 const LoginPage = () => {
 
@@ -50,6 +52,33 @@ const LoginPage = () => {
     }
 
     let invalidLoginMessage = t('login_invalid')
+
+    const logGoogleUser = async (accountType: string) => {
+        try {
+            const response = await signInWithGooglePopup();
+            console.log(response);
+            let request: UserGoogleRequest = {};
+            request.email = response.user.email;
+            request.username = response.user.displayName;
+            request.accountType = accountType;
+            console.log(request)
+            AuthenticationService.authGoogle((request)).then((response: any) => {
+                console.log(response)
+            }).catch((error) => {
+                console.error("Error during authentication: " + error.message);
+                AppToaster.show({
+                    message: t('auth_error'),
+                    intent: Intent.DANGER,
+                });
+            })
+        } catch (error) {
+            console.error("Error during login: " + error.message);
+            AppToaster.show({
+                message: t('login_error'),
+                intent: Intent.DANGER,
+            });
+        }
+    }
 
     return (
         <div className="login-container">
@@ -112,7 +141,11 @@ const LoginPage = () => {
                     {t('login_go_to_register')} &#8594;
                 </Link>
             </div>
+            <button onClick={() => logGoogleUser(CANDIDATE_ACCOUNT)}>Sign In With Google As Candidate</button>
+            <button onClick={() => logGoogleUser(EMPLOYER_ACCOUNT)}>Sign In With Google As Employer</button>
+
         </div>
+
     );
 };
 

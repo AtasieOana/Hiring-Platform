@@ -9,7 +9,7 @@ class AuthenticationService {
     async checkToken(email, token) {
         return api.get("/checkToken/" + email + "/" + token);
     }
-    
+
     async login(email, password) {
         return api.get("/login/" + email + "/" + password);
     }
@@ -20,6 +20,10 @@ class AuthenticationService {
 
     async resetPassword(request) {
         return api.post("/resetPassword", request);
+    }
+
+    async authGoogle(request) {
+        return api.post("/authGoogle", request);
     }
 }
 

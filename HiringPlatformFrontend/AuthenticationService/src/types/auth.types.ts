@@ -11,7 +11,6 @@ export interface RegisterResponse {
     username: string;
 }
 
-
 export interface LoginResponse {
     token: string;
     expiresIn: number;
@@ -23,4 +22,10 @@ export interface ResetPasswordRequest {
     email: string;
     newPassword: string;
     token: string;
+}
+
+export interface UserGoogleRequest {
+    email: string;
+    username: string;
+    accountType: string;
 }

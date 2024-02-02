@@ -49,6 +49,7 @@ public class SecurityConfig   {
                 .antMatchers("/forgotPassword/{email}").permitAll()
                 .antMatchers("/resetPassword").permitAll()
                 .antMatchers("/logoutUser").permitAll()
+                .antMatchers("/authGoogle").permitAll()
                 .antMatchers("/seeUsers").hasAnyAuthority("ROLE_ADMIN")
                 .anyRequest().authenticated()
                 .and()

@@ -1,6 +1,7 @@
 package com.hiringPlatform.authentication.controller;
 
 import com.hiringPlatform.authentication.model.request.ResetPasswordRequest;
+import com.hiringPlatform.authentication.model.request.UserGoogleRequest;
 import com.hiringPlatform.authentication.model.response.LoginResponse;
 import com.hiringPlatform.authentication.model.User;
 import com.hiringPlatform.authentication.model.request.RegisterRequest;
@@ -52,19 +53,7 @@ public class UserController {
     @GetMapping("/login/{email}/{password}")
     public ResponseEntity<LoginResponse> login(@PathVariable String email, @PathVariable String password) {
         User user =  userService.login(email, password);
-        String jwtToken = "";
-        LoginResponse loginResponse = new LoginResponse();
-        if(user != null){
-            jwtToken = jwtService.generateToken(new org.springframework.security.core.userdetails.User(user.getEmail(),
-                    user.getPassword(),
-                    mapRolesToAuthorities(user.getUserRole())));
-            loginResponse.setUsername(user.getUsername());
-            loginResponse.setRoleName(user.getUserRole().getRoleName());
-            redisService.saveData("userToken", jwtToken);
-        }
-        loginResponse.setToken(jwtToken);
-        loginResponse.setExpiresIn(jwtService.getExpirationTime());
-        return ResponseEntity.ok(loginResponse);
+        return getLoginResponse(user);
     }
 
     /**
@@ -119,5 +108,27 @@ public class UserController {
     public ResponseEntity<Boolean> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
         Boolean isTokenValid = userService.resetPassword(request);
         return ResponseEntity.ok(isTokenValid);
+    }
+
+    @PostMapping("/authGoogle")
+    public ResponseEntity<LoginResponse> authGoogle(@RequestBody UserGoogleRequest userGoogleRequest) {
+        User user =  userService.authGoogle(userGoogleRequest);
+        return getLoginResponse(user);
+    }
+
+    private ResponseEntity<LoginResponse> getLoginResponse(User user) {
+        String jwtToken = "";
+        LoginResponse loginResponse = new LoginResponse();
+        if(user != null){
+            jwtToken = jwtService.generateToken(new org.springframework.security.core.userdetails.User(user.getEmail(),
+                    user.getPassword(),
+                    mapRolesToAuthorities(user.getUserRole())));
+            loginResponse.setUsername(user.getUsername());
+            loginResponse.setRoleName(user.getUserRole().getRoleName());
+            redisService.saveData("userToken", jwtToken);
+        }
+        loginResponse.setToken(jwtToken);
+        loginResponse.setExpiresIn(jwtService.getExpirationTime());
+        return ResponseEntity.ok(loginResponse);
     }
 }
