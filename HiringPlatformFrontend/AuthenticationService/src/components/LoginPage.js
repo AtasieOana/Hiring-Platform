@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import "./styles/Login.css"
-import {Button, FormGroup, InputGroup, Intent} from "@blueprintjs/core";
+import {Button, FormGroup, InputGroup, Intent, Text} from "@blueprintjs/core";
 import {useTranslation} from "react-i18next";
 import AuthenticationService from "../services/authentication.service";
 import {AppToaster} from "./common/AppToaster";
@@ -10,6 +10,7 @@ import {LoginResponse} from "../types/auth.types";
 const LoginPage = () => {
 
     const {t} = useTranslation()
+    const navigate = useNavigate();
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -44,11 +45,14 @@ const LoginPage = () => {
         }
     }
 
+    const goToForgetPassword = () => {
+        navigate('/forgotPassword');
+    }
+
     let invalidLoginMessage = t('login_invalid')
 
     return (
         <div className="login-container">
-            Sa nu uiti de FORGET PASSWORD!!!!!!!!!!!!!!!!!!!!!!!!!
             <div className="login-title">{t('login_to')} Joblistic!</div>
             <div className="login-container-form">
                 <form className="login-forms">
@@ -90,6 +94,11 @@ const LoginPage = () => {
                             }
                         />
                     </FormGroup>
+                    <div className="forgot-password">
+                        <Text onClick={goToForgetPassword}>
+                            {t('password_title')}
+                        </Text>
+                    </div>
                 </form>
                 <Button onClick={handleLogin}
                         small={true}
@@ -98,7 +107,7 @@ const LoginPage = () => {
                     {t('login_button')}
                 </Button>
             </div>
-            <div className="login-go-to-register ">
+            <div className="login-go-to-register">
                 <Link to="/register">
                     {t('login_go_to_register')} &#8594;
                 </Link>

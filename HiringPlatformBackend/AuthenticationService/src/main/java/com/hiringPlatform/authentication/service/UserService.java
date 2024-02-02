@@ -3,6 +3,7 @@ package com.hiringPlatform.authentication.service;
 import com.hiringPlatform.authentication.model.Role;
 import com.hiringPlatform.authentication.model.User;
 import com.hiringPlatform.authentication.model.request.RegisterRequest;
+import com.hiringPlatform.authentication.model.request.ResetPasswordRequest;
 import com.hiringPlatform.authentication.model.response.RegisterResponse;
 import com.hiringPlatform.authentication.repository.RoleRepository;
 import com.hiringPlatform.authentication.repository.UserRepository;
@@ -105,6 +106,19 @@ public class UserService {
         }
     }
 
+    private User updatePassword(String email, String password){
+        Optional<User> userOptional = userRepository.findByEmail(email);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+            String encodedPassword = bCryptPasswordEncoder.encode(password);
+            user.setPassword(encodedPassword);
+            return userRepository.save(user);
+        } else {
+            return null;
+        }
+    }
+
     /**
      * Method used for checking a token
      * @param email the email of the user
@@ -119,6 +133,37 @@ public class UserService {
         }
         return tokenValid;
     }
+
+    /**
+     * Method used for checking a token and resenting a password
+     * @param request the reset password request
+     * @return the validation of the token
+     */
+    public Boolean resetPassword(ResetPasswordRequest request){
+        boolean tokenValid = authenticationTokenService.verifyToken(request.getEmail(), request.getToken());
+        if(tokenValid){
+            updatePassword(request.getEmail(), request.getNewPassword());
+            authenticationTokenService.deleteToken(request.getEmail());
+        }
+        return tokenValid;
+    }
+
+    /**
+     * Method used for sending an email for resenting the password
+     * @param email the email of the user
+     * @return the status of the email
+     */
+    public Boolean forgotPassword(String email) {
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+        if(optionalUser.isPresent()){
+            this.authenticationTokenService.sendPasswordEmail(email, optionalUser.get().getAccountEnabled() == 1, optionalUser.get());
+        }
+        else {
+            this.authenticationTokenService.sendPasswordEmail(email, false, null);
+        }
+        return true;
+    }
+
 
     /**
      * Method used for retrieving all users

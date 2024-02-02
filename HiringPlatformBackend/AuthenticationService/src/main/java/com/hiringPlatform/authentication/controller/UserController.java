@@ -1,5 +1,6 @@
 package com.hiringPlatform.authentication.controller;
 
+import com.hiringPlatform.authentication.model.request.ResetPasswordRequest;
 import com.hiringPlatform.authentication.model.response.LoginResponse;
 import com.hiringPlatform.authentication.model.User;
 import com.hiringPlatform.authentication.model.request.RegisterRequest;
@@ -93,8 +94,30 @@ public class UserController {
      * @return the validation of the token
      */
     @GetMapping("/checkToken/{email}/{token}")
-    public ResponseEntity<Boolean> copyTaskListToAnotherBoard(@PathVariable String email, @PathVariable String token) {
+    public ResponseEntity<Boolean> verifyToken(@PathVariable String email, @PathVariable String token) {
         Boolean isTokenValid = userService.verifyToken(email, token);
+        return ResponseEntity.ok(isTokenValid);
+    }
+
+    /**
+     * Method used for sending an email for resenting the password
+     * @param email the email of the user
+     * @return the status of the email
+     */
+    @GetMapping("/forgotPassword/{email}")
+    public ResponseEntity<Boolean> forgotPassword(@PathVariable String email) {
+        Boolean emailSend = userService.forgotPassword(email);
+        return ResponseEntity.ok(emailSend);
+    }
+
+    /**
+     * Method used for resenting a password if the token is valid
+     * @param request the reset password request
+     * @return the validation of the token
+     */
+    @PostMapping("/resetPassword")
+    public ResponseEntity<Boolean> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
+        Boolean isTokenValid = userService.resetPassword(request);
         return ResponseEntity.ok(isTokenValid);
     }
 }

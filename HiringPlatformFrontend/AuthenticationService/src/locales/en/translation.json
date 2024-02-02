@@ -44,5 +44,15 @@
   "login_to": "Register to",
   "login_button": "Login",
   "login_go_to_register": "No account? Create one",
-  "login_error": "An error occurred when trying to login."
+  "login_error": "An error occurred when trying to login.",
+  "password_title": "Forgot your Password?",
+  "password_helper": "There is no problem! In what follows, we will instruct you to reset it in order to be able to return to the application's functionalities.",
+  "password_helper2": "In order to reset the password, please start by writing your email below:",
+  "password_reset": "Reset password",
+  "reset_error": "An error occurred when trying to reset the password.",
+  "password_invalid_email": "Invalid email for resetting the account. Try again!",
+  "password_success": "The password was changed with success!",
+  "change_pass": "Change password",
+  "reset_helper": "An email containing a token was sent to the email address previously filled in.",
+  "reset_helper2": "Please fill in the new password below, its confirmation and the token sent by email. If the token entered is a valid one, then the password will be updated."
 }

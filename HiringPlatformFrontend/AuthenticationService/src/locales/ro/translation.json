@@ -44,5 +44,15 @@
   "login_to": "Intră în contul de pe",
   "login_button": "Autentificare",
   "login_go_to_register": "Fără cont? Creați unul",
-  "login_error": "A apărut o eroare la încercarea de autentificare."
+  "login_error": "A apărut o eroare la încercarea de autentificare.",
+  "password_title": "V-ați uitat Parola?",
+  "password_helper": "Nu e nicio problema! În cele ce urmează, vă vom îndruma să o resetați pentru a putea reveni la funcționalitățile aplicației.",
+  "password_helper2": "Pentru a reseta parola, vă rugăm să începeți prin a vă scrie e-mailul mai jos:",
+  "password_reset": "Resetează parola",
+  "reset_error": "A apărut o eroare la încercarea de a reseta parola.",
+  "password_invalid_email": "E-mail invalid pentru resetarea parolei. Încercați din nou!",
+  "password_success": "Parola a fost schimbată cu succes!",
+  "change_pass": "Actualizarea parolei",
+  "reset_helper": "Un e-mail care conține un token a fost trimis la adresa de e-mail completată anterior.",
+  "reset_helper2": "Vă rugăm să completați mai jos noua parolă, confirmarea acesteia și token-ul trimis prin e-mail. Dacă token-ul introdus este unul valid, atunci parola va fi actualizată."
 }

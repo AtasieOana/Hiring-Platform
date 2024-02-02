@@ -29,6 +29,10 @@
     height: 25px;
 }
 
+.login-form-group {
+    margin-bottom: 5px !important;
+}
+
 .login-forms .bp4-form-helper-text {
     text-align: center;
     font-weight: 550;
@@ -77,6 +81,20 @@
 .bp4-control input:focus ~ .bp4-control-indicator {
     outline: none !important;
     outline-offset: 0 !important;
+}
+
+.forgot-password {
+    font-size: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: end;
+    text-align: end;
+    justify-content: end;
+    text-decoration: underline 1px #2c56b9;
+    color: #2c56b9;
+    font-style: italic;
+    padding-bottom: 10px;
+    font-weight: 500;
 }
 
 @media (max-width: 1000px) {

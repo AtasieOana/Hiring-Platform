@@ -18,3 +18,9 @@ export interface LoginResponse {
     roleName: string;
     username: string;
 }
+
+export interface ResetPasswordRequest {
+    email: string;
+    newPassword: string;
+    token: string;
+}
