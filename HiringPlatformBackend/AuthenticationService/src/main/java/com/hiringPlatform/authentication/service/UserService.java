@@ -2,99 +2,94 @@ package com.hiringPlatform.authentication.service;
 
 import com.hiringPlatform.authentication.model.Role;
 import com.hiringPlatform.authentication.model.User;
-import com.hiringPlatform.authentication.model.request.RegisterRequest;
-import com.hiringPlatform.authentication.model.request.ResetPasswordRequest;
-import com.hiringPlatform.authentication.model.request.UserGoogleRequest;
+import com.hiringPlatform.authentication.model.request.*;
 import com.hiringPlatform.authentication.model.response.RegisterResponse;
 import com.hiringPlatform.authentication.repository.RoleRepository;
 import com.hiringPlatform.authentication.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
     private final AuthenticationTokenService authenticationTokenService;
-
     private final RoleRepository roleRepository;
-
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final CandidateService candidateService;
+    private final EmployerService employerService;
 
     @Autowired
-    public UserService(UserRepository userRepository, AuthenticationTokenService authenticationTokenService, RoleRepository roleRepository) {
+    public UserService(UserRepository userRepository, AuthenticationTokenService authenticationTokenService,
+                       RoleRepository roleRepository, CandidateService candidateService, EmployerService employerService) {
         this.userRepository = userRepository;
         this.authenticationTokenService = authenticationTokenService;
         this.roleRepository = roleRepository;
+        this.candidateService = candidateService;
+        this.employerService = employerService;
     }
 
     /**
-     * Method used for creating a new account
+     * Method used for creating a new account for a candidate
      * @param userRequest: the new user account
      * @return the signed used
      */
-    public RegisterResponse signUp(RegisterRequest userRequest) {
+    public RegisterResponse signUpCandidate(RegisterCandidateRequest userRequest) {
         Optional<User> optionalUser = userRepository.findByEmail(userRequest.getEmail());
         RegisterResponse registerResponse = new RegisterResponse();
         registerResponse.setEmail(userRequest.getEmail());
-        registerResponse.setUsername(userRequest.getUsername());
         registerResponse.setRoleName(userRequest.getAccountType());
         if(optionalUser.isPresent()){
             this.authenticationTokenService.sendAuthenticationEmail(optionalUser.get(), true);
-            return registerResponse;
         }
         else {
             User user = new User();
             BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
             String encodedPassword = bCryptPasswordEncoder.encode(userRequest.getPassword());
             user.setEmail(userRequest.getEmail());
-            user.setUsername(userRequest.getUsername());
             user.setPassword(encodedPassword);
             user.setRegistrationDate(new Date());
             user.setAccountEnabled(0);
             Optional<Role> role = roleRepository.findByRoleName(userRequest.getAccountType());
             role.ifPresent(user::setUserRole);
             User userDB = userRepository.save(user);
+            candidateService.saveCandidate(userDB, userRequest.getLastname(), userRequest.getFirstname());
             this.authenticationTokenService.sendAuthenticationEmail(userDB, false);
-            return registerResponse;
         }
+        return registerResponse;
     }
 
     /**
-     * Method used for creating or login a user with Google
-     * @param userRequest: the user account
-     * @return the signed/logged used
+     * Method used for creating a new account for an employer
+     * @param userRequest: the new user account
+     * @return the signed used
      */
-    public User authGoogle(UserGoogleRequest userRequest) {
-        String email = userRequest.getEmail();
-        Optional<User> optionalUser = userRepository.findByEmail(email);
+    public RegisterResponse signUpEmployer(RegisterEmployerRequest userRequest) {
+        Optional<User> optionalUser = userRepository.findByEmail(userRequest.getEmail());
+        RegisterResponse registerResponse = new RegisterResponse();
+        registerResponse.setEmail(userRequest.getEmail());
+        registerResponse.setRoleName(userRequest.getAccountType());
         if(optionalUser.isPresent()){
-            // the user already exist in database, so it is a login operation
-            User user = optionalUser.get();
-            user.setPassword("");
-            return user;
+            this.authenticationTokenService.sendAuthenticationEmail(optionalUser.get(), true);
         }
         else {
-            // the user don't exist in database, so it is a signup operation
             User user = new User();
+            BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+            String encodedPassword = bCryptPasswordEncoder.encode(userRequest.getPassword());
             user.setEmail(userRequest.getEmail());
-            user.setUsername(userRequest.getUsername());
+            user.setPassword(encodedPassword);
             user.setRegistrationDate(new Date());
-            user.setAccountEnabled(1);
-            user.setPassword("");
+            user.setAccountEnabled(0);
             Optional<Role> role = roleRepository.findByRoleName(userRequest.getAccountType());
             role.ifPresent(user::setUserRole);
-            return userRepository.save(user);
+            User userDB = userRepository.save(user);
+            employerService.saveEmployer(user, userRequest.getCompanyName(), userRequest.getStreet(),
+                    userRequest.getZipCode(), userRequest.getCity(), userRequest.getRegion(), userRequest.getCountry());
+            this.authenticationTokenService.sendAuthenticationEmail(userDB, false);
         }
+        return registerResponse;
     }
 
     /**
@@ -124,27 +119,105 @@ public class UserService {
         }
     }
 
-    private User activateAccount(String email){
+
+    /**
+     * Method used login a user with Google
+     * @param userRequest: the user account
+     * @return the logged used
+     */
+    public User loginGoogle(UserGoogleRequest userRequest) {
+        String email = userRequest.getEmail();
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+        if(optionalUser.isPresent()){
+            // the user already exist in database, so it is a login operation
+            User user = optionalUser.get();
+            user.setPassword("");
+            return user;
+        }
+        return null;
+    }
+
+    /**
+     * Method used for creating a user with Google
+     * @param userRequest: the user account
+     * @return the signed used
+     */
+    public User authGoogle(UserGoogleRequest userRequest) {
+        String email = userRequest.getEmail();
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+        if(optionalUser.isPresent()){
+            // the user already exist in database, so it is a login operation
+            User user = optionalUser.get();
+            user.setPassword("");
+            return user;
+        }
+        else {
+            // the user don't exist in database, so it is a signup operation
+            if(Objects.equals(userRequest.getAccountType(), "ROLE_EMPLOYER")){
+                return registerEmployerGoogle(userRequest);
+            }
+            if(Objects.equals(userRequest.getAccountType(), "ROLE_CANDIDATE")){
+                return registerCandidateGoogle(userRequest);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Method used for creating a user with Google as employer
+     * @param userRequest: the user account
+     * @return the signed user
+     */
+    private User registerEmployerGoogle(UserGoogleRequest userRequest) {
+        // the user don't exist in database
+        User user = new User();
+        user.setEmail(userRequest.getEmail());
+        user.setRegistrationDate(new Date());
+        user.setAccountEnabled(1);
+        user.setPassword("");
+        Optional<Role> role = roleRepository.findByRoleName(userRequest.getAccountType());
+        role.ifPresent(user::setUserRole);
+        User userDB = userRepository.save(user);
+        employerService.saveEmployer(user, userRequest.getName(), "", "", "", "", "");
+        return userDB;
+    }
+
+    /**
+     * Method used for creating a user with Google as candidate
+     * @param userRequest: the user account
+     * @return the signed user
+     */
+    private User registerCandidateGoogle(UserGoogleRequest userRequest) {
+        // the user don't exist in database
+        User user = new User();
+        user.setEmail(userRequest.getEmail());
+        user.setRegistrationDate(new Date());
+        user.setAccountEnabled(1);
+        user.setPassword("");
+        Optional<Role> role = roleRepository.findByRoleName(userRequest.getAccountType());
+        role.ifPresent(user::setUserRole);
+        User userDB = userRepository.save(user);
+        candidateService.saveCandidate(userDB, userRequest.getFamilyName(), userRequest.getGivenName());
+        return userDB;
+    }
+
+    private void activateAccount(String email){
         Optional<User> userOptional = userRepository.findByEmail(email);
         if (userOptional.isPresent()) {
             User user = userOptional.get();
             user.setAccountEnabled(1);
-            return userRepository.save(user);
-        } else {
-            return null;
+            userRepository.save(user);
         }
     }
 
-    private User updatePassword(String email, String password){
+    private void updatePassword(String email, String password){
         Optional<User> userOptional = userRepository.findByEmail(email);
         if (userOptional.isPresent()) {
             User user = userOptional.get();
             BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
             String encodedPassword = bCryptPasswordEncoder.encode(password);
             user.setPassword(encodedPassword);
-            return userRepository.save(user);
-        } else {
-            return null;
+            userRepository.save(user);
         }
     }
 

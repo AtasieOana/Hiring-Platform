@@ -9,6 +9,5 @@ import lombok.*;
 @NoArgsConstructor
 public class RegisterResponse {
     private String email;
-    private String username;
     private String roleName;
 }

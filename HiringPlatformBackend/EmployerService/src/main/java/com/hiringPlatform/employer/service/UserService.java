@@ -1,5 +1,6 @@
 package com.hiringPlatform.employer.service;
 
+import com.hiringPlatform.employer.model.LoggedUserResponse;
 import com.hiringPlatform.employer.model.User;
 import com.hiringPlatform.employer.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,54 +18,30 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final RedisService redisService;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, RedisService redisService) {
         this.userRepository = userRepository;
+        this.redisService = redisService;
     }
 
     /**
-     * Method used for creating a new account
-     * @param user: the new user account
-     * @return the signed used
+     * Method used for getting the logged user
+     * @return null if the user is not logged, the user otherwise
      */
-    public User signUp(User user) {
-        Optional<User> optionalUser = userRepository.findByEmail(user.getEmail());
-        if(optionalUser.isPresent()){
-            //this.authenticationTokenService.sendAuthenticationEmail(optionalUser.get(), true);
-            return optionalUser.get();
-        }
-        else {
-            BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-            String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
-            user.setPassword(encodedPassword);
-            user.setRegistrationDate(new Date());
-            user.setAccountEnabled(0);
-            User userDB = userRepository.save(user);
-            //this.authenticationTokenService.sendAuthenticationEmail(userDB, false);
-            return userDB;
-        }
-    }
-
-    /**
-     * Method used for login into an account
-     * @param email the user email
-     * @param password the user password
-     * @return if the user data is correct the returnable is the logged used, else null
-     */
-    public User login(String email, String password) {
-        Optional<User> optionalUser = userRepository.findByEmail(email);
+    public LoggedUserResponse getLoggedUser() {
+        String userEmail = redisService.getData("userEmail");
+        String userToken = redisService.getData("userToken");
+        Optional<User> optionalUser = userRepository.findByEmail(userEmail);
         if(optionalUser.isPresent()){
             if(optionalUser.get().getAccountEnabled() == 1) {
-                BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-                boolean passwordMatch = bCryptPasswordEncoder.matches(password, optionalUser.get().getPassword());
-                if (!passwordMatch) {
-                    return null;
-                } else {
-                    return optionalUser.get();
-                }
+                LoggedUserResponse loggedUserResponse = new LoggedUserResponse();
+                loggedUserResponse.setEmail(userEmail);
+                loggedUserResponse.setUsername(optionalUser.get().getUsername());
+                loggedUserResponse.setRoleName(optionalUser.get().getUserRole().getRoleName());
+                loggedUserResponse.setToken(userToken);
+                return loggedUserResponse;
             }
             else{
                 return null;
@@ -75,11 +52,5 @@ public class UserService {
         }
     }
 
-    /**
-     * Method used for retrieving all users
-     * @return the list of users
-     */
-    public List<User> getAllUsers() {
-        return new ArrayList<>(userRepository.findAll());
-    }
+
 }

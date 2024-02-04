@@ -2,8 +2,12 @@ import api from "../util/api";
 
 class AuthenticationService {
 
-    async register(registerRequest) {
-        return api.post("/signUp", registerRequest)
+    async registerCandidate(registerRequest) {
+        return api.post("/signUpCandidate", registerRequest)
+    }
+
+    async registerEmployer(registerRequest) {
+        return api.post("/signUpEmployer", registerRequest)
     }
 
     async checkToken(email, token) {
@@ -24,6 +28,10 @@ class AuthenticationService {
 
     async authGoogle(request) {
         return api.post("/authGoogle", request);
+    }
+
+    async loginGoogle(request) {
+        return api.post("/loginGoogle", request);
     }
 }
 

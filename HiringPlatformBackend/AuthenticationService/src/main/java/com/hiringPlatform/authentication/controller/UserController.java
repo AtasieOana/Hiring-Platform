@@ -1,10 +1,9 @@
 package com.hiringPlatform.authentication.controller;
 
-import com.hiringPlatform.authentication.model.request.ResetPasswordRequest;
+import com.hiringPlatform.authentication.model.request.*;
 import com.hiringPlatform.authentication.model.request.UserGoogleRequest;
 import com.hiringPlatform.authentication.model.response.LoginResponse;
 import com.hiringPlatform.authentication.model.User;
-import com.hiringPlatform.authentication.model.request.RegisterRequest;
 import com.hiringPlatform.authentication.model.response.RegisterResponse;
 import com.hiringPlatform.authentication.security.JwtService;
 import com.hiringPlatform.authentication.service.RedisService;
@@ -34,13 +33,24 @@ public class UserController {
     }
 
     /**
-     * Method used for creating a new account
+     * Method used for creating a new account for a candidate
      * @param user: the new user account
      * @return the signed used
      */
-    @PostMapping("/signUp")
-    public ResponseEntity<RegisterResponse> signUp(@Valid @RequestBody RegisterRequest user) {
-        RegisterResponse signedUser =  userService.signUp(user);
+    @PostMapping("/signUpCandidate")
+    public ResponseEntity<RegisterResponse> signUp(@Valid @RequestBody RegisterCandidateRequest user) {
+        RegisterResponse signedUser =  userService.signUpCandidate(user);
+        return ResponseEntity.ok(signedUser);
+    }
+
+    /**
+     * Method used for creating a new account for an employer
+     * @param user: the new user account
+     * @return the signed used
+     */
+    @PostMapping("/signUpEmployer")
+    public ResponseEntity<RegisterResponse> signUp(@Valid @RequestBody RegisterEmployerRequest user) {
+        RegisterResponse signedUser =  userService.signUpEmployer(user);
         return ResponseEntity.ok(signedUser);
     }
 
@@ -110,6 +120,12 @@ public class UserController {
         return ResponseEntity.ok(isTokenValid);
     }
 
+    @PostMapping("/loginGoogle")
+    public ResponseEntity<LoginResponse> loginGoogle(@RequestBody UserGoogleRequest userGoogleRequest) {
+        User user =  userService.loginGoogle(userGoogleRequest);
+        return getLoginResponse(user);
+    }
+
     @PostMapping("/authGoogle")
     public ResponseEntity<LoginResponse> authGoogle(@RequestBody UserGoogleRequest userGoogleRequest) {
         User user =  userService.authGoogle(userGoogleRequest);
@@ -123,9 +139,9 @@ public class UserController {
             jwtToken = jwtService.generateToken(new org.springframework.security.core.userdetails.User(user.getEmail(),
                     user.getPassword(),
                     mapRolesToAuthorities(user.getUserRole())));
-            loginResponse.setUsername(user.getUsername());
             loginResponse.setRoleName(user.getUserRole().getRoleName());
             redisService.saveData("userToken", jwtToken);
+            redisService.saveData("userEmail", user.getEmail());
         }
         loginResponse.setToken(jwtToken);
         loginResponse.setExpiresIn(jwtService.getExpirationTime());

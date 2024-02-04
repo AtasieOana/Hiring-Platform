@@ -1,39 +1,32 @@
 package com.hiringPlatform.employer.controller;
 
-import com.hiringPlatform.employer.model.User;
-import com.hiringPlatform.employer.security.JwtService;
+import com.hiringPlatform.employer.model.LoggedUserResponse;
 import com.hiringPlatform.employer.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
-@CrossOrigin(origins = "http://localhost:4200")
 @RestController
-@RequestMapping(value = "/employer")
+@CrossOrigin(origins = "http://localhost:3001")
 public class UserController {
 
     private final UserService userService;
-    private final JwtService jwtService;
-
 
     @Autowired
-    public UserController(UserService userService, JwtService jwtService) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.jwtService = jwtService;
     }
 
     /**
-     * Method used for retrieving all users
-     * @return the list of users
+     * Method used for getting the logged user
+     * @return null if the user is not logged, the user otherwise
      */
-    @GetMapping("/seeUsers")
-    public ResponseEntity<List<User>> getAllUsers(){
-        List<User> users = userService.getAllUsers();
-        return ResponseEntity.ok(users);
+    @GetMapping("/getLoggedUser")
+    public ResponseEntity<LoggedUserResponse> login() {
+        LoggedUserResponse user =  userService.getLoggedUser();
+        return ResponseEntity.ok(user);
     }
 }

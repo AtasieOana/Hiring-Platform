@@ -6,37 +6,27 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
-@Table(name = "utilizatori")
+@Table(name = "regiuni")
 @Getter
 @Setter
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class Region {
 
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
-    @Column(name = "id_utilizator")
-    private String userId;
+    @Column(name = "id_regiune")
+    private String regionId;
 
-    @Column(name = "email")
-    private String email;
-
-    @Column(name = "parola")
-    private String password;
-
-    @Column(name = "data_inregistrare")
-    private Date registrationDate;
-
-    @Column(name = "cont_activat")
-    private Integer accountEnabled;
+    @Column(name = "nume")
+    private String regionName;
 
     @ManyToOne(cascade={CascadeType.MERGE}, fetch=FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name ="id_rol")
-    private Role userRole;
+    @JoinColumn(name ="id_tara")
+    private Country country;
 }

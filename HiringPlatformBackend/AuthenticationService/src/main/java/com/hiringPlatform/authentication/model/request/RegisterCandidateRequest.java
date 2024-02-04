@@ -7,10 +7,10 @@ import lombok.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserGoogleRequest {
+public class RegisterCandidateRequest {
     private String email;
-    private String givenName;
-    private String familyName;
-    private String name;
+    private String password;
+    private String lastname;
+    private String firstname;
     private String accountType;
 }

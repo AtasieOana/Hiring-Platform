@@ -7,9 +7,9 @@ import lombok.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginResponse {
+public class LoggedUserResponse {
     private String token;
-    private long expiresIn;
+    private String email;
     private String username;
     private String roleName;
 }

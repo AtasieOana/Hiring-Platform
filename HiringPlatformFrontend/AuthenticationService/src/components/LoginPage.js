@@ -7,7 +7,7 @@ import AuthenticationService from "../services/authentication.service";
 import {AppToaster} from "./common/AppToaster";
 import {LoginResponse, UserGoogleRequest} from "../types/auth.types";
 import {signInWithGooglePopup} from "./google/firebase.utils";
-import {CANDIDATE_ACCOUNT, EMPLOYER_ACCOUNT} from "../util/constants";
+import {EMPLOYER_ACCOUNT} from "../util/constants";
 
 const LoginPage = () => {
 
@@ -56,18 +56,22 @@ const LoginPage = () => {
     const logGoogleUser = async (accountType: string) => {
         try {
             const response = await signInWithGooglePopup();
-            console.log(response);
             let request: UserGoogleRequest = {};
             request.email = response.user.email;
             request.username = response.user.displayName;
             request.accountType = accountType;
-            console.log(request)
-            AuthenticationService.authGoogle((request)).then((response: any) => {
-                console.log(response)
+            [request.givenName, request.familyName] = response.user.displayName.split(' ');
+            AuthenticationService.loginGoogle((request)).then((response: any) => {
+                if (response.data.token === "") {
+                    setLoginInvalid(true)
+                } else {
+                    setLoginInvalid(false)
+                    console.log("TODO", response.data)
+                }
             }).catch((error) => {
                 console.error("Error during authentication: " + error.message);
                 AppToaster.show({
-                    message: t('auth_error'),
+                    message: t('login_error'),
                     intent: Intent.DANGER,
                 });
             })
@@ -135,15 +139,20 @@ const LoginPage = () => {
                 >
                     {t('login_button')}
                 </Button>
+                <div className="text-or">
+                    OR
+                </div>
+                <Button className="register-button"
+                        small={true}
+                        onClick={() => logGoogleUser(EMPLOYER_ACCOUNT)}>
+                    {t('sign_google')}
+                </Button>
             </div>
             <div className="login-go-to-register">
                 <Link to="/register">
                     {t('login_go_to_register')} &#8594;
                 </Link>
             </div>
-            <button onClick={() => logGoogleUser(CANDIDATE_ACCOUNT)}>Sign In With Google As Candidate</button>
-            <button onClick={() => logGoogleUser(EMPLOYER_ACCOUNT)}>Sign In With Google As Employer</button>
-
         </div>
 
     );

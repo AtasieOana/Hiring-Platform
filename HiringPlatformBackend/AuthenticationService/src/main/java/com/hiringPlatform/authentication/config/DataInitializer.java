@@ -1,28 +1,29 @@
 package com.hiringPlatform.authentication.config;
 
+import com.hiringPlatform.authentication.model.Admin;
 import com.hiringPlatform.authentication.model.Role;
 import com.hiringPlatform.authentication.model.User;
+import com.hiringPlatform.authentication.repository.AdminRepository;
 import com.hiringPlatform.authentication.repository.RoleRepository;
 import com.hiringPlatform.authentication.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
-import java.util.Set;
 
 @Component
 public class DataInitializer implements CommandLineRunner {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-
+    private final AdminRepository adminRepository;
     @Autowired
-    public DataInitializer(UserRepository userRepository, RoleRepository roleRepository) {
+    public DataInitializer(UserRepository userRepository, RoleRepository roleRepository, AdminRepository adminRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.adminRepository = adminRepository;
     }
 
     @Override
@@ -45,12 +46,17 @@ public class DataInitializer implements CommandLineRunner {
     private void createUserIfNotExists(String email, String password, Role role) {
         userRepository.findByEmail(email).orElseGet(() -> {
             User user = new User();
-            user.setUsername("Admin");
             user.setEmail(email);
             user.setAccountEnabled(1);
             user.setRegistrationDate(new Date());
             user.setPassword(passwordEncoder().encode(password));
             user.setUserRole(role);
+            User savedUser = userRepository.save(user);
+            Admin admin = new Admin();
+            admin.setUsername("Admin");
+            admin.setUserDetails(savedUser);
+            admin.setCreatorUser(null);
+            adminRepository.save(admin);
             return userRepository.save(user);
         });
     }

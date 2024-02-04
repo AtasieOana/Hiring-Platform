@@ -16,7 +16,8 @@ const ForgotPasswordPage = () => {
 
 
     const handleEmailCheck = () => {
-        if (email === '') {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
             setEmailInvalid(true);
         } else {
             AuthenticationService.forgotPassword(email).then(() => {

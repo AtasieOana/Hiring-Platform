@@ -7,9 +7,14 @@ import lombok.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterRequest {
+public class RegisterEmployerRequest {
     private String email;
     private String password;
-    private String username;
+    private String companyName;
+    private String street;
+    private String zipCode;
+    private String city;
+    private String region;
+    private String country;
     private String accountType;
 }

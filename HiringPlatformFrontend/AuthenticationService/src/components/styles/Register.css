@@ -5,9 +5,9 @@
 
 .register-container-form {
     background-color: rgba(224, 156, 115, 0.2);
-    padding: 20px 20px;
+    padding: 15px 20px;
     width: 45vw;
-    margin: 20px auto 10px;
+    margin: 0 auto 10px;
 }
 
 .register-title {
@@ -84,10 +84,94 @@
     outline-offset: 0 !important;
 }
 
+.tabs {
+    display: flex;
+    width: 45vw;
+    margin: 20px auto 0;
+    text-align: center;
+    font-weight: bolder;
+    letter-spacing: 1px;
+    font-size: 13px;
+}
+
+.tab {
+    cursor: pointer;
+    padding: 5px 20px;
+    background-color: rgba(224, 156, 115, 0.5);
+    width: 50%;
+}
+
+.tab:hover {
+    background-color: #ffaf84;
+}
+
+.active {
+    background-color: rgba(252, 171, 104, 0.78);
+}
+
+.password-fields {
+    display: flex;
+    justify-content: space-between;
+}
+
+.password-fields .bp4-form-group {
+    width: 49%;
+}
+
+.street-city {
+    display: flex;
+    justify-content: space-between;
+}
+
+.street-city .bp4-form-group {
+    width: 49%;
+}
+
+.region-country {
+    display: flex;
+    justify-content: space-between;
+}
+
+.region-country .bp4-form-group {
+    width: 49%;
+}
+
+.text-or {
+    text-align: center !important;
+    color: black !important;
+    font-weight: 600;
+    letter-spacing: 1px;
+    padding: 5px;
+}
+
 @media (max-width: 1200px) {
     .register-radio-group label:nth-of-type(1) {
         display: block !important;
         padding-right: 0;
+    }
+
+    .password-fields {
+        display: block;
+    }
+
+    .password-fields .bp4-form-group {
+        width: 100%;
+    }
+
+    .region-country {
+        display: block;
+    }
+
+    .region-country .bp4-form-group {
+        width: 100%;
+    }
+
+    .street-city {
+        display: block;
+    }
+
+    .street-city .bp4-form-group {
+        width: 100% !important;
     }
 }
 
@@ -100,4 +184,9 @@
         margin-left: 3%;
         margin-right: 3%;
     }
+
+    .tabs {
+        width: 75vw;
+    }
+
 }

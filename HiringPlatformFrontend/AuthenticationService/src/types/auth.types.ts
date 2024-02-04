@@ -1,21 +1,32 @@
-export interface RegisterRequest {
+export interface RegisterCandidateRequest {
     email: string;
     password: string;
-    username: string;
+    lastname: string;
+    firstname: string;
+    accountType: string;
+}
+
+export interface RegisterEmployerRequest {
+    email: string;
+    password: string;
+    companyName: string;
+    street: string;
+    region: string;
+    city: string;
+    country: string;
+    zipCode: string;
     accountType: string;
 }
 
 export interface RegisterResponse {
     email: string;
     roleName: string;
-    username: string;
 }
 
 export interface LoginResponse {
     token: string;
     expiresIn: number;
     roleName: string;
-    username: string;
 }
 
 export interface ResetPasswordRequest {
@@ -27,5 +38,7 @@ export interface ResetPasswordRequest {
 export interface UserGoogleRequest {
     email: string;
     username: string;
+    givenName: string;
+    familyName: string;
     accountType: string;
 }
