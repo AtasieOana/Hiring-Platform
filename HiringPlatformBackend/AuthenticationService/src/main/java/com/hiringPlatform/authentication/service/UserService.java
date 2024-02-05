@@ -85,8 +85,7 @@ public class UserService {
             Optional<Role> role = roleRepository.findByRoleName(userRequest.getAccountType());
             role.ifPresent(user::setUserRole);
             User userDB = userRepository.save(user);
-            employerService.saveEmployer(user, userRequest.getCompanyName(), userRequest.getStreet(),
-                    userRequest.getZipCode(), userRequest.getCity(), userRequest.getRegion(), userRequest.getCountry());
+            employerService.saveEmployer(user, userRequest.getCompanyName());
             this.authenticationTokenService.sendAuthenticationEmail(userDB, false);
         }
         return registerResponse;
@@ -178,7 +177,7 @@ public class UserService {
         Optional<Role> role = roleRepository.findByRoleName(userRequest.getAccountType());
         role.ifPresent(user::setUserRole);
         User userDB = userRepository.save(user);
-        employerService.saveEmployer(user, userRequest.getName(), "", "", "", "", "");
+        employerService.saveEmployer(user, userRequest.getName());
         return userDB;
     }
 

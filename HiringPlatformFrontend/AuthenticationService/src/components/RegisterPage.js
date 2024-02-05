@@ -17,11 +17,6 @@ import {signInWithGooglePopup} from "./google/firebase.utils";
 const RegisterPage = () => {
     const [email, setEmail] = useState('');
     const [companyName, setCompanyName] = useState('');
-    const [street, setStreet] = useState('');
-    const [zipCode, setZipCode] = useState('');
-    const [city, setCity] = useState('');
-    const [region, setRegion] = useState('');
-    const [country, setCountry] = useState('');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [password, setPassword] = useState('');
@@ -32,7 +27,7 @@ const RegisterPage = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfPassword, setShowConfPassword] = useState(false);
 
-    const {t} = useTranslation()
+    const {t, i18n} = useTranslation();
     const navigate = useNavigate();
 
     const togglePasswordVisibility = () => {
@@ -140,21 +135,6 @@ const RegisterPage = () => {
         if (!newErrors.password && password !== confirmPassword) {
             newErrors.confirmPassword = true;
         }
-        if (!country) {
-            newErrors.countryRequired = true;
-        }
-        if (!region) {
-            newErrors.regionRequired = true;
-        }
-        if (!city) {
-            newErrors.cityRequired = true;
-        }
-        if (!street) {
-            newErrors.streetRequired = true;
-        }
-        if (!zipCode) {
-            newErrors.zipRequired = true;
-        }
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
             return;
@@ -170,11 +150,6 @@ const RegisterPage = () => {
         registerRequest.email = email;
         registerRequest.password = password;
         registerRequest.companyName = companyName;
-        registerRequest.street = street;
-        registerRequest.zipCode = zipCode;
-        registerRequest.city = city;
-        registerRequest.region = region;
-        registerRequest.country = country;
         registerRequest.accountType = userType;
         AuthenticationService.registerEmployer((registerRequest)).then((response: any) => {
             let registerResponse: RegisterResponse = response.data;
@@ -193,11 +168,23 @@ const RegisterPage = () => {
             const response = await signInWithGooglePopup();
             let request: UserGoogleRequest = {};
             request.email = response.user.email;
-            request.username = response.user.displayName;
+            request.name = response.user.displayName;
             request.accountType = accountType;
             [request.givenName, request.familyName] = response.user.displayName.split(' ');
             AuthenticationService.authGoogle((request)).then((response: any) => {
-                console.log("TODO", response)
+                let url = "";
+                if (response.data.roleName === CANDIDATE_ACCOUNT) {
+                    console.log("TODO - CANDIDAT")
+                } else if (response.data.roleName === EMPLOYER_ACCOUNT) {
+                    url = 'http://localhost:3001'
+                } else {
+                    console.log("TODO - ADMIN")
+                }
+                const paramLanguage = i18n.language;
+                if (paramLanguage) {
+                    url += `/${paramLanguage}`;
+                }
+                window.location.href = url;
             }).catch((error) => {
                 console.error("Error during authentication: " + error.message);
                 AppToaster.show({
@@ -255,6 +242,64 @@ const RegisterPage = () => {
         confirmError = t('password_confirm');
     }
 
+
+    const generatePasswordFields = () => {
+        return (
+            <div className="password-fields">
+                <FormGroup
+                    label={t('password')}
+                    intent={passwordError ? Intent.DANGER : Intent.NONE}
+                    helperText={passwordError ? passwordError : ""}
+                    className="register-form-group"
+                    labelInfo={t('required')}
+                >
+                    <InputGroup
+                        type={showPassword ? 'text' : 'password'}
+                        value={password}
+                        autoComplete="new-password"
+                        placeholder={t('password_placeholder')}
+                        onChange={(e: any) => setPassword(e.target.value)}
+                        rightElement={
+                            <Button
+                                className="password-button"
+                                icon={showPassword ? 'eye-off' : 'eye-open'}
+                                minimal={true}
+                                onClick={togglePasswordVisibility}
+                                small={true}
+                                fill
+                            />
+                        }
+                    />
+                </FormGroup>
+                <FormGroup
+                    label={t('confirm_password')}
+                    intent={confirmError ? Intent.DANGER : Intent.NONE}
+                    helperText={confirmError ? confirmError : ""}
+                    className="register-form-group"
+                    labelInfo={t('required')}
+                >
+                    <InputGroup
+                        type={showConfPassword ? 'text' : 'password'}
+                        value={confirmPassword}
+                        placeholder={t('password_confirm_placeholder')}
+                        autoComplete="new-password"
+                        onChange={(e: any) => setConfirmPassword(e.target.value)}
+                        rightElement={
+                            <Button
+                                className="password-button"
+                                icon={showConfPassword ? 'eye-off' : 'eye-open'}
+                                minimal={true}
+                                onClick={toggleConfPasswordVisibility}
+                                small={true}
+                                fill
+                            />
+                        }
+                    />
+                </FormGroup>
+            </div>
+        )
+    }
+
     const candidatePanel = () => {
         return (
             <div>
@@ -304,58 +349,7 @@ const RegisterPage = () => {
                                 onChange={(e: any) => setFirstName(e.target.value)}
                             />
                         </FormGroup>
-                        <div className="password-fields">
-                            <FormGroup
-                                label={t('password')}
-                                intent={passwordError ? Intent.DANGER : Intent.NONE}
-                                helperText={passwordError ? passwordError : ""}
-                                className="register-form-group"
-                                labelInfo={t('required')}
-                            >
-                                <InputGroup
-                                    type={showPassword ? 'text' : 'password'}
-                                    value={password}
-                                    autoComplete="new-password"
-                                    placeholder={t('password_placeholder')}
-                                    onChange={(e: any) => setPassword(e.target.value)}
-                                    rightElement={
-                                        <Button
-                                            className="password-button"
-                                            icon={showPassword ? 'eye-off' : 'eye-open'}
-                                            minimal={true}
-                                            onClick={togglePasswordVisibility}
-                                            small={true}
-                                            fill
-                                        />
-                                    }
-                                />
-                            </FormGroup>
-                            <FormGroup
-                                label={t('confirm_password')}
-                                intent={confirmError ? Intent.DANGER : Intent.NONE}
-                                helperText={confirmError ? confirmError : ""}
-                                className="register-form-group"
-                                labelInfo={t('required')}
-                            >
-                                <InputGroup
-                                    type={showConfPassword ? 'text' : 'password'}
-                                    value={confirmPassword}
-                                    placeholder={t('password_confirm_placeholder')}
-                                    autoComplete="new-password"
-                                    onChange={(e: any) => setConfirmPassword(e.target.value)}
-                                    rightElement={
-                                        <Button
-                                            className="password-button"
-                                            icon={showConfPassword ? 'eye-off' : 'eye-open'}
-                                            minimal={true}
-                                            onClick={toggleConfPasswordVisibility}
-                                            small={true}
-                                            fill
-                                        />
-                                    }
-                                />
-                            </FormGroup>
-                        </div>
+                        {generatePasswordFields()}
                     </form>
                     <Button onClick={handleRegisterCandidate}
                             small={true}
@@ -381,26 +375,6 @@ const RegisterPage = () => {
         );
     };
 
-    let streetError = "";
-    if (errors.streetRequired) {
-        streetError = t('street_req');
-    }
-    let regionError = "";
-    if (errors.regionRequired) {
-        regionError = t('region_req');
-    }
-    let cityError = "";
-    if (errors.cityRequired) {
-        cityError = t('city_req');
-    }
-    let countryError = "";
-    if (errors.countryRequired) {
-        countryError = t('country_req');
-    }
-    let zipError = "";
-    if (errors.zipRequired) {
-        zipError = t('zip_req');
-    }
 
     const employerPanel = () => {
         return (
@@ -436,137 +410,7 @@ const RegisterPage = () => {
                                 onChange={(e: any) => setCompanyName(e.target.value)}
                             />
                         </FormGroup>
-                        <FormGroup
-                            label={t('street')}
-                            intent={streetError ? Intent.DANGER : Intent.NONE}
-                            helperText={streetError ? streetError : ""}
-                            className="register-form-group"
-                            labelInfo={t('required')}
-                        >
-                            <InputGroup
-                                type="text"
-                                value={street}
-                                placeholder={t('street_placeholder')}
-                                autoComplete="new-user"
-                                onChange={(e: any) => setStreet(e.target.value)}
-                            />
-                        </FormGroup>
-                        <div className="street-city">
-                            <FormGroup
-                                label={t('zip')}
-                                intent={zipError ? Intent.DANGER : Intent.NONE}
-                                helperText={zipError ? zipError : ""}
-                                className="register-form-group"
-                                labelInfo={t('required')}
-                            >
-                                <InputGroup
-                                    type="text"
-                                    value={zipCode}
-                                    placeholder="077039"
-                                    autoComplete="new-user"
-                                    onChange={(e: any) => setZipCode(e.target.value)}
-                                />
-                            </FormGroup>
-                            <FormGroup
-                                label={t('city')}
-                                intent={cityError ? Intent.DANGER : Intent.NONE}
-                                helperText={cityError ? cityError : ""}
-                                className="register-form-group"
-                                labelInfo={t('required')}
-                            >
-                                <InputGroup
-                                    type="text"
-                                    value={city}
-                                    placeholder="Cluj-Napoca"
-                                    autoComplete="new-user"
-                                    onChange={(e: any) => setCity(e.target.value)}
-                                />
-                            </FormGroup>
-                        </div>
-                        <div className="region-country">
-                            <FormGroup
-                                label={t('region')}
-                                intent={regionError ? Intent.DANGER : Intent.NONE}
-                                helperText={regionError ? regionError : ""}
-                                className="register-form-group"
-                                labelInfo={t('required')}
-                            >
-                                <InputGroup
-                                    type="text"
-                                    value={region}
-                                    placeholder="Cluj"
-                                    autoComplete="new-user"
-                                    onChange={(e: any) => setRegion(e.target.value)}
-                                />
-                            </FormGroup>
-                            <FormGroup
-                                label={t('country')}
-                                intent={countryError ? Intent.DANGER : Intent.NONE}
-                                helperText={countryError ? countryError : ""}
-                                className="register-form-group"
-                                labelInfo={t('required')}
-                            >
-                                <InputGroup
-                                    type="text"
-                                    value={country}
-                                    placeholder="România"
-                                    autoComplete="new-user"
-                                    onChange={(e: any) => setCountry(e.target.value)}
-                                />
-                            </FormGroup>
-                        </div>
-                        <div className="password-fields">
-                            <FormGroup
-                                label={t('password')}
-                                intent={passwordError ? Intent.DANGER : Intent.NONE}
-                                helperText={passwordError ? passwordError : ""}
-                                className="register-form-group"
-                                labelInfo={t('required')}
-                            >
-                                <InputGroup
-                                    type={showPassword ? 'text' : 'password'}
-                                    value={password}
-                                    autoComplete="new-password"
-                                    placeholder={t('password_placeholder')}
-                                    onChange={(e: any) => setPassword(e.target.value)}
-                                    rightElement={
-                                        <Button
-                                            className="password-button"
-                                            icon={showPassword ? 'eye-off' : 'eye-open'}
-                                            minimal={true}
-                                            onClick={togglePasswordVisibility}
-                                            small={true}
-                                            fill
-                                        />
-                                    }
-                                />
-                            </FormGroup>
-                            <FormGroup
-                                label={t('confirm_password')}
-                                intent={confirmError ? Intent.DANGER : Intent.NONE}
-                                helperText={confirmError ? confirmError : ""}
-                                className="register-form-group"
-                                labelInfo={t('required')}
-                            >
-                                <InputGroup
-                                    type={showConfPassword ? 'text' : 'password'}
-                                    value={confirmPassword}
-                                    placeholder={t('password_confirm_placeholder')}
-                                    autoComplete="new-password"
-                                    onChange={(e: any) => setConfirmPassword(e.target.value)}
-                                    rightElement={
-                                        <Button
-                                            className="password-button"
-                                            icon={showConfPassword ? 'eye-off' : 'eye-open'}
-                                            minimal={true}
-                                            onClick={toggleConfPasswordVisibility}
-                                            small={true}
-                                            fill
-                                        />
-                                    }
-                                />
-                            </FormGroup>
-                        </div>
+                        {generatePasswordFields()}
                     </form>
                     <Button onClick={handleRegisterEmployer}
                             small={true}
@@ -595,11 +439,6 @@ const RegisterPage = () => {
     const resetState = () => {
         setEmail('');
         setCompanyName('');
-        setStreet('');
-        setZipCode('');
-        setCity('');
-        setRegion('');
-        setCountry('');
         setFirstName('');
         setLastName('');
         setPassword('');

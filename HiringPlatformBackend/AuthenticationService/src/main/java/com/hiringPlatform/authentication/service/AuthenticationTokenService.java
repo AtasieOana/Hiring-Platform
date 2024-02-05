@@ -88,43 +88,21 @@ public class AuthenticationTokenService {
      */
     public void sendPasswordEmail(String email, boolean accountEnabled, User user) {
         if(accountEnabled){
-            if(user.getPassword() == null || Objects.equals(user.getPassword(), "")){
-                String emailContent = "<div style='background-color: #f4f4f4; padding: 20px;'>" +
-                        "<p>Hello,</p>" +
-                        "</br><p>This email was sent following the password reset request the <b>Joblistic</b> platform. If the account was created with Google then the password can't be changed. </p>" +
-                        "<p>Thank you,</p>" +
-                        "<p><b>Joblistic Team</b></p>" +
-                        "</div>";
-                this.emailService.sendEmailToUserAsync(email, emailContent, "Reset password on JOBLISTIC");
-            }
-            else{
-                Optional<AuthenticationToken> authenticationTokenOptional = authenticationTokenRepository.findByUserEmail(email);
-                if (authenticationTokenOptional.isPresent()) {
-                    // A valid token already exists
-                    if (authenticationTokenOptional.get().getExpiryDate().getTime() > new Date().getTime()) {
-                        String emailContent = "<div style='background-color: #f4f4f4; padding: 20px;'>" +
-                                "<p>Hello,</p>" +
-                                "</br><p>This email was sent following the password reset request the <b>Joblistic</b> platform. A valid <span style='color: darkorange;'>token</span> for this email already exists. Please, check your previous emails.</p>" +
-                                "<p>Thank you,</p>" +
-                                "<p><b>Joblistic Team</b></p>" +
-                                "</div>";
-                        this.emailService.sendEmailToUserAsync(user.getEmail(), emailContent, "Authentication to JOBLISTIC");
-                    }
-                    // token is invalid, another token is needed
-                    else {
-                        authenticationTokenRepository.delete(authenticationTokenOptional.get());
-                        AuthenticationToken authenticationToken = this.generateToken(user);
-                        String emailContent = "<div style='background-color: #f4f4f4; padding: 20px;'>" +
-                                "<p>Hello,</p>" +
-                                "</br><p>This email was sent following the password reset request the <b>Joblistic</b> platform. To reset the password use the following token: </p>" +
-                                "<p><div style='color: darkorange;text-align: center;'><b>" + authenticationToken.getToken() + "<b></div></p>" +
-                                "<p>Thank you,</p>" +
-                                "<p><b>Joblistic Team</b></p>" +
-                                "</div>";
-                        this.emailService.sendEmailToUserAsync(email, emailContent, "Reset password on JOBLISTIC");
-                    }
+            Optional<AuthenticationToken> authenticationTokenOptional = authenticationTokenRepository.findByUserEmail(email);
+            if (authenticationTokenOptional.isPresent()) {
+                // A valid token already exists
+                if (authenticationTokenOptional.get().getExpiryDate().getTime() > new Date().getTime()) {
+                    String emailContent = "<div style='background-color: #f4f4f4; padding: 20px;'>" +
+                            "<p>Hello,</p>" +
+                            "</br><p>This email was sent following the password reset request the <b>Joblistic</b> platform. A valid <span style='color: darkorange;'>token</span> for this email already exists. Please, check your previous emails.</p>" +
+                            "<p>Thank you,</p>" +
+                            "<p><b>Joblistic Team</b></p>" +
+                            "</div>";
+                    this.emailService.sendEmailToUserAsync(user.getEmail(), emailContent, "Authentication to JOBLISTIC");
                 }
-                else{
+                // token is invalid, another token is needed
+                else {
+                    authenticationTokenRepository.delete(authenticationTokenOptional.get());
                     AuthenticationToken authenticationToken = this.generateToken(user);
                     String emailContent = "<div style='background-color: #f4f4f4; padding: 20px;'>" +
                             "<p>Hello,</p>" +
@@ -136,7 +114,17 @@ public class AuthenticationTokenService {
                     this.emailService.sendEmailToUserAsync(email, emailContent, "Reset password on JOBLISTIC");
                 }
             }
-
+            else{
+                AuthenticationToken authenticationToken = this.generateToken(user);
+                String emailContent = "<div style='background-color: #f4f4f4; padding: 20px;'>" +
+                        "<p>Hello,</p>" +
+                        "</br><p>This email was sent following the password reset request the <b>Joblistic</b> platform. To reset the password use the following token: </p>" +
+                        "<p><div style='color: darkorange;text-align: center;'><b>" + authenticationToken.getToken() + "<b></div></p>" +
+                        "<p>Thank you,</p>" +
+                        "<p><b>Joblistic Team</b></p>" +
+                        "</div>";
+                this.emailService.sendEmailToUserAsync(email, emailContent, "Reset password on JOBLISTIC");
+            }
         }
         else{
             String emailContent = "<div style='background-color: #f4f4f4; padding: 20px;'>" +

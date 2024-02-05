@@ -10,11 +10,6 @@ export interface RegisterEmployerRequest {
     email: string;
     password: string;
     companyName: string;
-    street: string;
-    region: string;
-    city: string;
-    country: string;
-    zipCode: string;
     accountType: string;
 }
 
@@ -37,7 +32,7 @@ export interface ResetPasswordRequest {
 
 export interface UserGoogleRequest {
     email: string;
-    username: string;
+    name: string;
     givenName: string;
     familyName: string;
     accountType: string;

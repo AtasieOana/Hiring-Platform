@@ -19,6 +19,6 @@ services:
     restart: always
     networks:
       - platformnet
-      
+#https://container-registry.oracle.com/ords/f?p=113:4:12535318386395      
 networks:
   platformnet:

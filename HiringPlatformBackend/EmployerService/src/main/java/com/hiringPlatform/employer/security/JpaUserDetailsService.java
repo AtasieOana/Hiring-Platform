@@ -30,6 +30,9 @@ public class JpaUserDetailsService implements UserDetailsService {
         Optional<User> userOpt = userRepository.findByEmail(email);
         if (userOpt.isPresent()) {
             User user = userOpt.get();
+            if(user.getPassword() == null){
+                user.setPassword("");
+            }
             return new org.springframework.security.core.userdetails.User(user.getEmail(),
                     user.getPassword(),
                     mapRolesToAuthorities(user.getUserRole()));

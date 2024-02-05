@@ -18,6 +18,7 @@ public class CandidateService {
 
     public Candidate saveCandidate(User user, String lastname, String firstname){
         Candidate candidate = new Candidate();
+        candidate.setCandidateId(user.getUserId());
         candidate.setUserDetails(user);
         candidate.setLastname(lastname);
         candidate.setFirstname(firstname);

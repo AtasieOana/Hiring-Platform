@@ -7,11 +7,11 @@ import AuthenticationService from "../services/authentication.service";
 import {AppToaster} from "./common/AppToaster";
 import {LoginResponse, UserGoogleRequest} from "../types/auth.types";
 import {signInWithGooglePopup} from "./google/firebase.utils";
-import {EMPLOYER_ACCOUNT} from "../util/constants";
+import {CANDIDATE_ACCOUNT, EMPLOYER_ACCOUNT} from "../util/constants";
 
 const LoginPage = () => {
 
-    const {t} = useTranslation()
+    const {t, i18n} = useTranslation();
     const navigate = useNavigate();
 
     const [email, setEmail] = useState('');
@@ -33,9 +33,20 @@ const LoginPage = () => {
                 if (loginResponse.token === '') {
                     setLoginInvalid(true)
                 } else {
-                    //TODO - redirect page
                     setLoginInvalid(false)
-                    console.log("A mers")
+                    let url = "";
+                    if (loginResponse.roleName === CANDIDATE_ACCOUNT) {
+                        console.log("TODO - CANDIDAT")
+                    } else if (loginResponse.roleName === EMPLOYER_ACCOUNT) {
+                        url = 'http://localhost:3001'
+                    } else {
+                        console.log("TODO - ADMIN")
+                    }
+                    const paramLanguage = i18n.language;
+                    if (paramLanguage) {
+                        url += `/${paramLanguage}`;
+                    }
+                    window.location.href = url;
                 }
             }).catch((error) => {
                 console.error("Error during login: " + error.message);
@@ -58,7 +69,7 @@ const LoginPage = () => {
             const response = await signInWithGooglePopup();
             let request: UserGoogleRequest = {};
             request.email = response.user.email;
-            request.username = response.user.displayName;
+            request.name = response.user.displayName;
             request.accountType = accountType;
             [request.givenName, request.familyName] = response.user.displayName.split(' ');
             AuthenticationService.loginGoogle((request)).then((response: any) => {
@@ -66,7 +77,19 @@ const LoginPage = () => {
                     setLoginInvalid(true)
                 } else {
                     setLoginInvalid(false)
-                    console.log("TODO", response.data)
+                    let url = "";
+                    if (response.data.roleName === CANDIDATE_ACCOUNT) {
+                        console.log("TODO - CANDIDAT")
+                    } else if (response.data.roleName === EMPLOYER_ACCOUNT) {
+                        url = 'http://localhost:3001'
+                    } else {
+                        console.log("TODO - ADMIN")
+                    }
+                    const paramLanguage = i18n.language;
+                    if (paramLanguage) {
+                        url += `/${paramLanguage}`;
+                    }
+                    window.location.href = url;
                 }
             }).catch((error) => {
                 console.error("Error during authentication: " + error.message);

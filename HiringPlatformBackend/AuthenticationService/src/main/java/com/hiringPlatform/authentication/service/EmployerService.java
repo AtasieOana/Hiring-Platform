@@ -11,20 +11,16 @@ import org.springframework.stereotype.Service;
 public class EmployerService {
 
     private final EmployerRepository employerRepository;
-    private final AddressService addressService;
 
     @Autowired
-    public EmployerService(EmployerRepository employerRepository, AddressService addressService) {
+    public EmployerService(EmployerRepository employerRepository) {
         this.employerRepository = employerRepository;
-        this.addressService = addressService;
     }
 
-    public Employer saveEmployer(User user, String companyName, String street, String zipCode,
-                                String city, String region, String country){
+    public Employer saveEmployer(User user, String companyName){
         Employer employer = new Employer();
         employer.setUserDetails(user);
-        Address address = addressService.saveAddressIfNotExist(zipCode, street, city, region, country);
-        employer.setAddress(address);
+        employer.setEmployerId(user.getUserId());
         employer.setCompanyName(companyName);
         return employerRepository.save(employer);
     }

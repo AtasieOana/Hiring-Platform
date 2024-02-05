@@ -1,13 +1,13 @@
 // HeaderPage.js
 import React from 'react';
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import './styles/Header.css';
 import {Icon} from "@blueprintjs/core";
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 
 const HeaderPage = () => {
 
-    const { t, i18n } = useTranslation();
+    const {t, i18n} = useTranslation();
 
     // Change the language
     const changeLanguage = () => {
@@ -22,7 +22,7 @@ const HeaderPage = () => {
 
             <div className="navigation">
                 <Link className="nav-item" to="#" isActive={false} onClick={changeLanguage}>
-                    <Icon size={13} icon="translate" color="white" className="nav-icon"/>  En/Ro
+                    <Icon size={13} icon="translate" color="white" className="nav-icon"/> En/Ro
                 </Link>
                 <Link to="" className="nav-item">
                     <Icon size={13} icon="home" color="white" className="nav-icon"/> {t('about')}

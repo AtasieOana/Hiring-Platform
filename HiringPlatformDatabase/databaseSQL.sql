@@ -58,22 +58,20 @@ CREATE TABLE candidati (
 	id_candidat VARCHAR2(36) CONSTRAINT pk_candidat PRIMARY KEY,
     nume VARCHAR2(100) NOT NULL,
     prenume VARCHAR2(100) NOT NULL,
-    id_utilizator CONSTRAINT fk_utilizator_candidat REFERENCES utilizatori(id_utilizator)
+    CONSTRAINT fk_utilizator_candidat FOREIGN KEY (id_candidat) REFERENCES utilizatori(id_utilizator)
 );
 
 CREATE TABLE angajatori (
 	id_angajator VARCHAR2(36) CONSTRAINT pk_angajator PRIMARY KEY,
     nume_companie VARCHAR2(100) NOT NULL,
-    id_adresa VARCHAR2(36) NOT NULL,
-    id_utilizator CONSTRAINT fk_utilizator_angajat REFERENCES utilizatori(id_utilizator),
-    CONSTRAINT fk_adresa_angajator FOREIGN KEY (id_adresa) REFERENCES adrese(id_adresa)
+    CONSTRAINT fk_utilizator_angajat FOREIGN KEY (id_angajator) REFERENCES utilizatori(id_utilizator)
 );
 
 CREATE TABLE administratori (
 	id_admin VARCHAR2(36) CONSTRAINT pk_admin PRIMARY KEY,
     nume_utilizator VARCHAR2(100) NOT NULL,
     id_creator_cont VARCHAR2(36),
-    id_utilizator CONSTRAINT fk_utilizator_admin REFERENCES utilizatori(id_utilizator),
+    CONSTRAINT fk_utilizator_admin FOREIGN KEY (id_admin) REFERENCES utilizatori(id_utilizator),
     CONSTRAINT fk_creator_admin FOREIGN KEY (id_creator_cont) REFERENCES utilizatori(id_utilizator)
 );
 
@@ -88,5 +86,9 @@ CREATE TABLE token_autentificare (
 SELECT * FROM roluri;
 SELECT * FROM utilizatori;
 SELECT * FROM administratori;
+SELECT * FROM candidati;
+SELECT * FROM angajatori;
+SELECT * FROM tari;
+SELECT * FROM adrese;
 SELECT * FROM token_autentificare;
 COMMIT;

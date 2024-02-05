@@ -1,11 +1,11 @@
 package com.hiringPlatform.employer.model;
 
-import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
@@ -28,9 +28,6 @@ public class User {
 
     @Column(name = "parola")
     private String password;
-
-    @Column(name = "nume_de_utilizator")
-    private String username;
 
     @Column(name = "data_inregistrare")
     private Date registrationDate;

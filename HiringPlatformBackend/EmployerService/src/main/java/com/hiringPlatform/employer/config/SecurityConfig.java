@@ -1,6 +1,6 @@
 package com.hiringPlatform.employer.config;
 
-import jakarta.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -38,11 +38,14 @@ public class SecurityConfig   {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .httpBasic(AbstractHttpConfigurer::disable)
-                .cors(Customizer.withDefaults())
-                .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests((authorize) ->
-                        authorize.requestMatchers("/employer/seeUsers").hasAnyAuthority("ROLE_ADMIN")
-                )
+                .cors().configurationSource(corsConfigurationSource())
+                .and()
+                .csrf().disable()
+                .authorizeRequests()
+                .antMatchers("/getLoggedUser").permitAll()
+                .antMatchers("/hasEmployerProfile/{email}").hasAnyAuthority("ROLE_EMPLOYER")
+                .anyRequest().authenticated()
+                .and()
                 .exceptionHandling().authenticationEntryPoint(accessDeniedHandler())
                 .and()
                 .sessionManagement()
@@ -56,14 +59,13 @@ public class SecurityConfig   {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-
-        configuration.setAllowedOrigins(List.of("http://localhost:8080"));
-        configuration.setAllowedMethods(List.of("GET","POST"));
+        configuration.setAllowedOriginPatterns(List.of("http://localhost"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("Authorization","Content-Type"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
-        source.registerCorsConfiguration("/**",configuration);
+        source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
 
         return source;
     }
