@@ -8,6 +8,8 @@ import {EmployerResponse} from "./types/auth.types";
 import {useDispatch} from "react-redux";
 import {setAuthData} from "./redux/actions/authActions";
 import RouterPage from "./components/RouterPage";
+import HomePage from "./components/HomePage";
+import ProfilePage from "./components/profile/ProfilePage";
 
 
 const App = () => {
@@ -34,6 +36,8 @@ const App = () => {
                 <div>
                     <Routes>
                         <Route path="/:paramLanguage" element={<RouterPage/>}/>
+                        <Route path="/home" element={<HomePage/>}/>
+                        <Route path="/profile" element={<ProfilePage/>}/>
                     </Routes>
                 </div>
             </Router>

@@ -1,4 +1,4 @@
-package com.hiringPlatform.employer.model.response;
+package com.hiringPlatform.employer.model;
 
 import com.hiringPlatform.employer.model.Address;
 import com.hiringPlatform.employer.model.Employer;

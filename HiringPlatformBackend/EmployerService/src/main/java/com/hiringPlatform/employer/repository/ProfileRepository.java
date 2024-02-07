@@ -1,6 +1,6 @@
 package com.hiringPlatform.employer.repository;
 
-import com.hiringPlatform.employer.model.response.Profile;
+import com.hiringPlatform.employer.model.Profile;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

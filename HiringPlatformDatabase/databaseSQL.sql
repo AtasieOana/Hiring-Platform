@@ -82,6 +82,17 @@ CREATE TABLE token_autentificare (
     id_utilizator VARCHAR2(36) CONSTRAINT fk_utilizator_token REFERENCES utilizatori(id_utilizator)
 );
 
+CREATE TABLE profiluri (
+    id_profil VARCHAR2(36) CONSTRAINT pk_profil PRIMARY KEY,
+    imagine BLOB,
+    descriere VARCHAR2(4000) NOT NULL,
+    nr_telefon VARCHAR2(10),
+    site_oficial VARCHAR2(255),
+    id_adresa VARCHAR2(36) CONSTRAINT fk_profil_adresa REFERENCES adrese(id_adresa),
+    id_angajator VARCHAR2(36) CONSTRAINT fk_profil_angajator REFERENCES angajatori(id_angajator),
+    CONSTRAINT nr_telefon_corect CHECK(LENGTH(nr_telefon) = 10 AND REGEXP_LIKE(nr_telefon, '^[0-9]+$'))
+);
+
 -- Verificarea datelor
 SELECT * FROM roluri;
 SELECT * FROM utilizatori;

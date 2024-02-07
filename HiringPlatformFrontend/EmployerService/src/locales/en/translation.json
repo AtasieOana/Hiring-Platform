@@ -1,3 +1,19 @@
 {
-  "home_title": "Ready to find new opportunities?"
+  "image": "Profile image",
+  "choose_img": "Choose a image",
+  "phone_number": "Phone number",
+  "phone_number_err": "The phone number must contain 10 digits.",
+  "website": "Website",
+  "website_err": "The site must be a valid URL.",
+  "street_err": "The street must have minimum 10 characters (letters, numbers, spaces, period, comma and hyphen).",
+  "street": "Street",
+  "street_placeholder": "Enter the address",
+  "region": "Region",
+  "region_req": "Region is required.",
+  "city": "City",
+  "city_req": "City is required.",
+  "country": "Country",
+  "country_req": "Country is required.",
+  "zip": "Zip code",
+  "zip_req": "Zip code is required."
 }

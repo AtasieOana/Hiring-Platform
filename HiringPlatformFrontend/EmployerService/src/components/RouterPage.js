@@ -2,9 +2,12 @@ import React, {useEffect} from 'react';
 import {connect} from 'react-redux';
 import {useTranslation} from "react-i18next";
 import ProfileService from "../services/profile.service";
+import {useNavigate} from "react-router-dom";
 
 const RouterPage = ({employer, token}) => {
+
     const {t, i18n} = useTranslation();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const urlPath = window.location.pathname;
@@ -15,13 +18,12 @@ const RouterPage = ({employer, token}) => {
             i18n.changeLanguage(paramLanguage);
         }
 
-        console.log(employer)
         ProfileService.hasEmployerProfile(token, employer.userDetails.email)
-            .then((response) => {
+            .then((response: any) => {
                 if (response.data === true) {
-                    console.log('CATRE HOME');
+                    navigate(`/home`);
                 } else {
-                    console.log('CATRE CREARE PROFIL');
+                    navigate(`/profile`);
                 }
             })
             .catch((error) => {

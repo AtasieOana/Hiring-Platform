@@ -1,0 +1,17 @@
+.form-container {
+    display: flex;
+}
+
+.left-column,
+.right-column {
+    flex: 1;
+    padding: 20px;
+}
+
+.left-column {
+    border-right: 1px solid #ccc;
+}
+
+.form-column .bp3-form-group {
+    margin-bottom: 20px;
+}

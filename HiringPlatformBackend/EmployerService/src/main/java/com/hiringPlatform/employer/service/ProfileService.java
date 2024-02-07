@@ -1,9 +1,6 @@
 package com.hiringPlatform.employer.service;
 
-import com.hiringPlatform.employer.model.Employer;
-import com.hiringPlatform.employer.model.response.EmployerResponse;
-import com.hiringPlatform.employer.model.response.Profile;
-import com.hiringPlatform.employer.repository.EmployerRepository;
+import com.hiringPlatform.employer.model.Profile;
 import com.hiringPlatform.employer.repository.ProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

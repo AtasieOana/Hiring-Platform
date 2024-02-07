@@ -6,6 +6,9 @@ import reportWebVitals from './reportWebVitals';
 import {persistor, store} from "./redux/reducers/persistReducer";
 import {PersistGate} from "redux-persist/integration/react";
 import {Provider} from "react-redux";
+import "normalize.css";
+import "@blueprintjs/core/lib/css/blueprint.css";
+import "@blueprintjs/icons/lib/css/blueprint-icons.css";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

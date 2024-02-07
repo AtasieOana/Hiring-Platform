@@ -1,3 +1,19 @@
 {
-  "home_title": "Sunteți pregătiți să găsiți noi oportunități?"
+  "image": "Imaginea de profil",
+  "choose_img": "Alege o imagine",
+  "phone_number": "Numărul de telefon",
+  "phone_number_err": "Numărul de telefon trebuie să conțină 10 cifre.",
+  "website": "Website",
+  "website_err": "Site-ului trebuie să fie un URL valid.",
+  "street_err": "Strada trebuie să aibă minim 10 caractere (litere, cifre, spații, punct, virgula și cratimă).",
+  "street": "Strada",
+  "street_placeholder": "Introduceți adresa",
+  "region": "Regiunea/Județul",
+  "region_req": "Regiunea este obligatorie.",
+  "city": "Orașul",
+  "city_req": "Orașul este obligatoriu.",
+  "country": "Țara",
+  "country_req": "Țara este obligatorie.",
+  "zip": "Codul poștal",
+  "zip_req": "Codul poștal este obligatoriu."
 }
