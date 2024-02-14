@@ -12,6 +12,7 @@ const HeaderPage = () => {
     // Change the language
     const changeLanguage = () => {
         let oldLanguage = i18n.language;
+        console.log(oldLanguage)
         const newLanguage = oldLanguage === 'ro' ? 'en' : 'ro';
         i18n.changeLanguage(newLanguage);
     };

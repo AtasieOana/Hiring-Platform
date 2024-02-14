@@ -1,6 +1,7 @@
 // authReducer.js
 
 const initialState = {
+    isAuthenticated: false,
     employer: {
         employerId: "",
         companyName: "",
@@ -25,6 +26,7 @@ const authReducer = (state = initialState, action) => {
         case 'SET_AUTH_DATA':
             return {
                 ...state,
+                isAuthenticated: action.payload.isAuthenticated,
                 employer: action.payload.employer,
                 token: action.payload.token,
             };

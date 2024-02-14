@@ -14,26 +14,26 @@ DROP TABLE roluri;
 
 -- Crearea tabelelor
 CREATE TABLE tari (
-	id_tara VARCHAR2(36) CONSTRAINT pk_tara PRIMARY KEY,
+    id_tara VARCHAR2(36) CONSTRAINT pk_tara PRIMARY KEY,
     nume VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE regiuni (
-	id_regiune VARCHAR2(36) CONSTRAINT pk_regiune PRIMARY KEY,
+    id_regiune VARCHAR2(36) CONSTRAINT pk_regiune PRIMARY KEY,
     nume VARCHAR(255) NOT NULL,
     id_tara VARCHAR2(36) CONSTRAINT fk_regiune_tara REFERENCES tari(id_tara)
 );
 
 CREATE TABLE orase (
-	id_oras VARCHAR2(36) CONSTRAINT pk_oras PRIMARY KEY,
+    id_oras VARCHAR2(36) CONSTRAINT pk_oras PRIMARY KEY,
     nume VARCHAR(255) NOT NULL,
     id_regiune VARCHAR2(36) CONSTRAINT fk_oras_regiune REFERENCES regiuni(id_regiune)
 );
 
 CREATE TABLE adrese (
-	id_adresa VARCHAR2(36) CONSTRAINT pk_adresa PRIMARY KEY,
-    strada VARCHAR(255),
-    cod_postal VARCHAR(255),
+    id_adresa VARCHAR2(36) CONSTRAINT pk_adresa PRIMARY KEY,
+    strada VARCHAR(255)  NOT NULL,
+    cod_postal VARCHAR(255)  NOT NULL,
     id_oras VARCHAR2(36) CONSTRAINT fk_adresa_oras REFERENCES orase(id_oras)
 );
 

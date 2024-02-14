@@ -1,4 +1,4 @@
-export const setAuthData = (employer, token) => ({
+export const setAuthData = (isAuthenticated, employer, token) => ({
     type: 'SET_AUTH_DATA',
-    payload: {employer, token},
+    payload: {isAuthenticated, employer, token},
 });

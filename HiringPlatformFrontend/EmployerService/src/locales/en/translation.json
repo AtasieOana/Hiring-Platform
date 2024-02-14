@@ -1,5 +1,8 @@
 {
+  "required": "(required)",
   "image": "Profile image",
+  "save_profile": "Save profile",
+  "profile_err": "An error occurred when trying to retrieving the profile.",
   "choose_img": "Choose a image",
   "phone_number": "Phone number",
   "phone_number_err": "The phone number must contain 10 digits.",
@@ -15,5 +18,7 @@
   "country": "Country",
   "country_req": "Country is required.",
   "zip": "Zip code",
-  "zip_req": "Zip code is required."
+  "zip_req": "Zip code is required.",
+  "description": "Description",
+  "description_req": "The description must have at least 100 characters."
 }

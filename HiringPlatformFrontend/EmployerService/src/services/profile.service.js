@@ -2,7 +2,7 @@ import apiToken from "../util/apiToken";
 
 class ProfileService {
 
-    async hasEmployerProfile(token, email) {
+    async hasEmployerProfile(email) {
         return apiToken.get("/hasEmployerProfile/" + email);
     }
 

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Button, ControlGroup, FormGroup, InputGroup, Intent} from '@blueprintjs/core';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -6,9 +6,16 @@ import './Profile.css';
 import ImageUpload from "../common/ImageUpload";
 import {useTranslation} from "react-i18next";
 import HeaderPage from "../header/HeaderPageWithoutProfile";
+import {useNavigate} from "react-router-dom";
+import {useSelector} from "react-redux";
+import ProfileService from "../../services/profile.service";
+import {AppToaster} from "../common/AppToaster";
 
 const ProfilePage = () => {
-    const {t} = useTranslation();
+    const {t, i18n} = useTranslation();
+    const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+    const employer = useSelector(state => state.auth.employer);
+    const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
         image: null,
@@ -31,6 +38,37 @@ const ProfilePage = () => {
         country: false,
         description: false
     });
+
+    useEffect(() => {
+        // Set the language
+        const urlPath = window.location.pathname;
+        const parts = urlPath.split('/').filter(part => part !== '');
+
+        if (parts.length >= 1) {
+            const paramLanguage = parts[0];
+            i18n.changeLanguage(paramLanguage);
+        }
+
+        // Choose if the employer is redirect to profile creation or not
+        if (isAuthenticated) {
+            ProfileService.hasEmployerProfile(employer.userDetails.email)
+                .then((response: any) => {
+                    if (response.data === true) {
+                        navigate('/home');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error: ', error.message);
+                    AppToaster.show({
+                        message: t('profile_err'),
+                        intent: Intent.DANGER,
+                    });
+                    window.location.replace('http://localhost:3000/login');
+                });
+        } else {
+            window.location.replace('http://localhost:3000/login');
+        }
+    }, []);
 
     const handleChange = (e) => {
         const {name, value} = e.target;
@@ -66,7 +104,7 @@ const ProfilePage = () => {
             newErrors.street = false;
         }
         // Zipcode validation
-        if (formData.zipCode && !/^\d+$/.test(formData.zipCode)) {
+        if (formData.zipCode || !/^\d+$/.test(formData.zipCode)) {
             newErrors.zipCode = true;
             valid = false;
         } else {
@@ -151,6 +189,7 @@ const ProfilePage = () => {
                         label={t('street')}
                         intent={errors.street ? Intent.DANGER : Intent.NONE}
                         helperText={errors.street ? t('street_err') : ""}
+                        labelInfo={t('required')}
                     >
                         <InputGroup
                             type="text"
@@ -161,10 +200,11 @@ const ProfilePage = () => {
                     </FormGroup>
                     <ControlGroup fill>
                         <FormGroup
-                            label="Postal Code"
+                            label={t('zip')}
                             style={{flex: 1}}
                             intent={errors.zipCode ? Intent.DANGER : Intent.NONE}
-                            helperText={errors.zipCode ? "Codul poștal trebuie să conțină doar cifre" : ""}
+                            helperText={errors.zipCode ? t('zip_req') : ""}
+                            labelInfo={t('required')}
                         >
                             <InputGroup
                                 type="text"
@@ -174,10 +214,11 @@ const ProfilePage = () => {
                             />
                         </FormGroup>
                         <FormGroup
-                            label="City"
+                            label={t('city')}
                             style={{flex: 1}}
                             intent={errors.city ? Intent.DANGER : Intent.NONE}
-                            helperText={errors.city ? "Orașul nu poate fi gol" : ""}
+                            helperText={errors.city ? t('city_req') : ""}
+                            labelInfo={t('required')}
                         >
                             <InputGroup
                                 type="text"
@@ -189,10 +230,11 @@ const ProfilePage = () => {
                     </ControlGroup>
                     <ControlGroup fill>
                         <FormGroup
-                            label="Region"
+                            label={t('region')}
                             style={{flex: 1}}
                             intent={errors.region ? Intent.DANGER : Intent.NONE}
-                            helperText={errors.region ? "Regiunea poate conține doar litere și spații" : ""}
+                            helperText={errors.region ? t('region_req') : ""}
+                            labelInfo={t('required')}
                         >
                             <InputGroup
                                 type="text"
@@ -202,10 +244,11 @@ const ProfilePage = () => {
                             />
                         </FormGroup>
                         <FormGroup
-                            label="Country"
+                            label={t('country')}
                             style={{flex: 1}}
                             intent={errors.country ? Intent.DANGER : Intent.NONE}
-                            helperText={errors.country ? "Țara nu poate fi goală" : ""}
+                            helperText={errors.country ? t('country_req') : ""}
+                            labelInfo={t('required')}
                         >
                             <InputGroup
                                 type="text"
@@ -217,8 +260,10 @@ const ProfilePage = () => {
                     </ControlGroup>
                 </div>
                 <div className="right-column">
-                    <FormGroup label="Description" intent={errors.description ? Intent.DANGER : Intent.NONE}
-                               helperText={errors.description ? "Descrierea trebuie sa aiba minim 100 de caractere" : ""}>
+                    <FormGroup label={t('description')}
+                               labelInfo={t('required')}
+                               intent={errors.description ? Intent.DANGER : Intent.NONE}
+                               helperText={errors.description ? t('description_req') : ""}>
                         <ReactQuill
                             theme="snow"
                             value={formData.description}
@@ -230,7 +275,7 @@ const ProfilePage = () => {
             <Button className="register-button"
                     small={true}
                     onClick={(e) => handleSubmit(e)}>
-                Save profile
+                {t('save_profile')}
             </Button>
         </div>
     );

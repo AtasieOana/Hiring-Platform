@@ -6,6 +6,8 @@ import com.hiringPlatform.authentication.model.User;
 import com.hiringPlatform.authentication.repository.AdminRepository;
 import com.hiringPlatform.authentication.repository.RoleRepository;
 import com.hiringPlatform.authentication.repository.UserRepository;
+import com.hiringPlatform.authentication.service.RedisService;
+import com.hiringPlatform.authentication.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -19,15 +21,21 @@ public class DataInitializer implements CommandLineRunner {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final AdminRepository adminRepository;
+
+    private final RedisService redisService;
+
     @Autowired
-    public DataInitializer(UserRepository userRepository, RoleRepository roleRepository, AdminRepository adminRepository) {
+    public DataInitializer(UserRepository userRepository, RoleRepository roleRepository, AdminRepository adminRepository, RedisService redisService) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.adminRepository = adminRepository;
+        this.redisService = redisService;
     }
 
     @Override
     public void run(String... args) {
+        // Remove Redis config
+        redisService.removeData("userToken");
         // Create the roles: ADMIN, EMPLOYER, CANDIDATE
         Role adminRole = createRoleIfNotExists("ROLE_ADMIN", "The admin is the one who takes care of the management of the application.");
         createRoleIfNotExists("ROLE_EMPLOYER", "The employer is the one who seeks to hire a person for a job.");
