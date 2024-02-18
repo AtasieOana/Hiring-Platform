@@ -1,32 +1,51 @@
 import React, {useState} from 'react';
 import {useTranslation} from "react-i18next";
+import {AppToaster} from "./AppToaster";
+import {Intent} from "@blueprintjs/core";
 
-const ImageUpload = () => {
+const ImageUpload = ({onImageUpload}) => {
     const {t} = useTranslation();
 
     const [selectedImage, setSelectedImage] = useState(null);
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
-        setSelectedImage(file);
+
+        // Check if the file is an image
+        if (file && file.type.startsWith('image/')) {
+            setSelectedImage(file);
+            onImageUpload(file)
+        } else {
+            AppToaster.show({
+                message: t('profile_img_err'),
+                intent: Intent.WARNING,
+            });
+        }
     };
 
     const handleRemoveImage = () => {
+        onImageUpload(null)
         setSelectedImage(null);
     };
 
     return (
         <div>
-            <label className="custom-file-input-label">
-                {t('choose_img')}
-                <input type="file" accept="image/*" onChange={handleImageChange} style={{display: 'none'}}/>
-            </label>
-            {selectedImage && (
-                <div>
-                    <img src={URL.createObjectURL(selectedImage)} alt="Selected"/>
-                    <button onClick={handleRemoveImage}>Remove</button>
-                </div>
-            )}
+            {selectedImage ? (
+                    <div className="custom-file-container">
+                        <button className="custom-file-upload" onClick={handleRemoveImage}>
+                            {t('remove_img')}
+                        </button>
+                        <div>
+                            <img className="custom-image" src={URL.createObjectURL(selectedImage)} alt="Image"/>
+                        </div>
+                    </div>
+                ) :
+                <div className="custom-file-container">
+                    <label className="custom-file-upload">
+                        {t('choose_img')}
+                        <input type="file" accept="image/*" onChange={handleImageChange} style={{display: 'none'}}/>
+                    </label>
+                </div>}
         </div>
     );
 };

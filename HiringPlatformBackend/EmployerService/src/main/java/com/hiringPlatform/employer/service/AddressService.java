@@ -1,25 +1,14 @@
-package com.hiringPlatform.authentication.service;
+package com.hiringPlatform.employer.service;
 
-import com.hiringPlatform.authentication.model.Address;
-import com.hiringPlatform.authentication.model.City;
-import com.hiringPlatform.authentication.model.Country;
-import com.hiringPlatform.authentication.model.Region;
-import com.hiringPlatform.authentication.repository.*;
+import com.hiringPlatform.employer.model.Address;
+import com.hiringPlatform.employer.model.City;
+import com.hiringPlatform.employer.model.Country;
+import com.hiringPlatform.employer.model.Region;
+import com.hiringPlatform.employer.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-import javax.swing.text.html.Option;
 import java.util.Optional;
-import java.util.Properties;
 
 @Service
 public class AddressService {

@@ -102,4 +102,4 @@ SELECT * FROM angajatori;
 SELECT * FROM tari;
 SELECT * FROM adrese;
 SELECT * FROM token_autentificare;
-COMMIT;
+SELECT * FROM profiluri;

@@ -44,6 +44,7 @@ public class SecurityConfig   {
                 .authorizeRequests()
                 .antMatchers("/getLoggedUser").permitAll()
                 .antMatchers("/hasEmployerProfile/{email}").hasAnyAuthority("ROLE_EMPLOYER")
+                .antMatchers("/addEmployerProfile").hasAnyAuthority("ROLE_EMPLOYER")
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(accessDeniedHandler())

@@ -1,0 +1,16 @@
+/* styles.css sau NotFoundPage.css */
+
+.not-found-page {
+    text-align: center;
+    margin-top: 50px;
+}
+
+.not-found-page h1 {
+    font-size: 2rem;
+    color: red;
+}
+
+.not-found-page p {
+    font-size: 1.2rem;
+    color: #333;
+}

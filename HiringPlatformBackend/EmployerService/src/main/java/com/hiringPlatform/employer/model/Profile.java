@@ -4,6 +4,7 @@ import com.hiringPlatform.employer.model.Address;
 import com.hiringPlatform.employer.model.Employer;
 import com.hiringPlatform.employer.model.User;
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -19,6 +20,8 @@ import javax.persistence.*;
 public class Profile {
 
     @Id
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
     @Column(name = "id_profil")
     private String profileId;
 

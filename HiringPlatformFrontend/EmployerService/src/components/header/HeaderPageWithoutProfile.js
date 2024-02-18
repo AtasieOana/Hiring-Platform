@@ -2,8 +2,10 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 import './Header.css';
-import {Icon} from "@blueprintjs/core";
+import {Icon, Intent} from "@blueprintjs/core";
 import {useTranslation} from 'react-i18next';
+import {AppToaster} from "../common/AppToaster";
+import AuthenticationService from "../../services/authentication.service";
 
 const HeaderPage = () => {
 
@@ -17,6 +19,26 @@ const HeaderPage = () => {
         i18n.changeLanguage(newLanguage);
     };
 
+    // Logout
+    const logout = () => {
+        AuthenticationService.logout()
+            .then(() => {
+                AppToaster.show({
+                    message: t('logout_success'),
+                    intent: Intent.SUCCESS,
+                });
+                window.location.replace('http://localhost:3000/login');
+            })
+            .catch(error => {
+                console.error('Error: ', error.message);
+                AppToaster.show({
+                    message: t('logout_err'),
+                    intent: Intent.DANGER,
+                });
+            });
+    };
+
+
     return (
         <div className="header">
             <div className="company-name">JOBLISTIC</div>
@@ -25,7 +47,9 @@ const HeaderPage = () => {
                 <Link className="nav-item" to="#" isActive={false} onClick={changeLanguage}>
                     <Icon size={13} icon="translate" color="white" className="nav-icon"/> En/Ro
                 </Link>
-                TODOLOGOUT
+                <Link className="nav-item" to="#" isActive={false} onClick={logout}>
+                    <Icon size={13} icon="log-out" color="white" className="nav-icon"/> {t('logout')}
+                </Link>
             </div>
         </div>
     );

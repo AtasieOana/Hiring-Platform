@@ -94,17 +94,14 @@ const ProfilePage = () => {
             newErrors.phoneNumber = false;
         }
         // Street validation
-        if (formData.street && !/^[\w\d\s.,-]*$/.test(formData.street)) {
-            newErrors.street = true;
-            valid = false;
-        } else if (formData.street.length < 10) {
+        if (!formData.street || formData.street.length < 10 || !/^[A-Za-zăâîșțĂÂÎȘȚ\d\s.,\-]*$/u.test(formData.street)) {
             newErrors.street = true;
             valid = false;
         } else {
             newErrors.street = false;
         }
         // Zipcode validation
-        if (formData.zipCode || !/^\d+$/.test(formData.zipCode)) {
+        if (!formData.zipCode || !/^\d+$/.test(formData.zipCode)) {
             newErrors.zipCode = true;
             valid = false;
         } else {
@@ -113,7 +110,7 @@ const ProfilePage = () => {
         // City, region and country validation
         const fieldsToValidate = ['city', 'region', 'country'];
         fieldsToValidate.forEach(field => {
-            if (!formData[field] || (formData[field] && !/^[A-Za-z\s]*$/.test(formData[field]))) {
+            if (!formData[field] || (formData[field] && !/^[A-Za-zăâîșțĂÂÎȘȚ\s]*$/.test(formData[field]))) {
                 newErrors[field] = true;
                 valid = false;
             } else {
@@ -142,21 +139,46 @@ const ProfilePage = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (validateForm()) {
-            // Trimite datele către server sau procesează-le aici
-            console.log('Formul este valid!');
-        } else {
-            console.log('Formul conține erori!');
+            let request = {
+                imagine: formData.image,
+                description: formData.description,
+                phone: formData.phoneNumber,
+                site: formData.website,
+                street: formData.street,
+                zipCode: formData.zipCode,
+                cityName: formData.city,
+                regionName: formData.region,
+                countryName: formData.country,
+                employerId: employer.employerId,
+            }
+            ProfileService.addEmployerProfile(request)
+                .then(() => {
+                    AppToaster.show({
+                        message: t('create_profile_success'),
+                        intent: Intent.SUCCESS,
+                    });
+                    navigate('/home');
+                })
+                .catch(error => {
+                    console.error('Error: ', error.message);
+                    AppToaster.show({
+                        message: t('create_profile_err'),
+                        intent: Intent.DANGER,
+                    });
+                });
         }
     };
 
     return (
         <div>
             <HeaderPage/>
-            <div className="form-container">
+            <div className="create-profile-title">{t('create_profile_title')}</div>
+            <div className="create-profile-subtitle">
+                *{t('create_profile_subtitle')}
+            </div>
+            <div className="form-container-profile">
                 <div className="left-column">
-                    <FormGroup label={t('image')}>
-                        <ImageUpload onImageUpload={handleImageUpload}/>
-                    </FormGroup>
+                    <ImageUpload onImageUpload={handleImageUpload}/>
                     <ControlGroup fill>
                         <FormGroup
                             label={t('phone_number')}
@@ -272,7 +294,7 @@ const ProfilePage = () => {
                     </FormGroup>
                 </div>
             </div>
-            <Button className="register-button"
+            <Button className="create-profile-button"
                     small={true}
                     onClick={(e) => handleSubmit(e)}>
                 {t('save_profile')}

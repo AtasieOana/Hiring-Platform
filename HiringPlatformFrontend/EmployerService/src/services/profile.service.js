@@ -6,6 +6,10 @@ class ProfileService {
         return apiToken.get("/hasEmployerProfile/" + email);
     }
 
+    async addEmployerProfile(request) {
+        return apiToken.post("/addEmployerProfile", request);
+    }
+
 }
 
 export default new ProfileService();

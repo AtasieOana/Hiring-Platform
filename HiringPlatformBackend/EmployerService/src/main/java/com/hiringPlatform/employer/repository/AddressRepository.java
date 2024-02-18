@@ -1,4 +1,4 @@
-package com.hiringPlatform.authentication.repository;
+package com.hiringPlatform.employer.repository;
 
 import com.hiringPlatform.employer.model.Address;
 import com.hiringPlatform.employer.model.City;

@@ -1,6 +1,5 @@
 package com.hiringPlatform.authentication.service;
 
-import com.hiringPlatform.authentication.model.Address;
 import com.hiringPlatform.authentication.model.Employer;
 import com.hiringPlatform.authentication.model.User;
 import com.hiringPlatform.authentication.repository.EmployerRepository;

@@ -1,17 +1,111 @@
-.form-container {
+.form-container-profile {
     display: flex;
+    padding: 5px;
+    border: 2px #ffaf84 outset;
+    margin: 20px 50px;
+}
+
+.create-profile-title {
+    text-align: center;
+    color: #415d4d;
+    font-style: italic;
+    text-decoration: underline;
+    font-weight: bolder;
+    font-size: 22px;
+    padding-top: 15px;
+    padding-bottom: 20px;
+}
+
+.create-profile-subtitle {
+    margin-left: 52px;
+    color: black;
+    font-size: 13px;
+    text-align: justify;
+    line-height: 1.2;
+    font-style: italic;
 }
 
 .left-column,
 .right-column {
     flex: 1;
-    padding: 20px;
+    padding: 10px 20px;
 }
 
 .left-column {
-    border-right: 1px solid #ccc;
+    border-right: 2px solid #698576;
 }
 
 .form-column .bp3-form-group {
     margin-bottom: 20px;
+}
+
+.custom-file-container {
+    margin-bottom: 15px;
+}
+
+.custom-file-upload {
+    border: 1px solid #1d1d1d;
+    display: inline-block;
+    padding: 3px 10px;
+    cursor: pointer;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+}
+
+.custom-file-upload:hover {
+    background-color: #e9e9e9;
+}
+
+.custom-image {
+    border: 1px solid #1d1d1d;
+    width: 100px;
+    height: 100px;
+    margin-top: 5px;
+}
+
+.ql-editor {
+    overflow: auto;
+    max-width: 70ch;
+    margin: auto;
+    max-height: 60vh;
+}
+
+.create-profile-button {
+    display: block !important;
+    background-color: #ffaf84 !important;
+    width: 20%;
+    text-align: center !important;
+    color: black !important;
+    font-weight: 600;
+    letter-spacing: 1px;
+    margin: 0 auto 20px auto !important;
+}
+
+@media (max-width: 1000px) {
+    .create-profile-subtitle {
+        font-size: 12px;
+        line-height: 1;
+    }
+
+    .form-container-profile {
+        display: block;
+    }
+
+    .left-column {
+        border-right: none;
+        border-bottom: 2px solid #698576;
+    }
+
+}
+
+@media (max-width: 750px) {
+    .create-profile-subtitle {
+        font-size: 10px;
+        line-height: 1.2;
+        margin-right: 52px;
+    }
+
+    .create-profile-button {
+        width: 50%;
+    }
 }
