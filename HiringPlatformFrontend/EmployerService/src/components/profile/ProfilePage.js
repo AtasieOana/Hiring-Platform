@@ -5,7 +5,7 @@ import 'react-quill/dist/quill.snow.css';
 import './Profile.css';
 import ImageUpload from "../common/ImageUpload";
 import {useTranslation} from "react-i18next";
-import HeaderPage from "../header/HeaderPageWithoutProfile";
+import HeaderWithoutProfile from "../header/HeaderPageWithoutProfile";
 import {useNavigate} from "react-router-dom";
 import {useSelector} from "react-redux";
 import ProfileService from "../../services/profile.service";
@@ -171,7 +171,7 @@ const ProfilePage = () => {
 
     return (
         <div>
-            <HeaderPage/>
+            <HeaderWithoutProfile/>
             <div className="create-profile-title">{t('create_profile_title')}</div>
             <div className="create-profile-subtitle">
                 *{t('create_profile_subtitle')}

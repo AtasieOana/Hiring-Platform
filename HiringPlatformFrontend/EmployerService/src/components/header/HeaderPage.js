@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import './Header.css';
 import {Icon, Intent, Menu, MenuItem, Popover} from '@blueprintjs/core';
 
@@ -8,10 +8,11 @@ import {AppToaster} from "../common/AppToaster";
 import AuthenticationService from "../../services/authentication.service";
 import {useSelector} from "react-redux";
 
-const HeaderWithoutProfile = () => {
+const HeaderPage = () => {
 
     const {t, i18n} = useTranslation();
     const employer = useSelector(state => state.auth.employer);
+    const navigate = useNavigate();
 
     // Change the language
     const changeLanguage = () => {
@@ -40,6 +41,10 @@ const HeaderWithoutProfile = () => {
             });
     };
 
+    const handleGoToEditAccount = () => {
+        navigate('/editProfile');
+    }
+
     return (
         <div className="header">
             <div className="company-name">JOBLISTIC</div>
@@ -48,11 +53,16 @@ const HeaderWithoutProfile = () => {
                 <Link className="nav-item" to="#" isActive={false} onClick={changeLanguage}>
                     <Icon size={13} icon="translate" color="white" className="nav-icon"/> En/Ro
                 </Link>
+                <Link className="nav-item" to="/home">
+                    <Icon size={13} icon="list-detail-view" color="white" className="nav-icon"/> {t('posted_jobs')}
+                </Link>
                 <Popover
                     interactionKind="hover"
                     usePortal={false}
                     content={
                         <Menu>
+                            <MenuItem icon="annotation" color="white"
+                                      text={t('edit_account')} onClick={handleGoToEditAccount}/>
                             <MenuItem icon="log-out" color="white" text={t('logout')} onClick={logout}/>
                         </Menu>
                     }
@@ -68,4 +78,4 @@ const HeaderWithoutProfile = () => {
     );
 };
 
-export default HeaderWithoutProfile;
+export default HeaderPage;
