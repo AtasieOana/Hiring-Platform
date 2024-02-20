@@ -1,6 +1,7 @@
 package com.hiringPlatform.authentication.model;
 
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -16,6 +17,8 @@ import javax.persistence.*;
 public class Admin {
 
     @Id
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
     @Column(name = "id_admin")
     private String adminId;
 

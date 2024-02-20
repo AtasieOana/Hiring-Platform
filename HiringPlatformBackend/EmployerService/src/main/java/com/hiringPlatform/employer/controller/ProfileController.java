@@ -2,6 +2,7 @@ package com.hiringPlatform.employer.controller;
 
 import com.hiringPlatform.employer.model.Profile;
 import com.hiringPlatform.employer.model.request.CreateProfileRequest;
+import com.hiringPlatform.employer.model.response.GetProfileResponse;
 import com.hiringPlatform.employer.service.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -39,5 +40,15 @@ public class ProfileController {
     public ResponseEntity<String> addEmployerProfile(@ModelAttribute CreateProfileRequest profileRequest) throws IOException {
         Profile profile = profileService.addEmployerProfile(profileRequest);
         return ResponseEntity.ok(profileRequest.getEmployerId());
+    }
+
+    /**
+     * Method used for getting a profile
+     * @return the profile information
+     */
+    @GetMapping("/getProfile/{email}")
+    public ResponseEntity<GetProfileResponse> getProfile(@PathVariable String email) {
+        GetProfileResponse profile =  profileService.getProfile(email);
+        return ResponseEntity.ok(profile);
     }
 }

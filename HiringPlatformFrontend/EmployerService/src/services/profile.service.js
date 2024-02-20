@@ -1,4 +1,5 @@
 import apiToken from "../util/apiToken";
+import apiTokenMultipart from "../util/apiTokenMultipart";
 
 class ProfileService {
 
@@ -7,7 +8,15 @@ class ProfileService {
     }
 
     async addEmployerProfile(request) {
-        return apiToken.post("/addEmployerProfile", request);
+        return apiTokenMultipart.post("/addEmployerProfile", request);
+    }
+
+    async updateAccount(request) {
+        return apiToken.post("/updateAccount", request)
+    }
+
+    async getProfile(email) {
+        return apiToken.get("/getProfile/" + email)
     }
 
 }

@@ -50,6 +50,7 @@ public class SecurityConfig   {
                 .antMatchers("/logoutUser").permitAll()
                 .antMatchers("/authGoogle").permitAll()
                 .antMatchers("/loginGoogle").permitAll()
+                .antMatchers("/deleteUser/{email}").permitAll()
                 .antMatchers("/seeUsers").hasAnyAuthority("ROLE_ADMIN")
                 .anyRequest().authenticated()
                 .and()
@@ -68,7 +69,7 @@ public class SecurityConfig   {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.setAllowedOrigins(List.of("http://localhost:8080"));
-        configuration.setAllowedMethods(List.of("GET","POST"));
+        configuration.setAllowedMethods(List.of("GET","POST","DELETE","PUT","OPTIONS"));
         configuration.setAllowedHeaders(List.of("Authorization","Content-Type"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

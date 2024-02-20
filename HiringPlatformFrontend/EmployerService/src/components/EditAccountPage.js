@@ -1,12 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import HeaderPage from "./header/HeaderPage";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 import ProfileService from "../services/profile.service";
 import {AppToaster} from "./common/AppToaster";
-import {Button, Card, Divider, Elevation, FormGroup, H2, Icon, InputGroup, Intent} from "@blueprintjs/core";
+import {Button, Card, Divider, Elevation, FormGroup, Icon, InputGroup, Intent} from "@blueprintjs/core";
 import './EditAccount.css';
+import {setAuthData} from "../redux/actions/authActions";
+import {EmployerResponse} from "../types/auth.types";
 
 const EditAccountPage = () => {
 
@@ -15,7 +17,6 @@ const EditAccountPage = () => {
     const employer = useSelector(state => state.auth.employer);
     const navigate = useNavigate();
     const [isAccountEdited, setIsAccountEdited] = useState(false);
-    const [isProfileEdited, setIsProfileEdited] = useState(false);
     const [accountInfo, setAccountInfo] = useState({
         companyName: "",
         password: "",
@@ -26,6 +27,7 @@ const EditAccountPage = () => {
         password: false,
         confirmPassword: false,
     });
+    const dispatch = useDispatch();
 
     const [showPassword, setShowPassword] = useState(false);
     const [showConfPassword, setShowConfPassword] = useState(false);
@@ -92,7 +94,7 @@ const EditAccountPage = () => {
             newErrors.password = false;
         }
         // Confirm password validation
-        if (newErrors.confirmPassword === false && accountInfo.password !== accountInfo.confirmPassword) {
+        if (accountInfo.password !== accountInfo.confirmPassword) {
             newErrors.confirmPassword = true;
             valid = false;
         } else {
@@ -103,13 +105,30 @@ const EditAccountPage = () => {
     }
 
     const submitNewAccount = (e) => {
-        e.preventDefault();
         console.log(accountInfo)
         if (validateAccount()) {
-            setIsAccountEdited(false)
-            console.log("Valid")
-        } else {
-            console.log(errorsAccount)
+            let request = {
+                email: employer.userDetails.email,
+                newCompanyName: accountInfo.companyName,
+                newPassword: accountInfo.password,
+            }
+            ProfileService.updateAccount(request)
+                .then((response: any) => {
+                    let updateResponse: EmployerResponse = response.data;
+                    AppToaster.show({
+                        message: t('update_account_success'),
+                        intent: Intent.SUCCESS,
+                    });
+                    dispatch(setAuthData(true, updateResponse.employer, updateResponse.token));
+                    setIsAccountEdited(false)
+                })
+                .catch(error => {
+                    console.error('Error: ', error.message);
+                    AppToaster.show({
+                        message: t('update_account_err'),
+                        intent: Intent.DANGER,
+                    });
+                });
         }
     }
 
@@ -248,7 +267,7 @@ const EditAccountPage = () => {
                     className="card-form-group"
                 >
                     <p className="card-info-content">{employer.userDetails.password === "" || employer.userDetails.password === null
-                        ? t('empty_pass_motivation') : employer.userDetails.password}</p>
+                        ? t('empty_pass_motivation') : employer.userDetails.password.replace(/./g, '*')}</p>
                 </FormGroup>
             </div>
         </Card>
@@ -257,18 +276,11 @@ const EditAccountPage = () => {
     return (
         <div>
             <HeaderPage/>
-            <div className="create-profile-subtitle">
-                *{t('create_profile_subtitle')}
+            <div className="edit-account-subtitle">
+                {t('edit_account_subtitle')}
             </div>
             <div className="edit-card">
                 {isAccountEdited ? returnEditableAccountCard() : returnReadOnlyAccountCard()}
-                <Card interactive={true} elevation={Elevation.TWO}>
-                    <H2>
-                        Edit profile
-                    </H2>
-                    <p>Card content</p>
-                    <Button>Submit</Button>
-                </Card>
             </div>
         </div>
     );

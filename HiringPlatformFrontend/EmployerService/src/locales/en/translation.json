@@ -3,6 +3,8 @@
   "notfound2": "We're sorry, but the page you're looking for doesn't exist!",
   "logout": "Logout",
   "edit_account": "My account",
+  "delete_account": "Delete account",
+  "my_profile": "My profile",
   "posted_jobs": "Posted jobs",
   "logout_success": "Successful logout",
   "logout_err": "Failed logout",
@@ -46,7 +48,15 @@
   "company_err": "Company name must contain at least 3 characters (letters, numbers, hyphen, \"&\" character and spaces).",
   "password_placeholder": "Enter password",
   "password_err": "Password must have at least 5 characters.",
-  "password_confirm": "Password and Confirm Password must match.",
-  "confirm_password_err": "Confirm Password",
-  "password_confirm_placeholder": "Enter the password again"
+  "confirm_password": "Confirm Password",
+  "confirm_password_err": "Password and Confirm Password must match.",
+  "password_confirm_placeholder": "Enter the password again",
+  "edit_account_subtitle": "Below you can see the information related to your account: email, company name and password. You can press the \"Edit\" button to change the fields, with the exception of the email address, which can no longer be updated after creating the account.",
+  "delete_err": "An error occurred when deleting the account.",
+  "update_account_err": "An error occurred when trying to update the account.",
+  "update_account_success": "Account updated with success.",
+  "confirm_account_delete": "Account deletion confirmation",
+  "message_account_delete": "Are you sure you want to delete the account? It will be permanently deleted, with no possibility of recovery. You will no longer be able to perform any actions related to this account.",
+  "delete": "Delete",
+  "cancel": "Cancel"
 }

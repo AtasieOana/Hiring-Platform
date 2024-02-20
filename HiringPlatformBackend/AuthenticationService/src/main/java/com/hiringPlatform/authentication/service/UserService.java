@@ -273,4 +273,19 @@ public class UserService {
     public List<User> getAllUsers() {
         return new ArrayList<>(userRepository.findAll());
     }
+
+    /**
+     * Method used for deleting an account for an employer
+     * @return boolean
+     */
+    public Boolean deleteUser(String email) {
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+        if(optionalUser.isPresent()){
+            userRepository.delete(optionalUser.get());
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
 }

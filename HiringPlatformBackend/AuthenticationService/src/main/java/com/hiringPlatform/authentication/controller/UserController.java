@@ -147,4 +147,15 @@ public class UserController {
         loginResponse.setExpiresIn(jwtService.getExpirationTime());
         return ResponseEntity.ok(loginResponse);
     }
+
+    /**
+     * Method used for deleting an account for an employer
+     * @return boolean
+     */
+    @DeleteMapping("/deleteUser/{email}")
+    public ResponseEntity<Boolean> deleteUser(@PathVariable String email) {
+        redisService.removeData("userToken");
+        Boolean data = userService.deleteUser(email);
+        return ResponseEntity.ok(data);
+    }
 }

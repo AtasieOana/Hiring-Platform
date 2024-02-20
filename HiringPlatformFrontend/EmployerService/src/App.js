@@ -10,6 +10,7 @@ import {I18nextProvider} from 'react-i18next';
 import i18n from "./util/i18n";
 import NotFoundPage from "./components/common/notFound/NotFoundPage";
 import EditAccountPage from "./components/EditAccountPage";
+import EditProfilePage from "./components/EditProfilePage";
 
 const App = () => {
     const dispatch = useDispatch();
@@ -47,8 +48,9 @@ const App = () => {
             <Router>
                 <Routes>
                     <Route path="/home" element={isAuth ? <HomePage/> : redirectToWelcomePage()}/>
+                    <Route path="/profile" element={isAuth ? <EditProfilePage/> : redirectToWelcomePage()}/>
                     <Route path="/:paramLanguage" element={isAuth ? <ProfilePage/> : redirectToWelcomePage()}/>
-                    <Route path="/editProfile" element={isAuth ? <EditAccountPage/> : redirectToWelcomePage()}/>
+                    <Route path="/editAccount" element={isAuth ? <EditAccountPage/> : redirectToWelcomePage()}/>
                     <Route path="*" element={<NotFoundPage/>}/>
                 </Routes>
             </Router>

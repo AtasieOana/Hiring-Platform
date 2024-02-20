@@ -3,6 +3,7 @@
 -- Stergerea tabelelor
 DROP TABLE token_autentificare;
 DROP TABLE administratori;
+DROP TABLE profiluri;
 DROP TABLE angajatori;
 DROP TABLE candidati;
 DROP TABLE utilizatori;
@@ -58,13 +59,13 @@ CREATE TABLE candidati (
 	id_candidat VARCHAR2(36) CONSTRAINT pk_candidat PRIMARY KEY,
     nume VARCHAR2(100) NOT NULL,
     prenume VARCHAR2(100) NOT NULL,
-    CONSTRAINT fk_utilizator_candidat FOREIGN KEY (id_candidat) REFERENCES utilizatori(id_utilizator)
+    CONSTRAINT fk_utilizator_candidat FOREIGN KEY (id_candidat) REFERENCES utilizatori(id_utilizator) ON DELETE CASCADE
 );
 
 CREATE TABLE angajatori (
 	id_angajator VARCHAR2(36) CONSTRAINT pk_angajator PRIMARY KEY,
     nume_companie VARCHAR2(100) NOT NULL,
-    CONSTRAINT fk_utilizator_angajat FOREIGN KEY (id_angajator) REFERENCES utilizatori(id_utilizator)
+    CONSTRAINT fk_utilizator_angajat FOREIGN KEY (id_angajator) REFERENCES utilizatori(id_utilizator) ON DELETE CASCADE
 );
 
 CREATE TABLE administratori (
@@ -79,7 +80,7 @@ CREATE TABLE token_autentificare (
     id_token VARCHAR2(36) CONSTRAINT pk_token PRIMARY KEY,
     data_expirare DATE NOT NULL,
     token VARCHAR2(100) NOT NULL,
-    id_utilizator VARCHAR2(36) CONSTRAINT fk_utilizator_token REFERENCES utilizatori(id_utilizator)
+    id_utilizator VARCHAR2(36) CONSTRAINT fk_utilizator_token REFERENCES utilizatori(id_utilizator) ON DELETE CASCADE
 );
 
 CREATE TABLE profiluri (
@@ -89,7 +90,7 @@ CREATE TABLE profiluri (
     nr_telefon VARCHAR2(10),
     site_oficial VARCHAR2(255),
     id_adresa VARCHAR2(36) CONSTRAINT fk_profil_adresa REFERENCES adrese(id_adresa),
-    id_angajator VARCHAR2(36) CONSTRAINT fk_profil_angajator REFERENCES angajatori(id_angajator),
+    id_angajator VARCHAR2(36) CONSTRAINT fk_profil_angajator REFERENCES angajatori(id_angajator) ON DELETE CASCADE,
     CONSTRAINT nr_telefon_corect CHECK(LENGTH(nr_telefon) = 10 AND REGEXP_LIKE(nr_telefon, '^[0-9]+$'))
 );
 

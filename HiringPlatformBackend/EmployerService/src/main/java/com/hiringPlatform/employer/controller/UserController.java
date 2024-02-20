@@ -1,12 +1,13 @@
 package com.hiringPlatform.employer.controller;
 
+import com.hiringPlatform.employer.model.request.UpdateEmployerAccount;
 import com.hiringPlatform.employer.model.response.EmployerResponse;
 import com.hiringPlatform.employer.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3001")
@@ -28,4 +29,15 @@ public class UserController {
         EmployerResponse user =  userService.getLoggedUser();
         return ResponseEntity.ok(user);
     }
+
+    /**
+     * Method used for updating an account for an employer
+     * @return the updated account
+     */
+    @PostMapping("/updateAccount")
+    public ResponseEntity<EmployerResponse> updateAccount(@Valid @RequestBody UpdateEmployerAccount employerAccount) {
+        EmployerResponse user =  userService.updateEmployerAccount(employerAccount);
+        return ResponseEntity.ok(user);
+    }
+
 }

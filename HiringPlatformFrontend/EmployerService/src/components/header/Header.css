@@ -68,6 +68,15 @@
     margin-right: 3px;
 }
 
+.delete-menu-item {
+    background-color: #c51c1c;
+    color: white !important;
+}
+
+.delete-menu-item:hover {
+    background-color: #960606 !important;
+}
+
 @media (max-width: 700px) {
     .company-name {
         animation: none;

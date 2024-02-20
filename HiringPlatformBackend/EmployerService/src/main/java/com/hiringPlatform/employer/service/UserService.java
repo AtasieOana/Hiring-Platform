@@ -1,12 +1,14 @@
 package com.hiringPlatform.employer.service;
 
 import com.hiringPlatform.employer.model.Employer;
+import com.hiringPlatform.employer.model.Profile;
 import com.hiringPlatform.employer.model.User;
+import com.hiringPlatform.employer.model.request.UpdateEmployerAccount;
 import com.hiringPlatform.employer.model.response.EmployerResponse;
 import com.hiringPlatform.employer.repository.EmployerRepository;
-import com.hiringPlatform.employer.repository.UserRepository;
 import com.hiringPlatform.employer.security.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -55,5 +57,35 @@ public class UserService {
         }
     }
 
+    /**
+     * Method used for updating an account for an employer
+     * @return the updated account
+     */
+    public EmployerResponse updateEmployerAccount(UpdateEmployerAccount employerAccount) {
+        String userToken = redisService.getData("userToken");
+        Optional<Employer> optionalUser = employerRepository.findByEmail(employerAccount.getEmail());
+        if(optionalUser.isPresent()){
+            Employer employerToBeSaved = optionalUser.get();
+            User userDetails = employerToBeSaved.getUserDetails();
+            if(employerAccount.getNewPassword().length() > 0) {
+                BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+                String encodedPassword = bCryptPasswordEncoder.encode(employerAccount.getNewPassword());
+                userDetails.setPassword(encodedPassword);
+            }
+            else {
+                userDetails.setPassword(null);
+            }
+            employerToBeSaved.setCompanyName(employerAccount.getNewCompanyName());
+            employerToBeSaved.setUserDetails(userDetails);
+            Employer savedEmployer = employerRepository.save(employerToBeSaved);
+            EmployerResponse employerResponse = new EmployerResponse();
+            employerResponse.setEmployer(savedEmployer);
+            employerResponse.setToken(userToken);
+            return employerResponse;
+        }
+        else{
+            return null;
+        }
+    }
 
 }

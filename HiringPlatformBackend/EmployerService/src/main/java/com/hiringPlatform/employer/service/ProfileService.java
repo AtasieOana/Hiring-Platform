@@ -4,12 +4,15 @@ import com.hiringPlatform.employer.model.Address;
 import com.hiringPlatform.employer.model.Employer;
 import com.hiringPlatform.employer.model.Profile;
 import com.hiringPlatform.employer.model.request.CreateProfileRequest;
+import com.hiringPlatform.employer.model.response.EmployerResponse;
+import com.hiringPlatform.employer.model.response.GetProfileResponse;
 import com.hiringPlatform.employer.repository.EmployerRepository;
 import com.hiringPlatform.employer.repository.ProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Base64;
 import java.util.Optional;
 
 @Service
@@ -63,6 +66,32 @@ public class ProfileService {
         profile.setAddress(address);
         return profileRepository.save(profile);
     }
+
+    /**
+     * Method used for getting a profile
+     * @return the profile information
+     */
+    public GetProfileResponse getProfile(String email) {
+        Optional<Profile> optionalProfile = profileRepository.findByEmployerEmail(email);
+        if(optionalProfile.isPresent()){
+            Profile profile = optionalProfile.get();
+            GetProfileResponse getProfileResponse = new GetProfileResponse();
+            getProfileResponse.setImagine(Base64.getEncoder().encodeToString(profile.getImagine()));
+            getProfileResponse.setDescription(profile.getDescription());
+            getProfileResponse.setPhone(profile.getPhone());
+            getProfileResponse.setSite(profile.getSite());
+            getProfileResponse.setStreet(profile.getAddress().getStreet());
+            getProfileResponse.setZipCode(profile.getAddress().getZipCode());
+            getProfileResponse.setCityName(profile.getAddress().getCity().getCityName());
+            getProfileResponse.setRegionName(profile.getAddress().getCity().getRegion().getRegionName());
+            getProfileResponse.setCountryName(profile.getAddress().getCity().getRegion().getCountry().getCountryName());
+            return getProfileResponse;
+        }
+        else{
+            return null;
+        }
+    }
+
 
 
 }

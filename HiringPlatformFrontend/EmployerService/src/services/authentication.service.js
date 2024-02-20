@@ -10,6 +10,10 @@ class AuthenticationService {
     async logout() {
         return apiAuth.get("/logoutUser")
     }
+
+    async deleteAccount(email) {
+        return apiAuth.delete("/deleteUser/" + email)
+    }
 }
 
 export default new AuthenticationService();

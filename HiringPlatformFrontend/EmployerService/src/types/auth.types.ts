@@ -23,3 +23,4 @@ export interface EmployerResponse {
     employer: Employer;
     token: string;
 }
+
