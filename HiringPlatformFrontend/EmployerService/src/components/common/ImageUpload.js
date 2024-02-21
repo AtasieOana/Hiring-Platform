@@ -3,10 +3,10 @@ import {useTranslation} from "react-i18next";
 import {AppToaster} from "./AppToaster";
 import {Intent} from "@blueprintjs/core";
 
-const ImageUpload = ({onImageUpload}) => {
+const ImageUpload = ({onImageUpload, initialImg}) => {
     const {t} = useTranslation();
 
-    const [selectedImage, setSelectedImage] = useState(null);
+    const [selectedImage, setSelectedImage] = useState(initialImg);
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
@@ -30,13 +30,15 @@ const ImageUpload = ({onImageUpload}) => {
 
     return (
         <div>
-            {selectedImage ? (
+            {selectedImage && (selectedImage?.size > 10) ? (
                     <div className="custom-file-container">
                         <button className="custom-file-upload" onClick={handleRemoveImage}>
                             {t('remove_img')}
                         </button>
                         <div>
-                            <img className="custom-image" src={URL.createObjectURL(selectedImage)} alt="Image"/>
+                            <img className="custom-image"
+                                 src={URL.createObjectURL(selectedImage)}
+                                 alt="Image"/>
                         </div>
                     </div>
                 ) :

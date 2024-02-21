@@ -11,6 +11,10 @@ class ProfileService {
         return apiTokenMultipart.post("/addEmployerProfile", request);
     }
 
+    async updateEmployerProfile(request) {
+        return apiTokenMultipart.post("/updateEmployerProfile", request);
+    }
+
     async updateAccount(request) {
         return apiToken.post("/updateAccount", request)
     }

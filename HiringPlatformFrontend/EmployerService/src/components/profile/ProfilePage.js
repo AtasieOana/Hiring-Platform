@@ -1,306 +1,157 @@
 import React, {useEffect, useState} from 'react';
-import {Button, ControlGroup, FormGroup, InputGroup, Intent} from '@blueprintjs/core';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
+import HeaderPage from "../header/HeaderPage";
 import './Profile.css';
-import ImageUpload from "../common/ImageUpload";
-import {useTranslation} from "react-i18next";
-import HeaderWithoutProfile from "../header/HeaderPageWithoutProfile";
-import {useNavigate} from "react-router-dom";
-import {useSelector} from "react-redux";
 import ProfileService from "../../services/profile.service";
 import {AppToaster} from "../common/AppToaster";
+import {Button, Card, Intent, Spinner} from "@blueprintjs/core";
+import {useSelector} from "react-redux";
+import {useTranslation} from "react-i18next";
+import {useNavigate} from "react-router-dom";
+import {GetProfileResponse} from "../../types/profile.types";
+import Image from "../../resources-photo/No_profile_image.jpg";
+import MapDisplay from "../common/Map";
+import EditProfileCommon from "./EditProfileCommon";
+import ReactQuill from "react-quill";
+import {base64ToImage} from "../common/CommonMethods";
 
 const ProfilePage = () => {
-    const {t, i18n} = useTranslation();
+
+    const {t} = useTranslation();
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
     const employer = useSelector(state => state.auth.employer);
     const navigate = useNavigate();
-
-    const [formData, setFormData] = useState({
-        image: null,
-        phoneNumber: '',
-        website: '',
-        street: '',
-        zipCode: '',
-        city: '',
-        region: '',
-        country: '',
-        description: ''
-    });
-
-    const [errors, setErrors] = useState({
-        phoneNumber: false,
-        street: false,
-        zipCode: false,
-        city: false,
-        region: false,
-        country: false,
-        description: false
-    });
+    const [address, setAddress] = useState("");
+    const [profileInfo, setProfileInfo] = useState({
+        image: "",
+        description: "",
+        phone: "",
+        site: "",
+        street: "",
+        zipCode: "",
+        cityName: "",
+        regionName: "",
+        countryName: "",
+    })
+    const [isEditing, setIsEditing] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        // Set the language
-        const urlPath = window.location.pathname;
-        const parts = urlPath.split('/').filter(part => part !== '');
-
-        if (parts.length >= 1) {
-            const paramLanguage = parts[0];
-            i18n.changeLanguage(paramLanguage);
-        }
-
-        // Choose if the employer is redirect to profile creation or not
         if (isAuthenticated) {
-            ProfileService.hasEmployerProfile(employer.userDetails.email)
-                .then((response: any) => {
-                    if (response.data === true) {
-                        navigate('/home');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error: ', error.message);
-                    AppToaster.show({
-                        message: t('profile_err'),
-                        intent: Intent.DANGER,
-                    });
-                    window.location.replace('http://localhost:3000/login');
-                });
+            getProfile()
         } else {
             window.location.replace('http://localhost:3000/login');
         }
     }, []);
 
-    const handleChange = (e) => {
-        const {name, value} = e.target;
-        setFormData({...formData, [name]: value});
-    };
+    const getProfile = () => {
+        ProfileService.getProfile(employer.userDetails.email)
+            .then((response: any) => {
+                let profileResponse: GetProfileResponse = response.data;
+                setProfileInfo(profileResponse)
+                setAddress(`${profileResponse.street}, ${profileResponse.cityName}, ${profileResponse.countryName}`)
+                setIsLoading(false);
+            })
+            .catch(error => {
+                console.error('Error: ', error.message);
+                AppToaster.show({
+                    message: t('profile_err'),
+                    intent: Intent.DANGER,
+                });
+                navigate("/home");
+            });
+    }
 
-    const handleDescChange = (content, _delta, _source, _editor) => {
-        setFormData({...formData, description: content});
-    };
+    const handleUpdate = () => {
+        setIsEditing(false);
+        getProfile();
+    }
 
     const handleImageUpload = (image) => {
-        setFormData({...formData, image: image});
+        setProfileInfo({...profileInfo, image: image});
     };
 
-    const validateForm = () => {
-        let valid = true;
-        const newErrors = {...errors};
-        // Phone number validation
-        if (formData.phoneNumber && !/^\d{10}$/.test(formData.phoneNumber)) {
-            newErrors.phoneNumber = true;
-            valid = false;
-        } else {
-            newErrors.phoneNumber = false;
-        }
-        // Street validation
-        if (!formData.street || formData.street.length < 10 || !/^[A-Za-zăâîșțĂÂÎȘȚ\d\s.,\-]*$/u.test(formData.street)) {
-            newErrors.street = true;
-            valid = false;
-        } else {
-            newErrors.street = false;
-        }
-        // Zipcode validation
-        if (!formData.zipCode || !/^\d+$/.test(formData.zipCode)) {
-            newErrors.zipCode = true;
-            valid = false;
-        } else {
-            newErrors.zipCode = false;
-        }
-        // City, region and country validation
-        const fieldsToValidate = ['city', 'region', 'country'];
-        fieldsToValidate.forEach(field => {
-            if (!formData[field] || (formData[field] && !/^[A-Za-zăâîșțĂÂÎȘȚ\s]*$/.test(formData[field]))) {
-                newErrors[field] = true;
-                valid = false;
-            } else {
-                newErrors[field] = false;
-            }
-        });
-        // Description validation
-        if (!formData.description || formData.description.length < 100) {
-            newErrors.description = true;
-            valid = false;
-        } else {
-            newErrors.description = false;
-        }
-        // Website validation
-        if (formData.website && !/^https?:\/\/\S+$/.test(formData.website)) {
-            newErrors.website = true;
-            valid = false;
-        } else {
-            newErrors.website = false;
-        }
-        setErrors(newErrors);
-        return valid;
-    };
+    const renderStaticPage = () => {
+        return <div className="profile-container">
+            <div className="profile-left-column">
+                <Card className="profile-card">
+                    <div className="profile-info">
+                        {profileInfo.imagine ?
+                            <img className="profile-image" src={`data:image/jpeg;base64,${profileInfo.imagine}`}
+                                 alt="Company Logo"/>
+                            :
+                            <img className="profile-image" src={Image} alt="Company Logo"/>}
+                        <h2 className="profile-name">{employer.companyName}</h2>
+                        <p className="profile-jobs">{t('jobs_available')}: TODO</p>
+                        <Button className="profile-button" onClick={() => {
+                            setIsEditing(true)
+                        }}>
+                            {t('edit_information')}
+                        </Button>
+                    </div>
+                </Card>
+                <Card className="profile-card">
+                    <div className="profile-info">
+                        <div className="profile-heading">{t('contact')}</div>
+                        <div className="profile-details">
+                            <p>{t('email_simple')}: {employer.userDetails.email}</p>
+                            <p>{t('website')}: {profileInfo.site || t('info_not_provided')}</p>
+                            <p>{t('phone_number')}: {profileInfo.phone || t('info_not_provided')}</p>
+                        </div>
+                    </div>
+                </Card>
+                <Card className="profile-card">
+                    <div className="profile-info">
+                        <div className="profile-heading">{t('location')}</div>
+                        <div className="profile-details">
+                            <p>{profileInfo.street}, {profileInfo.zipCode}, {profileInfo.cityName}</p>
+                            <p>{t('region')} {profileInfo.regionName}, {profileInfo.countryName}</p>
+                            <MapDisplay
+                                address={address}/>
+                        </div>
+                    </div>
+                </Card>
+            </div>
+            <div className="profile-right-column">
+                <Card className="profile-card-description">
+                    <ReactQuill
+                        value={profileInfo.description}
+                        readOnly={true}
+                        theme={"bubble"}
+                    />
+                </Card>
+            </div>
+        </div>
+    }
 
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        if (validateForm()) {
-            let request = {
-                imagine: formData.image,
-                description: formData.description,
-                phone: formData.phoneNumber,
-                site: formData.website,
-                street: formData.street,
-                zipCode: formData.zipCode,
-                cityName: formData.city,
-                regionName: formData.region,
-                countryName: formData.country,
-                employerId: employer.employerId,
-            }
-            ProfileService.addEmployerProfile(request)
-                .then(() => {
-                    AppToaster.show({
-                        message: t('create_profile_success'),
-                        intent: Intent.SUCCESS,
-                    });
-                    navigate('/home');
-                })
-                .catch(error => {
-                    console.error('Error: ', error.message);
-                    AppToaster.show({
-                        message: t('create_profile_err'),
-                        intent: Intent.DANGER,
-                    });
-                });
+    const renderEditablePage = () => {
+        const formData = {
+            image: profileInfo.imagine,
+            phoneNumber: profileInfo.phone,
+            website: profileInfo.site,
+            street: profileInfo.street,
+            zipCode: profileInfo.zipCode,
+            city: profileInfo.cityName,
+            region: profileInfo.regionName,
+            country: profileInfo.countryName,
+            description: profileInfo.description
         }
-    };
+        return <EditProfileCommon formDataProps={formData} isAddOperationProps={false}
+                                  handleImageUploadProps={handleImageUpload}
+                                  imgProp={base64ToImage(`data:image/jpeg;base64,${profileInfo.imagine}`)}
+                                  updateEditionState={handleUpdate}/>
+    }
 
     return (
         <div>
-            <HeaderWithoutProfile/>
-            <div className="create-profile-title">{t('create_profile_title')}</div>
-            <div className="create-profile-subtitle">
-                *{t('create_profile_subtitle')}
-            </div>
-            <div className="form-container-profile">
-                <div className="left-column">
-                    <ImageUpload onImageUpload={handleImageUpload}/>
-                    <ControlGroup fill>
-                        <FormGroup
-                            label={t('phone_number')}
-                            style={{flex: 1}}
-                            intent={errors.phoneNumber ? Intent.DANGER : Intent.NONE}
-                            helperText={errors.phoneNumber ? t('phone_number_err') : ""}
-                        >
-                            <InputGroup
-                                type="text"
-                                name="phoneNumber"
-                                value={formData.phoneNumber}
-                                onChange={handleChange}
-                            />
-                        </FormGroup>
-                        <FormGroup
-                            label={t('website')}
-                            style={{flex: 1}}
-                            intent={errors.website ? Intent.DANGER : Intent.NONE}
-                            helperText={errors.website ? t('website_err') : ""}
-                        >
-                            <InputGroup
-                                type="text"
-                                name="website"
-                                value={formData.website}
-                                onChange={handleChange}
-                            />
-                        </FormGroup>
-                    </ControlGroup>
-                    <FormGroup
-                        label={t('street')}
-                        intent={errors.street ? Intent.DANGER : Intent.NONE}
-                        helperText={errors.street ? t('street_err') : ""}
-                        labelInfo={t('required')}
-                    >
-                        <InputGroup
-                            type="text"
-                            name="street"
-                            value={formData.street}
-                            onChange={handleChange}
-                        />
-                    </FormGroup>
-                    <ControlGroup fill>
-                        <FormGroup
-                            label={t('zip')}
-                            style={{flex: 1}}
-                            intent={errors.zipCode ? Intent.DANGER : Intent.NONE}
-                            helperText={errors.zipCode ? t('zip_req') : ""}
-                            labelInfo={t('required')}
-                        >
-                            <InputGroup
-                                type="text"
-                                name="zipCode"
-                                value={formData.zipCode}
-                                onChange={handleChange}
-                            />
-                        </FormGroup>
-                        <FormGroup
-                            label={t('city')}
-                            style={{flex: 1}}
-                            intent={errors.city ? Intent.DANGER : Intent.NONE}
-                            helperText={errors.city ? t('city_req') : ""}
-                            labelInfo={t('required')}
-                        >
-                            <InputGroup
-                                type="text"
-                                name="city"
-                                value={formData.city}
-                                onChange={handleChange}
-                            />
-                        </FormGroup>
-                    </ControlGroup>
-                    <ControlGroup fill>
-                        <FormGroup
-                            label={t('region')}
-                            style={{flex: 1}}
-                            intent={errors.region ? Intent.DANGER : Intent.NONE}
-                            helperText={errors.region ? t('region_req') : ""}
-                            labelInfo={t('required')}
-                        >
-                            <InputGroup
-                                type="text"
-                                name="region"
-                                value={formData.region}
-                                onChange={handleChange}
-                            />
-                        </FormGroup>
-                        <FormGroup
-                            label={t('country')}
-                            style={{flex: 1}}
-                            intent={errors.country ? Intent.DANGER : Intent.NONE}
-                            helperText={errors.country ? t('country_req') : ""}
-                            labelInfo={t('required')}
-                        >
-                            <InputGroup
-                                type="text"
-                                name="country"
-                                value={formData.country}
-                                onChange={handleChange}
-                            />
-                        </FormGroup>
-                    </ControlGroup>
-                </div>
-                <div className="right-column">
-                    <FormGroup label={t('description')}
-                               labelInfo={t('required')}
-                               intent={errors.description ? Intent.DANGER : Intent.NONE}
-                               helperText={errors.description ? t('description_req') : ""}>
-                        <ReactQuill
-                            theme="snow"
-                            value={formData.description}
-                            onChange={handleDescChange}
-                        />
-                    </FormGroup>
-                </div>
-            </div>
-            <Button className="create-profile-button"
-                    small={true}
-                    onClick={(e) => handleSubmit(e)}>
-                {t('save_profile')}
-            </Button>
+            <HeaderPage/>
+            {isLoading ?
+                <div className="central-spinner-div">
+                    <Spinner className="central-spinner"
+                             size={200}/>
+                </div> :
+                !isEditing ? renderStaticPage() : renderEditablePage()}
         </div>
     );
-};
+}
 
 export default ProfilePage;

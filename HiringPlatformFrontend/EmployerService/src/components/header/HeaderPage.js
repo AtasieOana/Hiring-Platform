@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import './Header.css';
 import {Button, Dialog, DialogBody, DialogFooter, Icon, Intent, Menu, MenuItem, Popover} from '@blueprintjs/core';
@@ -7,25 +7,9 @@ import {useTranslation} from 'react-i18next';
 import {AppToaster} from "../common/AppToaster";
 import AuthenticationService from "../../services/authentication.service";
 import {useSelector} from "react-redux";
+import {useMediaQuery} from "../common/CommonMethods";
 
 const HeaderPage = () => {
-
-    function useMediaQuery(query) {
-        const [matches, setMatches] = useState(false);
-
-        useEffect(() => {
-            const mediaQuery = window.matchMedia(query);
-            setMatches(mediaQuery.matches);
-
-            const handler = (event) => setMatches(event.matches);
-            mediaQuery.addListener(handler);
-
-            return () => mediaQuery.removeListener(handler);
-        }, [query]);
-
-        return matches;
-    }
-
     const {t, i18n} = useTranslation();
     const employer = useSelector(state => state.auth.employer);
     const navigate = useNavigate();
@@ -35,7 +19,6 @@ const HeaderPage = () => {
     // Change the language
     const changeLanguage = () => {
         let oldLanguage = i18n.language;
-        console.log(oldLanguage)
         const newLanguage = oldLanguage === 'ro' ? 'en' : 'ro';
         i18n.changeLanguage(newLanguage);
     };

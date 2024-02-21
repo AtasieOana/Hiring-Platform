@@ -1,111 +1,128 @@
-.form-container-profile {
+.profile-container {
     display: flex;
-    padding: 5px;
-    border: 2px #ffaf84 outset;
-    margin: 20px 50px;
+    background-color: rgba(224, 156, 115, 0.1);
+    width: 100%;
+    min-height: 92vh;
 }
 
-.create-profile-title {
-    text-align: center;
-    color: #415d4d;
-    font-style: italic;
-    text-decoration: underline;
-    font-weight: bolder;
-    font-size: 22px;
-    padding-top: 15px;
-    padding-bottom: 20px;
-}
-
-.create-profile-subtitle {
-    margin-left: 52px;
-    color: black;
-    font-size: 13px;
-    text-align: justify;
-    line-height: 1.2;
-    font-style: italic;
-}
-
-.left-column,
-.right-column {
-    flex: 1;
-    padding: 10px 20px;
-}
-
-.left-column {
-    border-right: 2px solid #698576;
-}
-
-.form-column .bp3-form-group {
+.profile-left-column,
+.profile-right-column {
+    flex: none;
+    margin-top: 20px;
     margin-bottom: 20px;
 }
 
-.custom-file-container {
-    margin-bottom: 15px;
+.profile-left-column {
+    display: flex;
+    flex-direction: column;
+    margin-left: 3vw;
+    margin-right: 3vw;
+    width: 30%;
 }
 
-.custom-file-upload {
-    border: 1px solid #1d1d1d;
-    display: inline-block;
-    padding: 3px 10px;
-    cursor: pointer;
-    background-color: #f9f9f9;
-    border-radius: 4px;
+.profile-right-column {
+    width: 60%;
 }
 
-.custom-file-upload:hover {
-    background-color: #e9e9e9;
+.profile-card {
+    margin-bottom: 10px;
+    text-align: justify;
 }
 
-.custom-image {
-    border: 1px solid #1d1d1d;
-    width: 100px;
-    height: 100px;
-    margin-top: 5px;
+.profile-info {
+    padding: 5px;
+    text-align: center;
 }
 
-.ql-editor {
-    overflow: auto;
-    max-width: 70ch;
-    margin: auto;
-    max-height: 60vh;
-}
-
-.create-profile-button {
+.profile-button {
+    margin: 0 auto !important;
     display: block !important;
     background-color: #ffaf84 !important;
-    width: 20%;
+    width: 40%;
     text-align: center !important;
     color: black !important;
     font-weight: 600;
     letter-spacing: 1px;
-    margin: 0 auto 20px auto !important;
 }
 
-@media (max-width: 1000px) {
-    .create-profile-subtitle {
-        font-size: 12px;
-        line-height: 1;
-    }
-
-    .form-container-profile {
-        display: block;
-    }
-
-    .left-column {
-        border-right: none;
-        border-bottom: 2px solid #698576;
-    }
-
+.profile-image {
+    width: 120px;
+    height: 120px;
+    border: 1px solid black;
 }
 
-@media (max-width: 750px) {
-    .create-profile-subtitle {
-        font-size: 10px;
-        line-height: 1.2;
-        margin-right: 52px;
+.profile-name {
+    margin-top: 10px;
+    margin-bottom: 5px;
+    color: #fdaf7e;
+    font-size: 24px;
+}
+
+.profile-jobs {
+    margin-bottom: 15px;
+    font-style: italic;
+    text-decoration: underline;
+}
+
+.profile-heading {
+    color: #698576;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.profile-details {
+    text-align: left;
+}
+
+.profile-details p {
+    margin: 5px 0;
+}
+
+.profile-card-description {
+    margin-bottom: 10px;
+    width: 100%;
+    height: 98%;
+}
+
+.central-spinner-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 90vh;
+}
+
+.profile-card-description .ql-editor {
+    overflow: auto;
+    max-width: none;
+    margin: auto;
+    max-height: none;
+}
+
+@media (max-width: 800px) {
+    .profile-container {
+        flex-direction: column;
+        justify-content: center;
     }
 
-    .create-profile-button {
-        width: 50%;
+    .profile-left-column,
+    .profile-right-column {
+        width: 90%;
+        margin: 20px;
+    }
+
+    .profile-right-column {
+        margin-top: 0;
+    }
+
+    .profile-left-column {
+        margin-bottom: 10px;
+    }
+
+    .profile-card:last-of-type {
+        margin-bottom: 0;
     }
 }
+
+@media (min-width: 801px) and (max-width: 901px) {
+}
+

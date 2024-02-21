@@ -45,6 +45,7 @@ public class SecurityConfig   {
                 .antMatchers("/getLoggedUser").permitAll()
                 .antMatchers("/hasEmployerProfile/{email}").hasAnyAuthority("ROLE_EMPLOYER")
                 .antMatchers("/addEmployerProfile").hasAnyAuthority("ROLE_EMPLOYER")
+                .antMatchers("/updateEmployerProfile").hasAnyAuthority("ROLE_EMPLOYER")
                 .antMatchers("/getProfile/{email}").hasAnyAuthority("ROLE_EMPLOYER")
                 .antMatchers("/updateAccount").hasAnyAuthority("ROLE_EMPLOYER")
                 .anyRequest().authenticated()

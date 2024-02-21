@@ -76,7 +76,12 @@ public class ProfileService {
         if(optionalProfile.isPresent()){
             Profile profile = optionalProfile.get();
             GetProfileResponse getProfileResponse = new GetProfileResponse();
-            getProfileResponse.setImagine(Base64.getEncoder().encodeToString(profile.getImagine()));
+            if(profile.getImagine() != null){
+                getProfileResponse.setImagine(Base64.getEncoder().encodeToString(profile.getImagine()));
+            }
+            else{
+                getProfileResponse.setImagine(null);
+            }
             getProfileResponse.setDescription(profile.getDescription());
             getProfileResponse.setPhone(profile.getPhone());
             getProfileResponse.setSite(profile.getSite());
@@ -92,6 +97,36 @@ public class ProfileService {
         }
     }
 
-
+    /**
+     * Method used for updating a profile
+     * @return the updated profile
+     */
+    public Profile updateEmployerProfile(CreateProfileRequest profileRequest) throws IOException {
+        // Get profile by employer
+        Optional<Profile> profile = profileRepository.findByEmployerId(profileRequest.getEmployerId());
+        if(profile.isPresent()){
+            // Save address if it not exists already
+            Address address = addressService.saveAddressIfNotExist(profileRequest.getZipCode(),
+                    profileRequest.getStreet(), profileRequest.getCityName(), profileRequest.getRegionName(),
+                    profileRequest.getCountryName());
+            Profile dbProfile = profile.get();
+            dbProfile.setDescription(profileRequest.getDescription());
+            dbProfile.setPhone(profileRequest.getPhone());
+            dbProfile.setSite(profileRequest.getSite());
+            dbProfile.setAddress(address);
+            // Get image in bytes
+            if(profileRequest.getImagine() != null){
+                byte[] imageData = profileRequest.getImagine().getBytes();
+                dbProfile.setImagine(imageData);
+            }
+            else{
+                dbProfile.setImagine(null);
+            }
+            return profileRepository.save(dbProfile);
+        }
+        else{
+            return null;
+        }
+    }
 
 }

@@ -86,7 +86,7 @@ CREATE TABLE token_autentificare (
 CREATE TABLE profiluri (
     id_profil VARCHAR2(36) CONSTRAINT pk_profil PRIMARY KEY,
     imagine BLOB,
-    descriere VARCHAR2(4000) NOT NULL,
+    descriere CLOB NOT NULL,
     nr_telefon VARCHAR2(10),
     site_oficial VARCHAR2(255),
     id_adresa VARCHAR2(36) CONSTRAINT fk_profil_adresa REFERENCES adrese(id_adresa),

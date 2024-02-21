@@ -1,16 +1,31 @@
-/* styles.css sau NotFoundPage.css */
-
-.not-found-page {
-    text-align: center;
+.error404 {
     margin-top: 50px;
+    width: 80%;
+    margin-left: 10%;
+    margin-right: 10%;
 }
 
-.not-found-page h1 {
-    font-size: 2rem;
-    color: red;
+.title {
+    font-size: xx-large;
+    font-weight: bold;
+    text-align: center;
+    color: firebrick;
 }
 
-.not-found-page p {
-    font-size: 1.2rem;
-    color: #333;
+#error {
+    margin-top: 30px;
+    float: left;
+}
+
+#error p {
+    padding-top: 30px;
+    font-weight: bolder;
+    font-size: large;
+}
+
+#reasons {
+    list-style-type: square;
+    font-weight: bolder;
+    font-size: large;
+    padding-top: 10px;
 }

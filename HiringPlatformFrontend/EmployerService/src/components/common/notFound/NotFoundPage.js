@@ -7,9 +7,19 @@ const NotFoundPage = () => {
     const {t} = useTranslation();
 
     return (
-        <div className="not-found-page">
-            <h1>404 - {t('notfound')}</h1>
-            <p>{t('notfound2')}</p>
+        <div className="error404">
+            <p className="title">{t('error_404_title')}</p>
+            <span id="error">
+                <span>
+                    <p>{t('error_message')}</p>
+                    <p>{t('possible_reasons')}</p>
+                    <ul id="reasons">
+                        <li>{t('reason_1')}</li>
+                        <li>{t('reason_2')}</li>
+                        <li>{t('reason_3')}</li>
+                    </ul>
+                </span>
+            </span>
         </div>
     );
 };

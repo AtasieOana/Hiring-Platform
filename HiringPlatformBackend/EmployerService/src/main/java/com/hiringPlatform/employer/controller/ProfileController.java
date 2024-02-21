@@ -51,4 +51,14 @@ public class ProfileController {
         GetProfileResponse profile =  profileService.getProfile(email);
         return ResponseEntity.ok(profile);
     }
+
+    /**
+     * Method used for updating a profile
+     * @return the updated profile
+     */
+    @PostMapping("/updateEmployerProfile")
+    public ResponseEntity<Profile> updateEmployerProfile(@ModelAttribute CreateProfileRequest profileRequest) throws IOException {
+        Profile profile = profileService.updateEmployerProfile(profileRequest);
+        return ResponseEntity.ok(profile);
+    }
 }
