@@ -1,0 +1,26 @@
+package com.hiringPlatform.employer.model.response;
+
+import com.hiringPlatform.employer.model.request.StageHelperRequest;
+import lombok.*;
+
+import java.util.List;
+
+@Getter
+@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class JobResponse {
+
+    private String description;
+    private String contractType;
+    private String employmentRegime;
+    private String experience;
+    private String industry;
+    private String cityName;
+    private String regionName;
+    private String countryName;
+    private String employerId;
+    List<String> questionsText;
+    List<StageHelperRequest> stages;
+}

@@ -1,6 +1,10 @@
 -- BAZA DE DATE
 
 -- Stergerea tabelelor
+DROP TABLE intrebari;
+DROP TABLE contine;
+DROP TABLE etape;
+DROP TABLE locuri_de_munca;
 DROP TABLE token_autentificare;
 DROP TABLE administratori;
 DROP TABLE profiluri;
@@ -94,6 +98,42 @@ CREATE TABLE profiluri (
     CONSTRAINT nr_telefon_corect CHECK(LENGTH(nr_telefon) = 10 AND REGEXP_LIKE(nr_telefon, '^[0-9]+$'))
 );
 
+CREATE TABLE locuri_de_munca (
+    id_loc_de_munca VARCHAR2(36) CONSTRAINT pk_loc_de_munca PRIMARY KEY,
+    id_angajator VARCHAR2(36) CONSTRAINT fk_loc_munca_angajator REFERENCES angajatori(id_angajator) ON DELETE CASCADE,
+    id_oras VARCHAR2(36) CONSTRAINT fk_loc_de_munca_adresa REFERENCES orase(id_oras),
+    descriere CLOB NOT NULL,
+    tip_contract VARCHAR2(100) NOT NULL,
+    regim_angajare VARCHAR2(100) NOT NULL,
+    data_postarii DATE NOT NULL,
+    industrie VARCHAR2(100) NOT NULL,
+    mod_lucru VARCHAR2(100) NOT NULL,
+    experienta VARCHAR2(100) NOT NULL,
+    CONSTRAINT tip_contract_corect CHECK(tip_contract IN ('Norma intreaga', 'Norma redusa', 'Norma variabila')),
+    CONSTRAINT regim_angajare_corect CHECK(regim_angajare IN ('Stagiu', 'Proiect', 'Contract determinat', 'Contract nedeterminat')),
+    CONSTRAINT experienta_corecta CHECK(experienta IN ('Entry-Level', 'Junior', 'Intermediar')),
+    CONSTRAINT mod_lucru_corect CHECK(mod_lucru IN ('On-Site', 'Remote', 'Hibrid'))
+);
+
+CREATE TABLE etape (
+    id_etapa VARCHAR2(36) CONSTRAINT pk_etapa PRIMARY KEY,
+    nume_etapa VARCHAR2(200) NOT NULL,
+    CONSTRAINT etapa_nume_etapa UNIQUE (nume_etapa)
+);
+
+CREATE TABLE contine (
+    id_etapa VARCHAR2(36) CONSTRAINT fk_etapa REFERENCES etape(id_etapa) ON DELETE CASCADE,
+    id_loc_de_munca VARCHAR2(36) CONSTRAINT fk_contine_loc_de_munca REFERENCES locuri_de_munca(id_loc_de_munca) ON DELETE CASCADE,
+    nr_etapa NUMBER NOT NULL,
+    CONSTRAINT pk_contine PRIMARY KEY(id_etapa, id_loc_de_munca)
+);
+
+CREATE TABLE intrebari (
+    id_intrebare VARCHAR2(36) CONSTRAINT pk_intrebare PRIMARY KEY,
+    id_loc_de_munca VARCHAR2(36) CONSTRAINT fk_intrebare_loc_de_munca REFERENCES locuri_de_munca(id_loc_de_munca) ON DELETE CASCADE,
+    text_intrebare VARCHAR2(500) NOT NULL
+);
+
 -- Verificarea datelor
 SELECT * FROM roluri;
 SELECT * FROM utilizatori;
@@ -104,3 +144,7 @@ SELECT * FROM tari;
 SELECT * FROM adrese;
 SELECT * FROM token_autentificare;
 SELECT * FROM profiluri;
+SELECT * FROM locuri_de_munca;
+SELECT * FROM etape;
+SELECT * FROM contine;
+SELECT * FROM intrebari;

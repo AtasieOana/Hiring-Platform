@@ -1,6 +1,5 @@
 package com.hiringPlatform.employer.model.request;
 
-import com.hiringPlatform.employer.model.Employer;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
