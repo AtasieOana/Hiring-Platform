@@ -20,9 +20,6 @@ public class Contains {
     @Column(name = "nr_etapa")
     private Number stageNr;
 
-    @Column(name = "descriere")
-    private String description;
-
     public Stage getStage() {
         return containsId.getStage();
     }
