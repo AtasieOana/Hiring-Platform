@@ -102,6 +102,7 @@ CREATE TABLE locuri_de_munca (
     id_loc_de_munca VARCHAR2(36) CONSTRAINT pk_loc_de_munca PRIMARY KEY,
     id_angajator VARCHAR2(36) CONSTRAINT fk_loc_munca_angajator REFERENCES angajatori(id_angajator) ON DELETE CASCADE,
     id_oras VARCHAR2(36) CONSTRAINT fk_loc_de_munca_adresa REFERENCES orase(id_oras),
+    titlu VARCHAR2(500) NOT NULL,
     descriere CLOB NOT NULL,
     tip_contract VARCHAR2(100) NOT NULL,
     regim_angajare VARCHAR2(100) NOT NULL,
@@ -131,7 +132,8 @@ CREATE TABLE contine (
 CREATE TABLE intrebari (
     id_intrebare VARCHAR2(36) CONSTRAINT pk_intrebare PRIMARY KEY,
     id_loc_de_munca VARCHAR2(36) CONSTRAINT fk_intrebare_loc_de_munca REFERENCES locuri_de_munca(id_loc_de_munca) ON DELETE CASCADE,
-    text_intrebare VARCHAR2(500) NOT NULL
+    text_intrebare VARCHAR2(500) NOT NULL,
+    nr_intrebare NUMBER NOT NULL
 );
 
 -- Verificarea datelor

@@ -53,12 +53,13 @@ public class JobService {
             job.setEmploymentRegime(addJobRequest.getEmploymentRegime());
             job.setPostingDate(new Date());
             job.setExperience(addJobRequest.getExperience());
+            job.setTitle(addJobRequest.getTitle());
             job.setIndustry(addJobRequest.getIndustry());
             Job savedJob = jobRepository.save(job);
             // Associate stages
             stageService.associateStageWithJob(addJobRequest.getStages(), savedJob);
             // Associate questions
-            questionService.associateQuestionWithJob(addJobRequest.getQuestionsText(), savedJob);
+            questionService.associateQuestionWithJob(addJobRequest.getQuestions(), savedJob);
             return job;
         }
         else{
@@ -90,9 +91,10 @@ public class JobService {
             jobResponse.setRegionName(job.getCity().getRegion().getRegionName());
             jobResponse.setCountryName(job.getCity().getRegion().getCountry().getCountryName());
             jobResponse.setEmployerId(job.getEmployer().getEmployerId());
-            jobResponse.setQuestionsText(questionService.getAllQuestionsForJob(job.getJobId()));
+            jobResponse.setQuestions(questionService.getAllQuestionsForJob(job.getJobId()));
             jobResponse.setStages(stageService.getAllStagesForJob(job.getJobId()));
             jobResponse.setIndustry(job.getIndustry());
+            jobResponse.setTitle(job.getTitle());
             jobResponseList.add(jobResponse);
         }
         return jobResponseList;

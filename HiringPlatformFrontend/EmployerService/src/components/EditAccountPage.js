@@ -105,7 +105,6 @@ const EditAccountPage = () => {
     }
 
     const submitNewAccount = (e) => {
-        console.log(accountInfo)
         if (validateAccount()) {
             let request = {
                 email: employer.userDetails.email,

@@ -2,6 +2,7 @@ package com.hiringPlatform.employer.service;
 
 import com.hiringPlatform.employer.model.Job;
 import com.hiringPlatform.employer.model.Question;
+import com.hiringPlatform.employer.model.request.QuestionHelperRequest;
 import com.hiringPlatform.employer.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,19 +20,20 @@ public class QuestionService {
         this.questionRepository = questionRepository;
     }
 
-    public void associateQuestionWithJob(List<String> questions, Job job){
-        for(String question: questions){
+    public void associateQuestionWithJob(List<QuestionHelperRequest> questions, Job job){
+        for(QuestionHelperRequest question: questions){
             Question questionToBeSaved = new Question();
             questionToBeSaved.setJob(job);
-            questionToBeSaved.setQuestionText(question);
+            questionToBeSaved.setQuestionText(question.getQuestionText());
+            questionToBeSaved.setQuestionNumber(questionToBeSaved.getQuestionNumber());
             questionRepository.save(questionToBeSaved);
         }
     }
 
-    public List<String> getAllQuestionsForJob(String jobId){
+    public List<QuestionHelperRequest> getAllQuestionsForJob(String jobId){
         return questionRepository.findAllByJobId(jobId)
                 .stream()
-                .map(Question::getQuestionText)
+                .map(question -> new QuestionHelperRequest(question.getQuestionText(), question.getQuestionNumber()))
                 .collect(Collectors.toList());
     }
 }

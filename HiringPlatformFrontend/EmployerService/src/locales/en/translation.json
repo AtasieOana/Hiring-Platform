@@ -74,5 +74,21 @@
   "possible_reasons": "Possible reasons:",
   "reason_1": "The searched page has been moved or deleted.",
   "reason_2": "The link you entered is an old one.",
-  "reason_3": "The link you entered is not spelled correctly."
+  "reason_3": "The link you entered is not spelled correctly.",
+  "add_new_job_title": "Add a new job",
+  "general_details": "General details of the job",
+  "stages_error": "An error occurred while retrieving available stages.",
+  "job_title": "Job title",
+  "job_placeholder": "Please add a job title.",
+  "job_title_error": "Title must contain between 5 and 500 characters.",
+  "job_desc": "Job description",
+  "job_desc_error": "Description must be at least 100 characters.",
+  "contract_type": "Contract type",
+  "employment_regime": "Employment regime",
+  "industry": "Industry",
+  "work_mode": "Work mode",
+  "experience": "Experience",
+  "stages": "Stages of the recruitment process",
+  "questions": "Questions for the candidate",
+  "add": "Add"
 }

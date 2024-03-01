@@ -23,6 +23,9 @@ public class Job {
     @Column(name = "id_loc_de_munca")
     private String jobId;
 
+    @Column(name = "titlu")
+    private String title;
+
     @Column(name = "descriere")
     private String description;
 

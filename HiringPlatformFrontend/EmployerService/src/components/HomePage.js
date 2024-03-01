@@ -17,7 +17,7 @@ const HomePage = () => {
             <Button className="add-job-button" onClick={handleDialogAction}>
                 Adauga job
             </Button>
-            <AddJobDialog idDialogOpen={isDialogOpen} handleDialogAction={handleDialogAction}/>
+            <AddJobDialog isDialogOpen={isDialogOpen} handleDialogAction={handleDialogAction}/>
         </div>
     );
 };

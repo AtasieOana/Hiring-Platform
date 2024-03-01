@@ -74,5 +74,21 @@
   "possible_reasons": "Motive posibile:",
   "reason_1": "Pagina căutată a fost mutată sau ștearsă.",
   "reason_2": "Link-ul pe care l-ați introdus este unul vechi.",
-  "reason_3": "Legătura pe care ați introdus-o nu este scris corect."
+  "reason_3": "Link-ul pe care ați introdus-o nu este scrisă corect.",
+  "add_new_job_title": "Adaugă un nou loc de muncă",
+  "general_details": "Detalii generale ale locului de muncă",
+  "stages_error": "A apărut o eroare la preluarea etapelor disponibile.",
+  "job_title": "Titlul locului de muncă",
+  "job_desc": "Descrierea locului de muncă",
+  "job_placeholder": "Please add a job title.",
+  "job_title_error": "Titlul trebuie să conțină între 5 și 500 de caractere.",
+  "job_desc_error": "Descrierea trebuie să conțină minim 100 de caractere.",
+  "contract_type": "Tipul de contract",
+  "employment_regime": "Regimul de angajare",
+  "industry": "Industrie",
+  "work_mode": "Modul de lucru",
+  "experience": "Experiență",
+  "stages": "Etapele procesului de recrutare",
+  "questions": "Întrebările adresate candidatului",
+  "add": "Adaugă"
 }

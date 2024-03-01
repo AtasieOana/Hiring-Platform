@@ -1,5 +1,6 @@
 package com.hiringPlatform.employer.model.response;
 
+import com.hiringPlatform.employer.model.request.QuestionHelperRequest;
 import com.hiringPlatform.employer.model.request.StageHelperRequest;
 import lombok.*;
 
@@ -12,6 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 public class JobResponse {
 
+    private String title;
     private String description;
     private String contractType;
     private String employmentRegime;
@@ -21,6 +23,6 @@ public class JobResponse {
     private String regionName;
     private String countryName;
     private String employerId;
-    List<String> questionsText;
+    List<QuestionHelperRequest> questions;
     List<StageHelperRequest> stages;
 }

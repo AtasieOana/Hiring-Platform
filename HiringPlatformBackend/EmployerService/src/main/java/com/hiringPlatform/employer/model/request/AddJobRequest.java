@@ -13,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 public class AddJobRequest {
 
+    private String title;
     private String description;
     private String contractType;
     private String employmentRegime;
@@ -22,6 +23,6 @@ public class AddJobRequest {
     private String regionName;
     private String countryName;
     private String employerId;
-    List<String> questionsText;
+    List<QuestionHelperRequest> questions;
     List<StageHelperRequest> stages;
 }

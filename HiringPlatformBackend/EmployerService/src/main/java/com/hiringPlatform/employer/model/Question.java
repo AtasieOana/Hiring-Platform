@@ -25,6 +25,8 @@ public class Question {
     @Column(name = "text_intrebare")
     private String questionText;
 
+    @Column(name = "nr_intrebare")
+    private Integer questionNumber;
     @ManyToOne(cascade={CascadeType.MERGE}, fetch=FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name ="id_loc_de_munca")
