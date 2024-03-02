@@ -1,5 +1,4 @@
 import apiToken from "../util/apiToken";
-import apiTokenMultipart from "../util/apiTokenMultipart";
 
 class JobService {
 
@@ -8,7 +7,7 @@ class JobService {
     }
 
     async addJob(request) {
-        return apiTokenMultipart.post("/addJob", request);
+        return apiToken.post("/addJob", request);
     }
 
     async deleteJob(jobId) {

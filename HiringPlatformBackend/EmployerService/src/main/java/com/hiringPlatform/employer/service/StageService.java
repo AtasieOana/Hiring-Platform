@@ -3,6 +3,7 @@ package com.hiringPlatform.employer.service;
 import com.hiringPlatform.employer.model.Contains;
 import com.hiringPlatform.employer.model.Job;
 import com.hiringPlatform.employer.model.Stage;
+import com.hiringPlatform.employer.model.key.ContainsId;
 import com.hiringPlatform.employer.model.request.StageHelperRequest;
 import com.hiringPlatform.employer.repository.ContainsRepository;
 import com.hiringPlatform.employer.repository.StageRepository;
@@ -45,6 +46,7 @@ public class StageService {
             Stage dbStage = saveStageIfNotExist(stage.getStageName());
             // Save contains object
             Contains contains = new Contains();
+            contains.setContainsId();
             contains.setStage(dbStage);
             contains.setJob(job);
             contains.setStageNr(stage.getStageNr());

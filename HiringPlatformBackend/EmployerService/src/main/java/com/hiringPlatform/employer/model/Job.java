@@ -41,6 +41,9 @@ public class Job {
     @Column(name = "industrie")
     private String industry;
 
+    @Column(name = "mod_lucru")
+    private String workMode;
+
     @Column(name = "experienta")
     private String experience;
 

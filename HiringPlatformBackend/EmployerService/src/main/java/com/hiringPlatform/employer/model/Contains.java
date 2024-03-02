@@ -18,7 +18,7 @@ public class Contains {
     private ContainsId containsId;
 
     @Column(name = "nr_etapa")
-    private Number stageNr;
+    private Integer stageNr;
 
     public Stage getStage() {
         return containsId.getStage();
@@ -32,8 +32,8 @@ public class Contains {
         return containsId;
     }
 
-    public void setId(ContainsId id) {
-        this.containsId = id;
+    public void setContainsId() {
+        this.containsId = new ContainsId();
     }
 
     public void setStage(Stage Stage) {

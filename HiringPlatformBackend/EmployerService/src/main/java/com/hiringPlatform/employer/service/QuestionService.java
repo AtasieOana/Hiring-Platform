@@ -25,7 +25,7 @@ public class QuestionService {
             Question questionToBeSaved = new Question();
             questionToBeSaved.setJob(job);
             questionToBeSaved.setQuestionText(question.getQuestionText());
-            questionToBeSaved.setQuestionNumber(questionToBeSaved.getQuestionNumber());
+            questionToBeSaved.setQuestionNumber(question.getQuestionNumber());
             questionRepository.save(questionToBeSaved);
         }
     }

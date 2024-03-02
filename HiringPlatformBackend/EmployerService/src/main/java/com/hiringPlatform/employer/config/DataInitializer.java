@@ -26,7 +26,7 @@ public class DataInitializer implements CommandLineRunner {
                     "The applicant has been hired (Candidatul a fost angajat)", "Preliminary telephone interview (Interviu telefonic preliminar)",
                     "Technical interview (Interviu tehnic)", "Personality tests (Teste de personalitate)", "Invitation to a social gathering (Invitație la o adunare socială)",
                     "Background check (Verificarea referințelor)", "Hiring manager interview (Interviu cu managerul de angajare)",
-                    "Interview with the Human Resources Department (Interviu cu Departamentul de Resurse Umane)",
+                    "Interview with HR Department (Interviu cu Departamentul HR)",
                     "Interview with the Technical Team (Interviu cu Echipa Tehnică)", "Practical Interview (Interviu Practic)",
                     "Assessment test (Test de evaluare)", "Language Proficiency Test (Test de competență lingvistică)");
             // Create default stages

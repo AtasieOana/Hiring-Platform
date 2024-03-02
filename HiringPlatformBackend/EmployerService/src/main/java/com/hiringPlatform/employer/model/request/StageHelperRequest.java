@@ -12,5 +12,5 @@ import lombok.Setter;
 public class StageHelperRequest {
 
     private String stageName;
-    private Number stageNr;
+    private Integer stageNr;
 }

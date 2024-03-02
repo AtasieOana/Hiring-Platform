@@ -54,6 +54,7 @@ public class JobService {
             job.setPostingDate(new Date());
             job.setExperience(addJobRequest.getExperience());
             job.setTitle(addJobRequest.getTitle());
+            job.setWorkMode(addJobRequest.getWorkMode());
             job.setIndustry(addJobRequest.getIndustry());
             Job savedJob = jobRepository.save(job);
             // Associate stages
@@ -94,6 +95,7 @@ public class JobService {
             jobResponse.setQuestions(questionService.getAllQuestionsForJob(job.getJobId()));
             jobResponse.setStages(stageService.getAllStagesForJob(job.getJobId()));
             jobResponse.setIndustry(job.getIndustry());
+            jobResponse.setWorkMode(jobResponse.getWorkMode());
             jobResponse.setTitle(job.getTitle());
             jobResponseList.add(jobResponse);
         }

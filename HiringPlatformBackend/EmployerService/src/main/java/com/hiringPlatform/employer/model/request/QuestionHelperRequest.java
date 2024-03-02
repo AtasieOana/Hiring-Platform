@@ -12,5 +12,5 @@ import lombok.Setter;
 public class QuestionHelperRequest {
 
     private String questionText;
-    private Number questionNumber;
+    private Integer questionNumber;
 }

@@ -19,6 +19,7 @@ public class JobResponse {
     private String employmentRegime;
     private String experience;
     private String industry;
+    private String workMode;
     private String cityName;
     private String regionName;
     private String countryName;
