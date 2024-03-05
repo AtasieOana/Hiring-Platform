@@ -51,6 +51,7 @@ const HeaderWithoutProfile = () => {
                 <Popover
                     interactionKind="hover"
                     usePortal={false}
+                    placement="bottom-end"
                     content={
                         <Menu>
                             <MenuItem icon="log-out" color="white" text={t('logout')} onClick={logout}/>

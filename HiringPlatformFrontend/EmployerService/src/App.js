@@ -3,7 +3,6 @@ import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import {useDispatch} from 'react-redux';
 import {setAuthData} from './redux/actions/authActions';
 import AuthenticationService from './services/authentication.service';
-import {EmployerResponse} from "./types/auth.types";
 import HomePage from "./components/HomePage";
 import EditProfilePage from "./components/profile/EditProfilePage";
 import {I18nextProvider} from 'react-i18next';
@@ -18,8 +17,8 @@ const App = () => {
     const [authLoaded, setAuthLoaded] = useState(false);
 
     useEffect(() => {
-        AuthenticationService.getLoggedUser().then((response: any) => {
-            let registerResponse: EmployerResponse = response.data;
+        AuthenticationService.getLoggedUser().then((response) => {
+            let registerResponse = response.data;
             if (registerResponse.token) {
                 setIsAuth(true)
                 dispatch(setAuthData(true, registerResponse.employer, registerResponse.token));

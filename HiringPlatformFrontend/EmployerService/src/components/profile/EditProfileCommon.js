@@ -72,7 +72,7 @@ const EditProfileCommon = ({
         // City, region and country validation
         const fieldsToValidate = ['city', 'region', 'country'];
         fieldsToValidate.forEach(field => {
-            if (!formData[field] || (formData[field] && !/^[A-Za-zăâîșțĂÂÎȘȚ\s]*$/.test(formData[field]))) {
+            if (!formData[field] || (formData[field] && !/^[A-Za-zăâîșțĂÂÎȘȚ\s\-]*$/u.test(formData[field]))) {
                 newErrors[field] = true;
                 valid = false;
             } else {
@@ -120,7 +120,7 @@ const EditProfileCommon = ({
             request.imagine = base64ToImage(`data:image/jpeg;base64,${request.imagine}`)
         }
         ProfileService.updateEmployerProfile(request)
-            .then((response: any) => {
+            .then((response) => {
                 AppToaster.show({
                     message: t('update_profile_success'),
                     intent: Intent.SUCCESS,

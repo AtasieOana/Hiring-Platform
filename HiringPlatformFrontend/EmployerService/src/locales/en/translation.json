@@ -115,5 +115,6 @@
   "add_question": "Add a question",
   "the_question": "Question",
   "create_job_err": "An error occurred while attempting to add the job.",
-  "create_job_success": "Job created with success."
+  "create_job_success": "Job created with success.",
+  "job_list_err": "An error occurred when trying to retrieving the jobs."
 }

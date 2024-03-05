@@ -115,5 +115,6 @@
   "add_question": "Adăugați o întrebare",
   "the_question": "Întrebarea",
   "create_job_err": "A apărut o eroare la încercarea de a adăuga locul de muncă.",
-  "create_job_success": "Locul de muncă a fost creat cu succes."
+  "create_job_success": "Locul de muncă a fost creat cu succes.",
+  "job_list_err": "A apărut o eroare la încercarea de a prelua locurile de muncă."
 }

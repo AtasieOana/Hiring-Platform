@@ -14,6 +14,23 @@ import {useTranslation} from "react-i18next";
 import {AppToaster} from "./common/AppToaster";
 import {signInWithGooglePopup} from "./google/firebase.utils";
 
+interface FormErrors {
+    emailRequired?: boolean;
+    emailInvalid?: boolean;
+    firstnameRequired?: boolean;
+    firstnameLen?: boolean;
+    firstnameInvalid?: boolean;
+    lastnameRequired?: boolean;
+    lastnameLen?: boolean;
+    lastnameInvalid?: boolean;
+    passwordRequired?: boolean;
+    passwordLen?: boolean;
+    confirmPassword?: boolean;
+    companyRequired?: boolean;
+    companyLen?: boolean;
+    companyInvalid?: boolean;
+}
+
 const RegisterPage = () => {
     const [email, setEmail] = useState('');
     const [companyName, setCompanyName] = useState('');
@@ -22,7 +39,7 @@ const RegisterPage = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [userType, setUserType] = useState(CANDIDATE_ACCOUNT);
-    const [errors, setErrors] = useState({});
+    const [errors, setErrors] = useState<FormErrors>({});
 
     const [showPassword, setShowPassword] = useState(false);
     const [showConfPassword, setShowConfPassword] = useState(false);
@@ -40,7 +57,7 @@ const RegisterPage = () => {
 
     const handleRegisterCandidate = () => {
         // Validation for fields
-        const newErrors = {};
+        const newErrors: FormErrors = {}; // Define type for newErrors
         if (!email) {
             newErrors.emailRequired = true;
         } else {
@@ -74,7 +91,7 @@ const RegisterPage = () => {
         } else if (password.length < 5) {
             newErrors.passwordLen = true;
         }
-        if (!newErrors.password && password !== confirmPassword) {
+        if (!newErrors.passwordLen && password !== confirmPassword) {
             newErrors.confirmPassword = true;
         }
         if (Object.keys(newErrors).length > 0) {
@@ -88,7 +105,13 @@ const RegisterPage = () => {
     }
 
     const registerUserCandidate = () => {
-        let registerRequest: RegisterCandidateRequest = {};
+        let registerRequest: RegisterCandidateRequest = {
+            accountType: "",
+            email: "",
+            firstname: "",
+            lastname: "",
+            password: ""
+        };
         registerRequest.email = email;
         registerRequest.password = password;
         registerRequest.lastname = lastName;
@@ -108,7 +131,7 @@ const RegisterPage = () => {
 
     const handleRegisterEmployer = () => {
         // Validation for fields
-        const newErrors = {};
+        const newErrors: FormErrors = {}; // Define type for newErrors
         if (!email) {
             newErrors.emailRequired = true;
         } else {
@@ -132,7 +155,7 @@ const RegisterPage = () => {
         } else if (password.length < 5) {
             newErrors.passwordLen = true;
         }
-        if (!newErrors.password && password !== confirmPassword) {
+        if (!newErrors.passwordLen && password !== confirmPassword) {
             newErrors.confirmPassword = true;
         }
         if (Object.keys(newErrors).length > 0) {
@@ -146,7 +169,7 @@ const RegisterPage = () => {
     };
 
     const registerUserEmployer = () => {
-        let registerRequest: RegisterEmployerRequest = {};
+        let registerRequest: RegisterEmployerRequest = {accountType: "", companyName: "", email: "", password: ""};
         registerRequest.email = email;
         registerRequest.password = password;
         registerRequest.companyName = companyName;
@@ -166,11 +189,13 @@ const RegisterPage = () => {
     const logGoogleUser = async (accountType: string) => {
         try {
             const response = await signInWithGooglePopup();
-            let request: UserGoogleRequest = {};
-            request.email = response.user.email;
-            request.name = response.user.displayName;
-            request.accountType = accountType;
-            [request.givenName, request.familyName] = response.user.displayName.split(' ');
+            let request: UserGoogleRequest = {accountType: "", email: "", familyName: "", givenName: "", name: ""};
+            if (response.user.email != null && response.user.displayName != null) {
+                request.email = response.user.email;
+                request.name = response.user.displayName;
+                request.accountType = accountType;
+                [request.givenName, request.familyName] = response.user.displayName.split(' ');
+            }
             AuthenticationService.authGoogle((request)).then((response: any) => {
                 let url = "";
                 if (response.data.roleName === CANDIDATE_ACCOUNT) {
@@ -192,7 +217,7 @@ const RegisterPage = () => {
                     intent: Intent.DANGER,
                 });
             })
-        } catch (error) {
+        } catch (error: any) {
             console.error("Error during register: " + error.message);
             AppToaster.show({
                 message: t('auth_error'),

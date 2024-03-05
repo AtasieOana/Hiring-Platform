@@ -33,7 +33,7 @@ const ResetPassword = () => {
 
     useEffect(() => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(emailParam)) {
+        if (!emailParam || !emailRegex.test(emailParam)) {
             AppToasterTop.show({
                 message: t('password_invalid_email'),
                 intent: Intent.WARNING,
@@ -48,9 +48,11 @@ const ResetPassword = () => {
         setConfirmPasswordInvalid(newPassword !== confirmPassword);
         setTokenInvalid(token === '');
         if (newPassword && newPassword.length >= 5 && newPassword === confirmPassword && token !== '') {
-            let request: ResetPasswordRequest = {};
+            let request: ResetPasswordRequest = {email: "", newPassword: "", token: ""};
             request.newPassword = newPassword
-            request.email = emailParam
+            if (emailParam != null) {
+                request.email = emailParam
+            }
             request.token = token
             AuthenticationService.resetPassword(request).then((response: any) => {
                 if (response.data) {

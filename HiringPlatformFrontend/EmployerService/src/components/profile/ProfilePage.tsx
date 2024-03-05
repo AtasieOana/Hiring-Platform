@@ -13,16 +13,17 @@ import MapDisplay from "../common/Map";
 import EditProfileCommon from "./EditProfileCommon";
 import ReactQuill from "react-quill";
 import {base64ToImage} from "../common/CommonMethods";
+import JobService from "../../services/job.service";
 
 const ProfilePage = () => {
 
     const {t} = useTranslation();
-    const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
-    const employer = useSelector(state => state.auth.employer);
+    const isAuthenticated = useSelector((state: any) => state.auth.isAuthenticated);
+    const employer = useSelector((state: any) => state.auth.employer);
     const navigate = useNavigate();
     const [address, setAddress] = useState("");
-    const [profileInfo, setProfileInfo] = useState({
-        image: "",
+    const [profileInfo, setProfileInfo] = useState<GetProfileResponse>({
+        imagine: "",
         description: "",
         phone: "",
         site: "",
@@ -34,6 +35,7 @@ const ProfilePage = () => {
     })
     const [isEditing, setIsEditing] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
+    const [jobNr, setJobNr] = useState(0);
 
     useEffect(() => {
         if (isAuthenticated) {
@@ -50,6 +52,10 @@ const ProfilePage = () => {
                 setProfileInfo(profileResponse)
                 setAddress(`${profileResponse.street}, ${profileResponse.cityName}, ${profileResponse.countryName}`)
                 setIsLoading(false);
+                JobService.getNrJobsForEmployer(employer.employerId)
+                    .then((response: any) => {
+                        setJobNr(response.data)
+                    })
             })
             .catch(error => {
                 console.error('Error: ', error.message);
@@ -66,8 +72,8 @@ const ProfilePage = () => {
         getProfile();
     }
 
-    const handleImageUpload = (image) => {
-        setProfileInfo({...profileInfo, image: image});
+    const handleImageUpload = (image: any) => {
+        setProfileInfo({...profileInfo, imagine: image});
     };
 
     const renderStaticPage = () => {
@@ -81,7 +87,7 @@ const ProfilePage = () => {
                             :
                             <img className="profile-image" src={Image} alt="Company Logo"/>}
                         <h2 className="profile-name">{employer.companyName}</h2>
-                        <p className="profile-jobs">{t('jobs_available')}: TODO</p>
+                        <p className="profile-jobs">{t('jobs_available')}: {jobNr}</p>
                         <Button className="profile-button" onClick={() => {
                             setIsEditing(true)
                         }}>

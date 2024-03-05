@@ -21,6 +21,12 @@ public class JobController {
         this.jobService = jobService;
     }
 
+    @GetMapping("/getNrJobsForEmployer/{employerId}")
+    public ResponseEntity<Number> getNrJobsForEmployer(@PathVariable String employerId) {
+        List<JobResponse> jobResponseList =  jobService.getAllJobsForEmployer(employerId);
+        return ResponseEntity.ok(jobResponseList.size());
+    }
+
     /**
      * Method used for getting the list of jobs for the employer
      * @return the list of jobs

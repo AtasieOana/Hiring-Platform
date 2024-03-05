@@ -74,7 +74,7 @@ const modules = {
     ]
 };
 
-const AddJobDialog = ({isDialogOpen, handleDialogAction}) => {
+const AddJobDialog = ({isDialogOpen, handleDialogAction}: any) => {
 
     // Constants
     const OTHERS = "Others"
@@ -83,7 +83,7 @@ const AddJobDialog = ({isDialogOpen, handleDialogAction}) => {
     const STAGE3 = "The applicant has been hired (Candidatul a fost angajat)"
 
     const {t, i18n} = useTranslation();
-    const employer = useSelector(state => state.auth.employer);
+    const employer = useSelector((state: any) => state.auth.employer);
 
     const industries = i18n.language === "ro" ? industriesRo : industriesEng
     const experiences = i18n.language === "ro" ? experiencesRo : experiencesEng
@@ -103,8 +103,8 @@ const AddJobDialog = ({isDialogOpen, handleDialogAction}) => {
     const [regionName, setRegionName] = useState('');
     const [countryName, setCountryName] = useState('');
     // Job Stages
-    const [stages, setStages] = useState([]); // All the stages
-    const [selectedStages, setSelectedStages] = useState([]); // The selected stage and their type
+    const [stages, setStages] = useState<any>([]); // All the stages
+    const [selectedStages, setSelectedStages] = useState<any>([]); // The selected stage and their type
     const [showInputGroup, setShowInputGroup] = useState(false);
     const [customStage, setCustomStage] = useState("");
     // Job Questions
@@ -120,9 +120,9 @@ const AddJobDialog = ({isDialogOpen, handleDialogAction}) => {
             .then((response: any) => {
                 let stagesResponse = response.data
                 setStages([...stagesResponse])
-                let stage1 = stagesResponse.filter(stage => stage.stageName === STAGE1)[0]
-                let stage2 = stagesResponse.filter(stage => stage.stageName === STAGE2)[0]
-                let stage3 = stagesResponse.filter(stage => stage.stageName === STAGE3)[0]
+                let stage1 = stagesResponse.filter((stage:any) => stage.stageName === STAGE1)[0]
+                let stage2 = stagesResponse.filter((stage:any) => stage.stageName === STAGE2)[0]
+                let stage3 = stagesResponse.filter((stage:any) => stage.stageName === STAGE3)[0]
                 let defaultStages = [stage1, stage2, stage3]
                 let defaultValues = defaultStages.map((stage: Stage, index: number) => {
                     return {
@@ -172,7 +172,7 @@ const AddJobDialog = ({isDialogOpen, handleDialogAction}) => {
      *  @param {any} _source
      *  @param {any} _editor
      */
-    const handleDescChange = (content, _delta, _source, _editor) => {
+    const handleDescChange = (content: any, _delta: any, _source: any, _editor: any) => {
         setJobDescription(content);
     };
 
@@ -180,7 +180,7 @@ const AddJobDialog = ({isDialogOpen, handleDialogAction}) => {
      * Handle stage addition
      *  @param {number} index
      */
-    const handleAddStage = (index) => {
+    const handleAddStage = (index: number) => {
         let oldValues: Stage[] = [...selectedStages];
         let currentItem = selectedStages[index]
         let beforeItem;
@@ -194,7 +194,7 @@ const AddJobDialog = ({isDialogOpen, handleDialogAction}) => {
         } else {
             beforeItem = {...oldValues[index]}
         }
-        const availableStages = stages.filter(stage => !selectedStages.some(selected => selected.stage.stageId === stage.stageId));
+        const availableStages = stages.filter((stage: any) => !selectedStages.some((selected: any) => selected.stage.stageId === stage.stageId));
         const firstAvailableStage = availableStages[0];
         // Insert the new stage between the last and penultimate stages
         let newItem = {
@@ -214,7 +214,7 @@ const AddJobDialog = ({isDialogOpen, handleDialogAction}) => {
      *  Handle stage removal
      *  @param {number} index
      */
-    const handleRemoveStage = (index) => {
+    const handleRemoveStage = (index: number) => {
         let oldValues: Stage[] = [...selectedStages];
         let oldSelectedItem = selectedStages[index - 1]
         let newSelectedItem;
@@ -243,8 +243,8 @@ const AddJobDialog = ({isDialogOpen, handleDialogAction}) => {
      *  @param {any} item
      *  @param {number} index
      */
-    const handleStageSelect = (item, index) => {
-        let itemStage = stages.filter(stage => stage.stageName === item)[0]
+    const handleStageSelect = (item: any, index: number) => {
+        let itemStage = stages.filter((stage: any) => stage.stageName === item)[0]
         if (item === "Others (Altele)") {
             setShowInputGroup(true);
             itemStage = {
@@ -313,8 +313,8 @@ const AddJobDialog = ({isDialogOpen, handleDialogAction}) => {
      * @param {number} index
      * @returns {any}
      */
-    const handleQuestionChange = (text, index) => {
-        let questionsCopy = [...questions]
+    const handleQuestionChange = (text: string, index: number): any => {
+        let questionsCopy: any = [...questions]
         questionsCopy[index].questionText = text;
         setQuestions(questionsCopy)
     }
@@ -323,7 +323,7 @@ const AddJobDialog = ({isDialogOpen, handleDialogAction}) => {
      * Used to add a new question
      */
     const handleAddQuestion = () => {
-        let questionsCopy = [...questions]
+        let questionsCopy: any = [...questions]
         questionsCopy.push({questionText: "", questionNumber: questionsCopy.length})
         setQuestions(questionsCopy)
     }
@@ -374,7 +374,7 @@ const AddJobDialog = ({isDialogOpen, handleDialogAction}) => {
      * @param {any} _query
      * @returns {any}
      */
-    const renderStageItem = (stage, {handleClick, modifiers, _query}) => {
+    const renderStageItem = (stage: any, {handleClick, modifiers, _query}: any): any => {
         if (!modifiers.matchesPredicate) {
             return null;
         }
@@ -397,7 +397,7 @@ const AddJobDialog = ({isDialogOpen, handleDialogAction}) => {
      * @param {any} _query
      * @returns {any}
      */
-    const renderContractType = (contractType: string, {handleClick, modifiers, _query}: any) => {
+    const renderContractType = (contractType: string, {handleClick, modifiers, _query}: any): any => {
         if (!modifiers.matchesPredicate) {
             return null;
         }
@@ -420,7 +420,7 @@ const AddJobDialog = ({isDialogOpen, handleDialogAction}) => {
      * @param {any} _query
      * @returns {any}
      */
-    const renderEmpRegimeType = (empRegime: string, {handleClick, modifiers, _query}: any) => {
+    const renderEmpRegimeType = (empRegime: string, {handleClick, modifiers, _query}: any): any => {
         if (!modifiers.matchesPredicate) {
             return null;
         }
@@ -443,7 +443,7 @@ const AddJobDialog = ({isDialogOpen, handleDialogAction}) => {
      * @param {any} _query
      * @returns {any}
      */
-    const renderIndustryType = (industry: string, {handleClick, modifiers, _query}: any) => {
+    const renderIndustryType = (industry: string, {handleClick, modifiers, _query}: any): any => {
         if (!modifiers.matchesPredicate) {
             return null;
         }
@@ -466,7 +466,7 @@ const AddJobDialog = ({isDialogOpen, handleDialogAction}) => {
      * @param {any} _query
      * @returns {any}
      */
-    const renderWorkModeType = (workMode: string, {handleClick, modifiers, _query}: any) => {
+    const renderWorkModeType = (workMode: string, {handleClick, modifiers, _query}: any): any => {
         if (!modifiers.matchesPredicate) {
             return null;
         }
@@ -489,7 +489,7 @@ const AddJobDialog = ({isDialogOpen, handleDialogAction}) => {
      * @param {any} _query
      * @returns {any}
      */
-    const renderExperienceType = (experience: string, {handleClick, modifiers, _query}: any) => {
+    const renderExperienceType = (experience: string, {handleClick, modifiers, _query}: any): any => {
         if (!modifiers.matchesPredicate) {
             return null;
         }
@@ -516,7 +516,7 @@ const AddJobDialog = ({isDialogOpen, handleDialogAction}) => {
         if (jobDescription.length < 100) {
             isValid = false;
         }
-        if (questions.filter(q => q.questionText.length < 10 || q.questionText.length >= 500).length > 0) {
+        if (questions.filter((q: any) => q.questionText.length < 10 || q.questionText.length >= 500).length > 0) {
             isValid = false
         }
         return isValid;
@@ -525,7 +525,7 @@ const AddJobDialog = ({isDialogOpen, handleDialogAction}) => {
     /**
      * Add job
      */
-    const addJob = (request) => {
+    const addJob = (request: any) => {
         JobService.addJob(request)
             .then(() => {
                 AppToaster.show({
@@ -594,13 +594,13 @@ const AddJobDialog = ({isDialogOpen, handleDialogAction}) => {
                 cityName: cityName,
                 regionName: regionName,
                 countryName: countryName,
-                questions: questions.map(q => {
+                questions: questions.map((q: any) => {
                     return {
                         questionText: q.questionText,
                         questionNumber: q.questionNumber
                     }
                 }),
-                stages: selectedStages.map(s => {
+                stages: selectedStages.map((s: any) => {
                     if (s.stage.stageId === OTHERS && customStage !== "")
                         return {
                             stageName: customStage,
@@ -624,13 +624,14 @@ const AddJobDialog = ({isDialogOpen, handleDialogAction}) => {
         handleDialogAction();
     }
 
-    let stageSelectOption = []
+    let stageSelectOption: any[] = []
     if (stages.length > 0) {
-        let justStages = selectedStages.map(stageObj => stageObj.stage)
-        let filteredStages = stages.filter(stage => !justStages.includes(stage))
-        let stageNamesStages = filteredStages.map(stageObj => stageObj.stageName)
+        let justStages = selectedStages.map((stageObj: any) => stageObj.stage)
+        let filteredStages = stages.filter((stage: any) => !justStages.includes(stage))
+        let stageNamesStages = filteredStages.map((stageObj: any) => stageObj.stageName)
         stageSelectOption = [...stageNamesStages, "Others (Altele)"]
     }
+    // @ts-ignore
     return (
         <MultistepDialog
             isOpen={isDialogOpen}
@@ -641,7 +642,7 @@ const AddJobDialog = ({isDialogOpen, handleDialogAction}) => {
             className="add-job-dialog"
             finalButtonProps={{
                 intent: "success", onClick: handleSubmit, text: t('add'),
-                disabled: questions.filter(q => q.questionText.length < 10 || q.questionText.length >= 500).length > 0
+                disabled: questions.filter((q: any) => q.questionText.length < 10 || q.questionText.length >= 500).length > 0
             }}
         >
             <DialogStep
@@ -695,12 +696,12 @@ const AddJobDialog = ({isDialogOpen, handleDialogAction}) => {
             <DialogStep
                 id="step2"
                 nextButtonProps={{
+                    disabled: (!countryName || (countryName && !/^[A-Za-zăâîșțĂÂÎȘȚ\s\-]*$/u.test(countryName)))
+                        || (!cityName || (cityName && !/^[A-Za-zăâîșțĂÂÎȘȚ\s\-]*$/u.test(cityName))) || (
+                            !regionName || (regionName && !/^[A-Za-zăâîșțĂÂÎȘȚ\s\-]*$/u.test(regionName))
+                        ) || false,
                     intent: "success",
-                    text: t('next_step'),
-                    disabled: (!countryName || (countryName && !/^[A-Za-zăâîșțĂÂÎȘȚ\s]*$/.test(countryName)))
-                        || (!cityName || (cityName && !/^[A-Za-zăâîșțĂÂÎȘȚ\s]*$/.test(cityName))) || (
-                            !regionName || (regionName && !/^[A-Za-zăâîșțĂÂÎȘȚ\s]*$/.test(regionName))
-                        )
+                    text: t('next_step')
                 }}
                 backButtonProps={{
                     intent: "none",
@@ -717,8 +718,8 @@ const AddJobDialog = ({isDialogOpen, handleDialogAction}) => {
                             <div className="add-job-address">
                                 <FormGroup
                                     label={t('city')}
-                                    intent={!cityName || (cityName && !/^[A-Za-zăâîșțĂÂÎȘȚ\s]*$/.test(cityName)) ? Intent.DANGER : Intent.NONE}
-                                    helperText={!cityName || (cityName && !/^[A-Za-zăâîșțĂÂÎȘȚ\s]*$/.test(cityName)) ? t('city_req') : ""}
+                                    intent={!cityName || (cityName && !/^[A-Za-zăâîșțĂÂÎȘȚ\s\-]*$/.test(cityName)) ? Intent.DANGER : Intent.NONE}
+                                    helperText={!cityName || (cityName && !/^[A-Za-zăâîșțĂÂÎȘȚ\s\-]*$/.test(cityName)) ? t('city_req') : ""}
                                     labelInfo={t('required')}
                                 >
                                     <InputGroup
@@ -730,8 +731,8 @@ const AddJobDialog = ({isDialogOpen, handleDialogAction}) => {
                                 </FormGroup>
                                 <FormGroup
                                     label={t('region')}
-                                    intent={!regionName || (regionName && !/^[A-Za-zăâîșțĂÂÎȘȚ\s]*$/.test(regionName)) ? Intent.DANGER : Intent.NONE}
-                                    helperText={!regionName || (regionName && !/^[A-Za-zăâîșțĂÂÎȘȚ\s]*$/.test(regionName)) ? t('region_req') : ""}
+                                    intent={!regionName || (regionName && !/^[A-Za-zăâîșțĂÂÎȘȚ\s\-]*$/.test(regionName)) ? Intent.DANGER : Intent.NONE}
+                                    helperText={!regionName || (regionName && !/^[A-Za-zăâîșțĂÂÎȘȚ\s\-]*$/.test(regionName)) ? t('region_req') : ""}
                                     labelInfo={t('required')}
                                 >
                                     <InputGroup
@@ -743,8 +744,8 @@ const AddJobDialog = ({isDialogOpen, handleDialogAction}) => {
                                 </FormGroup>
                                 <FormGroup
                                     label={t('country')}
-                                    intent={!countryName || (countryName && !/^[A-Za-zăâîșțĂÂÎȘȚ\s]*$/.test(countryName)) ? Intent.DANGER : Intent.NONE}
-                                    helperText={!countryName || (countryName && !/^[A-Za-zăâîșțĂÂÎȘȚ\s]*$/.test(countryName)) ? t('country_req') : ""}
+                                    intent={!countryName || (countryName && !/^[A-Za-zăâîșțĂÂÎȘȚ\s\-]*$/.test(countryName)) ? Intent.DANGER : Intent.NONE}
+                                    helperText={!countryName || (countryName && !/^[A-Za-zăâîșțĂÂÎȘȚ\s\-]*$/.test(countryName)) ? t('country_req') : ""}
                                     labelInfo={t('required')}
                                 >
                                     <InputGroup
@@ -787,7 +788,7 @@ const AddJobDialog = ({isDialogOpen, handleDialogAction}) => {
                                         onItemSelect={(e) => handleEmpRegimeSwitch(e)}
                                         popoverProps={{position: Position.RIGHT}}
                                     >
-                                        <Button text={employmentRegime} r
+                                        <Button text={employmentRegime}
                                                 rightIcon="double-caret-vertical"
                                                 fill={true}/>
                                     </Select>
@@ -861,7 +862,7 @@ const AddJobDialog = ({isDialogOpen, handleDialogAction}) => {
                 nextButtonProps={{
                     intent: "success",
                     text: t('next_step'),
-                    disabled: (selectedStages.filter(stageObj => stageObj.stage.stageId === OTHERS
+                    disabled: (selectedStages.filter((stageObj: any) => stageObj.stage.stageId === OTHERS
                             && stageObj.stage.stageName === "Others (Altele)" && (customStage.length <= 0 || customStage.length >= 200)).length > 0)
                         || selectedStages.length <= 3
                 }}
@@ -880,7 +881,7 @@ const AddJobDialog = ({isDialogOpen, handleDialogAction}) => {
                             {t('stages_p')}
                         </p>
                         <div className="stage-container">
-                            {selectedStages.map((stageValue, index) => (
+                            {selectedStages.map((stageValue: any, index: number) => (
                                 <div className="stage-item-with-arrow">
                                     <div key={index} className="stage-item-general">
                                         {index === selectedStages.length - 2 && index >= 2 ? (
@@ -995,7 +996,7 @@ const AddJobDialog = ({isDialogOpen, handleDialogAction}) => {
                             }
                             {showQuestionSection &&
                                 <div className="questions-section">
-                                    {questions.map((question, index) => (
+                                    {questions.map((question: any, index: number) => (
                                         <div key={index} className="question-section">
                                             <FormGroup
                                                 intent={question.questionText.length < 10 || question.questionText.length >= 500 ? "danger" : "none"}
@@ -1015,13 +1016,13 @@ const AddJobDialog = ({isDialogOpen, handleDialogAction}) => {
                                                     <Button intent="warning"
                                                             className="btn-remove-stage"
                                                             text={t('remove_question')}
-                                                            onClick={() => handleRemoveQuestion(index)}
+                                                            onClick={() => handleRemoveQuestion()}
                                                             small={true}
                                                     />
                                                     <Button intent="primary"
                                                             className="btn-add-stage"
                                                             text={t('add_question')}
-                                                            onClick={() => handleAddQuestion(index)}
+                                                            onClick={() => handleAddQuestion()}
                                                             disabled={question.questionText.length < 10 || question.questionText.length >= 500}
                                                             small={true}
                                                     />

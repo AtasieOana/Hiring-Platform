@@ -95,7 +95,8 @@ public class JobService {
             jobResponse.setQuestions(questionService.getAllQuestionsForJob(job.getJobId()));
             jobResponse.setStages(stageService.getAllStagesForJob(job.getJobId()));
             jobResponse.setIndustry(job.getIndustry());
-            jobResponse.setWorkMode(jobResponse.getWorkMode());
+            jobResponse.setPostingDate(job.getPostingDate());
+            jobResponse.setWorkMode(job.getWorkMode());
             jobResponse.setTitle(job.getTitle());
             jobResponseList.add(jobResponse);
         }

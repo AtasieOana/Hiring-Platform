@@ -52,6 +52,7 @@ public class SecurityConfig   {
                 .antMatchers("/deleteJob/{jobId}").hasAnyAuthority("ROLE_EMPLOYER")
                 .antMatchers("/addJob").hasAnyAuthority("ROLE_EMPLOYER")
                 .antMatchers("/getAllStages").hasAnyAuthority("ROLE_EMPLOYER")
+                .antMatchers("/getNrJobsForEmployer/{employerId}").hasAnyAuthority("ROLE_EMPLOYER")
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(accessDeniedHandler())

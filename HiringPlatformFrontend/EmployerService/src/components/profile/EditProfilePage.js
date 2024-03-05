@@ -41,7 +41,7 @@ const EditProfilePage = () => {
         // Choose if the employer is redirect to profile creation or not
         if (isAuthenticated) {
             ProfileService.hasEmployerProfile(employer.userDetails.email)
-                .then((response: any) => {
+                .then((response) => {
                     if (response.data === true) {
                         navigate('/home');
                     }

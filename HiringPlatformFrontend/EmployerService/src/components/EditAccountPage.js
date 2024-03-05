@@ -8,7 +8,6 @@ import {AppToaster} from "./common/AppToaster";
 import {Button, Card, Divider, Elevation, FormGroup, Icon, InputGroup, Intent} from "@blueprintjs/core";
 import './EditAccount.css';
 import {setAuthData} from "../redux/actions/authActions";
-import {EmployerResponse} from "../types/auth.types";
 
 const EditAccountPage = () => {
 
@@ -44,7 +43,7 @@ const EditAccountPage = () => {
         // Choose if the employer is redirect to profile creation or not
         if (isAuthenticated) {
             ProfileService.hasEmployerProfile(employer.userDetails.email)
-                .then((response: any) => {
+                .then((response) => {
                     if (response.data === false) {
                         navigate('/ro');
                     }
@@ -112,8 +111,8 @@ const EditAccountPage = () => {
                 newPassword: accountInfo.password,
             }
             ProfileService.updateAccount(request)
-                .then((response: any) => {
-                    let updateResponse: EmployerResponse = response.data;
+                .then((response) => {
+                    let updateResponse = response.data;
                     AppToaster.show({
                         message: t('update_account_success'),
                         intent: Intent.SUCCESS,

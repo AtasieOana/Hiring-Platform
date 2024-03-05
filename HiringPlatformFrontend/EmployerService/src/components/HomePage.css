@@ -1,0 +1,21 @@
+.filter-section {
+    width: 30%;
+    padding: 20px;
+    background-color: #f2f2f2;
+}
+
+.jobs-list {
+    width: 65%;
+    padding: 20px;
+}
+
+.job-item {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.job-details {
+    color: #666;
+}

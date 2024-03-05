@@ -30,7 +30,7 @@ const TokenPage = () => {
         if (token === '') {
             setTokenInvalid(true);
         } else {
-            AuthenticationService.checkToken(emailParam, token).then((response: any) => {
+            AuthenticationService.checkToken(emailParam, token).then((response) => {
                 if (response.data) {
                     setTokenInvalid(false);
                     AppToasterTop.show({
@@ -80,7 +80,7 @@ const TokenPage = () => {
                             type="text"
                             value={token}
                             autoComplete="token"
-                            onChange={(e: any) => setToken(e.target.value)}
+                            onChange={(e) => setToken(e.target.value)}
                         />
                     </FormGroup>
                 </form>

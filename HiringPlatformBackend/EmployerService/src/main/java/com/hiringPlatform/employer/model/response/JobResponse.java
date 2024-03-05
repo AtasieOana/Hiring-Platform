@@ -4,6 +4,7 @@ import com.hiringPlatform.employer.model.request.QuestionHelperRequest;
 import com.hiringPlatform.employer.model.request.StageHelperRequest;
 import lombok.*;
 
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -20,6 +21,7 @@ public class JobResponse {
     private String experience;
     private String industry;
     private String workMode;
+    private Date postingDate;
     private String cityName;
     private String regionName;
     private String countryName;

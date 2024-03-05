@@ -67,11 +67,13 @@ const LoginPage = () => {
     const logGoogleUser = async (accountType: string) => {
         try {
             const response = await signInWithGooglePopup();
-            let request: UserGoogleRequest = {};
-            request.email = response.user.email;
-            request.name = response.user.displayName;
-            request.accountType = accountType;
-            [request.givenName, request.familyName] = response.user.displayName.split(' ');
+            let request: UserGoogleRequest = {} as UserGoogleRequest;
+            if (response.user.email != null && response.user.displayName != null) {
+                request.email = response.user.email;
+                request.name = response.user.displayName;
+                request.accountType = accountType;
+                [request.givenName, request.familyName] = response.user.displayName.split(' ');
+            }
             AuthenticationService.loginGoogle((request)).then((response: any) => {
                 if (response.data.token === "") {
                     setLoginInvalid(true)
@@ -98,7 +100,7 @@ const LoginPage = () => {
                     intent: Intent.DANGER,
                 });
             })
-        } catch (error) {
+        } catch (error: any) {
             console.error("Error during login: " + error.message);
             AppToaster.show({
                 message: t('login_error'),

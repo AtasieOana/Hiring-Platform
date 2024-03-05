@@ -13,7 +13,7 @@ public interface JobRepository extends JpaRepository<Job, String> {
 
     Optional<Job> findByJobId(String id);
 
-    @Query("SELECT l FROM Job l WHERE l.employer.employerId = :empId")
+    @Query("SELECT l FROM Job l WHERE l.employer.employerId = :empId ORDER BY l.postingDate DESC ")
     List<Job> findByJobEmployer(String empId);
 
 }

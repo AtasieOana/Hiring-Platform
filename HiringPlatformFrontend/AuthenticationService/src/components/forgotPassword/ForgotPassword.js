@@ -55,7 +55,7 @@ const ForgotPasswordPage = () => {
                             value={email}
                             placeholder="mail@gmail.com"
                             autoComplete="new-email"
-                            onChange={(e: any) => setEmail(e.target.value)}
+                            onChange={(e) => setEmail(e.target.value)}
                             asyncControl={true}
                         />
                     </FormGroup>

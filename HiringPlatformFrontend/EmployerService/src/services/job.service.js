@@ -18,8 +18,8 @@ class JobService {
         return apiToken.get("/getAllJobsForEmployer/" + employerId)
     }
 
-    async getProfile(email) {
-        return apiToken.get("/getProfile/" + email)
+    async getNrJobsForEmployer(employerId) {
+        return apiToken.get("/getNrJobsForEmployer/" + employerId)
     }
 
 }
