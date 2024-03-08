@@ -14,6 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 public class JobResponse {
 
+    private String jobId;
     private String title;
     private String description;
     private String contractType;

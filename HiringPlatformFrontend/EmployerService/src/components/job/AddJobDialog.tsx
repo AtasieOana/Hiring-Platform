@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useReducer, useState} from 'react';
 import {
     Button,
     DialogStep,
@@ -74,7 +74,7 @@ const modules = {
     ]
 };
 
-const AddJobDialog = ({isDialogOpen, handleDialogAction}: any) => {
+const AddJobDialog = ({isDialogOpen, handleDialogAction, handleJobAddition}: any) => {
 
     // Constants
     const OTHERS = "Others"
@@ -532,6 +532,7 @@ const AddJobDialog = ({isDialogOpen, handleDialogAction}: any) => {
                     message: t('create_job_success'),
                     intent: Intent.SUCCESS,
                 });
+                handleJobAddition();
                 closeDialog();
             })
             .catch(error => {
@@ -638,7 +639,7 @@ const AddJobDialog = ({isDialogOpen, handleDialogAction}: any) => {
             onClose={closeDialog}
             title={t('add_new_job_title')}
             canOutsideClickClose={false}
-            usePortal={false}
+            usePortal={true}
             className="add-job-dialog"
             finalButtonProps={{
                 intent: "success", onClick: handleSubmit, text: t('add'),
@@ -719,7 +720,7 @@ const AddJobDialog = ({isDialogOpen, handleDialogAction}: any) => {
                                 <FormGroup
                                     label={t('city')}
                                     intent={!cityName || (cityName && !/^[A-Za-zăâîșțĂÂÎȘȚ\s\-]*$/.test(cityName)) ? Intent.DANGER : Intent.NONE}
-                                    helperText={!cityName || (cityName && !/^[A-Za-zăâîșțĂÂÎȘȚ\s\-]*$/.test(cityName)) ? t('city_req') : ""}
+                                    helperText={!cityName || (cityName && !/^[A-Za-zăâîșțĂÂÎȘȚ\s\-]*$/.test(cityName)) ? t('city_err_job') : ""}
                                     labelInfo={t('required')}
                                 >
                                     <InputGroup
@@ -732,7 +733,7 @@ const AddJobDialog = ({isDialogOpen, handleDialogAction}: any) => {
                                 <FormGroup
                                     label={t('region')}
                                     intent={!regionName || (regionName && !/^[A-Za-zăâîșțĂÂÎȘȚ\s\-]*$/.test(regionName)) ? Intent.DANGER : Intent.NONE}
-                                    helperText={!regionName || (regionName && !/^[A-Za-zăâîșțĂÂÎȘȚ\s\-]*$/.test(regionName)) ? t('region_req') : ""}
+                                    helperText={!regionName || (regionName && !/^[A-Za-zăâîșțĂÂÎȘȚ\s\-]*$/.test(regionName)) ? t('city_err_job') : ""}
                                     labelInfo={t('required')}
                                 >
                                     <InputGroup
@@ -745,7 +746,7 @@ const AddJobDialog = ({isDialogOpen, handleDialogAction}: any) => {
                                 <FormGroup
                                     label={t('country')}
                                     intent={!countryName || (countryName && !/^[A-Za-zăâîșțĂÂÎȘȚ\s\-]*$/.test(countryName)) ? Intent.DANGER : Intent.NONE}
-                                    helperText={!countryName || (countryName && !/^[A-Za-zăâîșțĂÂÎȘȚ\s\-]*$/.test(countryName)) ? t('country_req') : ""}
+                                    helperText={!countryName || (countryName && !/^[A-Za-zăâîșțĂÂÎȘȚ\s\-]*$/.test(countryName)) ? t('city_err_job') : ""}
                                     labelInfo={t('required')}
                                 >
                                     <InputGroup

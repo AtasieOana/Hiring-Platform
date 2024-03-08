@@ -40,6 +40,10 @@ public class JobService {
         this.questionService = questionService;
     }
 
+    /**
+     * Method used for adding a job
+     * @return the added job
+     */
     public Job addJob(AddJobRequest addJobRequest){
         Optional<Employer> employerOptional = employerRepository.findById(addJobRequest.getEmployerId());
         if(employerOptional.isPresent()){
@@ -68,6 +72,10 @@ public class JobService {
         }
     }
 
+    /**
+     * Method used for deleting a job
+     * @return the status of the deleting
+     */
     public Boolean deleteJob(String jobId){
         Optional<Job> jobOptional = jobRepository.findById(jobId);
         if(jobOptional.isPresent()){
@@ -79,27 +87,54 @@ public class JobService {
         }
     }
 
+    /**
+     * Method used for getting the list of jobs for the employer
+     * @return the list of jobs
+     */
     public List<JobResponse> getAllJobsForEmployer(String employerId){
         List<JobResponse> jobResponseList = new ArrayList<>();
         List<Job> jobs = jobRepository.findByJobEmployer(employerId);
         for(Job job: jobs){
-            JobResponse jobResponse = new JobResponse();
-            jobResponse.setDescription(job.getDescription());
-            jobResponse.setContractType(job.getContractType());
-            jobResponse.setExperience(job.getExperience());
-            jobResponse.setEmploymentRegime(job.getEmploymentRegime());
-            jobResponse.setCityName(job.getCity().getCityName());
-            jobResponse.setRegionName(job.getCity().getRegion().getRegionName());
-            jobResponse.setCountryName(job.getCity().getRegion().getCountry().getCountryName());
-            jobResponse.setEmployerId(job.getEmployer().getEmployerId());
-            jobResponse.setQuestions(questionService.getAllQuestionsForJob(job.getJobId()));
-            jobResponse.setStages(stageService.getAllStagesForJob(job.getJobId()));
-            jobResponse.setIndustry(job.getIndustry());
-            jobResponse.setPostingDate(job.getPostingDate());
-            jobResponse.setWorkMode(job.getWorkMode());
-            jobResponse.setTitle(job.getTitle());
-            jobResponseList.add(jobResponse);
+            jobResponseList.add(buildJobResponse(job));
         }
         return jobResponseList;
+    }
+
+    /**
+     * Method used for updating a job
+     * @return the updated job
+     */
+    public JobResponse updateJobDescription(String jobId, String description){
+        Optional<Job> jobOptional = jobRepository.findById(jobId);
+        if(jobOptional.isPresent()){
+            Job updatedJob = jobOptional.get();
+            updatedJob.setDescription(description);
+            Job savedJob = jobRepository.save(updatedJob);
+            buildJobResponse(savedJob);
+            return buildJobResponse(savedJob);
+        }
+        else{
+            throw new JobNotFoundException("Job was not found in database");
+        }
+    }
+
+    private JobResponse buildJobResponse(Job savedJob) {
+        JobResponse jobResponse = new JobResponse();
+        jobResponse.setJobId(savedJob.getJobId());
+        jobResponse.setDescription(savedJob.getDescription());
+        jobResponse.setContractType(savedJob.getContractType());
+        jobResponse.setExperience(savedJob.getExperience());
+        jobResponse.setEmploymentRegime(savedJob.getEmploymentRegime());
+        jobResponse.setCityName(savedJob.getCity().getCityName());
+        jobResponse.setRegionName(savedJob.getCity().getRegion().getRegionName());
+        jobResponse.setCountryName(savedJob.getCity().getRegion().getCountry().getCountryName());
+        jobResponse.setEmployerId(savedJob.getEmployer().getEmployerId());
+        jobResponse.setQuestions(questionService.getAllQuestionsForJob(savedJob.getJobId()));
+        jobResponse.setStages(stageService.getAllStagesForJob(savedJob.getJobId()));
+        jobResponse.setIndustry(savedJob.getIndustry());
+        jobResponse.setPostingDate(savedJob.getPostingDate());
+        jobResponse.setWorkMode(savedJob.getWorkMode());
+        jobResponse.setTitle(savedJob.getTitle());
+        return jobResponse;
     }
 }

@@ -1,4 +1,9 @@
-FROM oracleinanutshell/oracle-xe-11g
+# Utilizăm imaginea oficiala Oracle Database
+FROM container-registry.oracle.com/database/enterprise:latest
 
-# Adaugă scripturile SQL la container
-COPY ./init.sql /docker-entrypoint-initdb.d/
+# Definim variabilele de mediu
+ENV ORACLE_SID=ORCL \
+    ORACLE_PWD=oracle 
+
+# Porturile pe care vrem să le expunem
+EXPOSE 1521

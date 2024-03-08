@@ -20,7 +20,7 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        if(stageRepository.findAll().size() == 0) {
+        if(stageRepository.findAll().isEmpty()) {
             // Create default stages
             List<String> stages = Arrays.asList("The candidate submitted a resume (Candidatul a depus un CV)", "Employer viewed the application (Angajatorul a vizualizat aplicarea)",
                     "The applicant has been hired (Candidatul a fost angajat)", "Preliminary telephone interview (Interviu telefonic preliminar)",

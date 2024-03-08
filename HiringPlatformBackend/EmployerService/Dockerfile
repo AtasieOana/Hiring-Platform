@@ -15,9 +15,9 @@ FROM openjdk:17-slim
 
 WORKDIR /usr/app
 
-COPY --from=builder /app/target/authentication-0.0.1-SNAPSHOT.jar authentication-service.jar
+COPY --from=builder /app/target/employer-0.0.1-SNAPSHOT.jar employer-service.jar
 COPY --from=builder /app/src/main/resources ./resources
 
 EXPOSE 8080
 
-CMD ["java", "-jar", "authentication-service.jar"]
+CMD ["java", "-jar", "employer-service.jar"]

@@ -10,6 +10,6 @@ import java.util.List;
 @Repository
 public interface ContainsRepository extends JpaRepository<Contains, String> {
 
-    @Query("SELECT l FROM Contains l WHERE l.containsId.job.jobId = :jobId")
+    @Query("SELECT l FROM Contains l WHERE l.containsId.job.jobId = :jobId ORDER BY l.stageNr")
     List<Contains> findAllByJobId(String jobId);
 }

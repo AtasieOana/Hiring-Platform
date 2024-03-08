@@ -1,6 +1,6 @@
 import React from 'react';
 import './styles/About.css';
-import Image from "../resources/HomeImg.png";
+import Image from "../resources/HomeImg.svg";
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 

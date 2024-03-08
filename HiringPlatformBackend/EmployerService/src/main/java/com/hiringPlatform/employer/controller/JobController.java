@@ -2,6 +2,7 @@ package com.hiringPlatform.employer.controller;
 
 import com.hiringPlatform.employer.model.Job;
 import com.hiringPlatform.employer.model.request.AddJobRequest;
+import com.hiringPlatform.employer.model.request.UpdateJobDescRequest;
 import com.hiringPlatform.employer.model.response.JobResponse;
 import com.hiringPlatform.employer.service.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,7 @@ public class JobController {
      * Method used for deleting a job
      * @return the status of the deleting
      */
-    @DeleteMapping("/deleteJob/{jobId}")
+    @PostMapping("/deleteJob/{jobId}")
     public ResponseEntity<Boolean> deleteJob(@PathVariable String jobId) {
         Boolean value =  jobService.deleteJob(jobId);
         return ResponseEntity.ok(value);
@@ -54,6 +55,16 @@ public class JobController {
     @PostMapping("/addJob")
     public ResponseEntity<Job> addJob(@RequestBody AddJobRequest addJobRequest) {
         Job job =  jobService.addJob(addJobRequest);
+        return ResponseEntity.ok(job);
+    }
+
+    /**
+     * Method used for updating a job
+     * @return the updated job
+     */
+    @PostMapping("/updateJobDescription")
+    public ResponseEntity<JobResponse> updateJobDescription(@RequestBody UpdateJobDescRequest request) {
+        JobResponse job =  jobService.updateJobDescription(request.getJobId(), request.getDescription());
         return ResponseEntity.ok(job);
     }
 }

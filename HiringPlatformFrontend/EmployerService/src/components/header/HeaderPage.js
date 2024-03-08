@@ -6,8 +6,9 @@ import {Button, Dialog, DialogBody, DialogFooter, Icon, Intent, Menu, MenuItem, 
 import {useTranslation} from 'react-i18next';
 import {AppToaster} from "../common/AppToaster";
 import AuthenticationService from "../../services/authentication.service";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {useMediaQuery} from "../common/CommonMethods";
+import {removeJobData} from "../../redux/actions/jobActions";
 
 const HeaderPage = () => {
     const {t, i18n} = useTranslation();
@@ -15,6 +16,7 @@ const HeaderPage = () => {
     const navigate = useNavigate();
     const isSmallScreen = useMediaQuery("(max-width: 700px)");
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+    const dispatch = useDispatch();
 
     // Change the language
     const changeLanguage = () => {
@@ -45,6 +47,7 @@ const HeaderPage = () => {
                     message: t('logout_success'),
                     intent: Intent.SUCCESS,
                 });
+                dispatch(removeJobData());
                 window.location.replace('http://localhost:3000/login');
             })
             .catch(error => {

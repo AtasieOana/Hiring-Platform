@@ -10,6 +10,7 @@ import i18n from "./util/i18n";
 import NotFoundPage from "./components/common/notFound/NotFoundPage";
 import EditAccountPage from "./components/EditAccountPage";
 import ProfilePage from "./components/profile/ProfilePage";
+import JobView from "./components/job/JobView";
 
 const App = () => {
     const dispatch = useDispatch();
@@ -50,6 +51,7 @@ const App = () => {
                     <Route path="/profile" element={isAuth ? <ProfilePage/> : redirectToWelcomePage()}/>
                     <Route path="/:paramLanguage" element={isAuth ? <EditProfilePage/> : redirectToWelcomePage()}/>
                     <Route path="/editAccount" element={isAuth ? <EditAccountPage/> : redirectToWelcomePage()}/>
+                    <Route path="/viewJob" element={isAuth ? <JobView/> : redirectToWelcomePage()}/>
                     <Route path="*" element={<NotFoundPage/>}/>
                 </Routes>
             </Router>

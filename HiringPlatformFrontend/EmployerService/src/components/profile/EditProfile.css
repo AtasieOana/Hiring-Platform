@@ -63,11 +63,11 @@
     margin-top: 5px;
 }
 
-.ql-editor {
+.right-column .ql-editor {
     overflow: auto;
     max-width: 70ch;
     margin: auto;
-    max-height: 60vh;
+    min-height: 60vh;
 }
 
 .create-profile-button {

@@ -11,7 +11,7 @@ class JobService {
     }
 
     async deleteJob(jobId) {
-        return apiToken.delete("/deleteJob/" + jobId);
+        return apiToken.post("/deleteJob/" + jobId);
     }
 
     async getAllJobsForEmployer(employerId) {
@@ -20,6 +20,10 @@ class JobService {
 
     async getNrJobsForEmployer(employerId) {
         return apiToken.get("/getNrJobsForEmployer/" + employerId)
+    }
+
+    async updateJobDescription(request) {
+        return apiToken.post("/updateJobDescription", request);
     }
 
 }
