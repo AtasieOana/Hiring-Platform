@@ -36,7 +36,7 @@ const LoginPage = () => {
                     setLoginInvalid(false)
                     let url = "";
                     if (loginResponse.roleName === CANDIDATE_ACCOUNT) {
-                        console.log("TODO - CANDIDAT")
+                        url = 'http://localhost:3002'
                     } else if (loginResponse.roleName === EMPLOYER_ACCOUNT) {
                         url = 'http://localhost:3001'
                     } else {

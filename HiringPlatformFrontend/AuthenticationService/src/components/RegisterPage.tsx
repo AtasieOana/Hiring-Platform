@@ -69,7 +69,7 @@ const RegisterPage = () => {
         if (!firstName) {
             newErrors.firstnameRequired = true;
         } else {
-            const usernameRegex = /^[a-zA-Z\- ]*$/;
+            const usernameRegex = /^[a-zA-ZăâîșțĂÂÎȘȚ\- ]*$/;
             if (firstName.length < 3) {
                 newErrors.firstnameLen = true;
             } else if (!usernameRegex.test(firstName)) {
@@ -79,7 +79,7 @@ const RegisterPage = () => {
         if (!lastName) {
             newErrors.lastnameRequired = true;
         } else {
-            const usernameRegex = /^[a-zA-Z\- ]*$/;
+            const usernameRegex = /^[a-zA-ZăâîșțĂÂÎȘȚ\- ]*$/;
             if (lastName.length < 3) {
                 newErrors.lastnameLen = true;
             } else if (!usernameRegex.test(lastName)) {
@@ -143,7 +143,7 @@ const RegisterPage = () => {
         if (!companyName) {
             newErrors.companyRequired = true;
         } else {
-            const usernameRegex = /^[a-zA-Z0-9\-& ]*$/;
+            const usernameRegex = /^[a-zA-ZăâîșțĂÂÎȘȚ0-9\-& ]*$/;
             if (companyName.length < 3) {
                 newErrors.companyLen = true;
             } else if (!usernameRegex.test(companyName)) {
@@ -199,7 +199,7 @@ const RegisterPage = () => {
             AuthenticationService.authGoogle((request)).then((response: any) => {
                 let url = "";
                 if (response.data.roleName === CANDIDATE_ACCOUNT) {
-                    console.log("TODO - CANDIDAT")
+                    url = 'http://localhost:3002'
                 } else if (response.data.roleName === EMPLOYER_ACCOUNT) {
                     url = 'http://localhost:3001'
                 } else {

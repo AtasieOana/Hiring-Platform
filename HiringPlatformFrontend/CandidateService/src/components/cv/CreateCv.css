@@ -1,0 +1,272 @@
+.cv-form {
+    padding: 10px 50px;
+    background-color: #fef5f2;
+    margin: 20px 100px;
+}
+
+.candidate-cv-reason{
+    margin: 20px 110px;
+    line-height: 1.7;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: justify;
+}
+
+.create-cv-header{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.create-cv-or{
+    font-weight: bold;
+    font-size: 16px;
+    font-style: italic;
+}
+
+.upload-already-existing-cv {
+    margin: 0 auto !important;
+    display: block !important;
+    background-color: #ff9661 !important;
+    width: 20%;
+    text-align: center !important;
+    color: black !important;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.upload-already-existing-cv:hover {
+    background-color: #ff884f !important;
+}
+
+.upload-already-existing-cv:focus {
+   outline: none !important;
+}
+
+.cv-upload-dialog{
+    width: 50vw !important;
+}
+
+.cv-upload-dialog .bp4-dialog-footer{
+    margin: 0 !important;
+}
+
+.cv-form-title{
+    text-align: center !important;
+    color: black !important;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.custom-file-container {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    margin-bottom: 15px;
+}
+
+.custom-image-wrapper{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2px;
+}
+
+.file-input-container-hole{
+    flex: none;
+    width: 100%;
+    margin-top: 5px;
+}
+
+.file-input-container{
+    flex: none;
+    width: 80%;
+    margin-top: 5px;
+    margin-left: 1%;
+}
+
+.file-input-container .bp4-file-input,
+.file-input-container-hole .bp4-file-input{
+    width: 50%;
+}
+
+.file-input-content{
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px
+}
+
+.custom-image {
+    border: 1px solid #ffc8b2;
+    border-radius: 4px;
+    width: 100px;
+    height: 100px;
+    margin-top: 5px;
+}
+
+.file-input-label-title{
+    margin-bottom: 5px;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.cv-form-group{
+    display: flex;
+    flex-direction: row;
+    gap:3%;
+    justify-content: space-between;
+}
+
+.cv-form-group .bp4-form-group{
+    width: 100%;
+}
+
+.cv-form-photo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cv-years{
+    display: flex;
+    flex-direction: row;
+    gap:5px
+}
+
+.cv-section-dialog{
+    width: 70vw !important;
+}
+
+.cv-years .bp4-form-group{
+    width: 49%;
+}
+
+.section-title {
+    font-size: 22px;
+    font-weight: bolder;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-decoration: underline;
+}
+
+.cv-form .bp4-non-ideal-state-visual img{
+    width: 150px;
+    height: 150px;
+}
+
+.cv-form .bp4-non-ideal-state-visual{
+    margin-bottom: 0 !important;
+}
+
+.section-header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.add-section-button .bp4-button-text{
+    text-decoration: none !important;
+}
+
+.education-card{
+    margin: 20px 50px !important;
+    padding: 10px !important;
+}
+
+.education-card-header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.education-card-header-buttons button:focus{
+    outline: none !important;
+}
+
+.education-card-header-buttons .bp4-popover-wrapper:nth-of-type(1){
+    margin-right: 10px !important;
+}
+
+.education-card-header p{
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.education-card p{
+    text-align: justify;
+}
+
+.bp4-disabled.upload-already-existing-cv{
+    background-color: #d74400 !important;
+}
+
+.education-section{
+    margin-bottom: 10px;
+}
+
+.ideal-state-ed div{
+    color: #ac2f33;
+}
+
+@media (max-width: 1100px) {
+    .cv-form{
+        padding: 10px 10px;
+        margin: 20px 10px;
+    }
+
+    .education-card{
+        margin: 20px 10px !important;
+    }
+}
+
+@media (max-width: 900px) {
+    .cv-form{
+        padding: 10px 10px;
+        margin: 20px 10px;
+    }
+
+    .education-card{
+        margin: 20px 10px !important;
+    }
+
+    .cv-form-group{
+        display: flex;
+        flex-direction: column;
+        gap:3%;
+        justify-content: space-between;
+    }
+
+}
+
+@media (max-width: 700px) {
+    .cv-upload-dialog{
+        width: 80vw !important;
+    }
+
+    .cv-section-dialog{
+        width: 90vw !important;
+    }
+
+    .candidate-cv-reason{
+        margin: 20px 30px;
+    }
+
+    .upload-already-existing-cv{
+        width: 60%;
+    }
+
+    .cv-form{
+        padding: 10px 10px;
+        margin: 20px 10px;
+    }
+
+    .education-card{
+        margin: 20px 10px !important;
+    }
+}

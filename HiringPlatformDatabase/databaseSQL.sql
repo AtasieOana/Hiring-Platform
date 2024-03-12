@@ -1,6 +1,9 @@
 -- BAZA DE DATE
 
 -- Stergerea tabelelor
+DROP TABLE aplica;
+DROP TABLE cv;
+DROP TABLE intrebari;
 DROP TABLE intrebari;
 DROP TABLE contine;
 DROP TABLE etape;
@@ -95,7 +98,8 @@ CREATE TABLE profiluri (
     site_oficial VARCHAR2(255),
     id_adresa VARCHAR2(36) CONSTRAINT fk_profil_adresa REFERENCES adrese(id_adresa),
     id_angajator VARCHAR2(36) CONSTRAINT fk_profil_angajator REFERENCES angajatori(id_angajator) ON DELETE CASCADE,
-    CONSTRAINT nr_telefon_corect CHECK(LENGTH(nr_telefon) = 10 AND REGEXP_LIKE(nr_telefon, '^[0-9]+$'))
+    CONSTRAINT nr_telefon_corect CHECK(LENGTH(nr_telefon) = 10 AND REGEXP_LIKE(nr_telefon, '^[0-9]+$')),
+    CONSTRAINT profil_angajator_unic UNIQUE (id_angajator)
 );
 
 CREATE TABLE locuri_de_munca (
@@ -136,6 +140,33 @@ CREATE TABLE intrebari (
     nr_intrebare NUMBER NOT NULL
 );
 
+CREATE TABLE cv (
+    id_cv VARCHAR2(36) CONSTRAINT pk_cv PRIMARY KEY,
+    id_candidat CONSTRAINT fk_cv_candidat REFERENCES candidati(id_candidat) ON DELETE CASCADE,
+    nume_cv VARCHAR2(100) NOT NULL unique pe nume combinat cu candidat,
+    cale_fisier VARCHAR2(400) NOT NULL,
+    data_incarcarii DATE NOT NULL
+);
+
+CREATE TABLE aplica (
+    id_loc_de_munca VARCHAR2(36) CONSTRAINT fk_aplica_loc_de_munca REFERENCES locuri_de_munca(id_loc_de_munca) ON DELETE CASCADE,
+    id_cv_candidat VARCHAR2(36) CONSTRAINT fk_aplica_cv REFERENCES cv(id_cv) ON DELETE CASCADE,
+    data_aplicarii DATE NOT NULL,
+    id_etapa_curenta VARCHAR2(36) CONSTRAINT fk_aplica_etapa REFERENCES locuri_de_munca(id_loc_de_munca),
+    status VARCHAR2(20) CHECK (status IN ('refuzat', 'in_curs', 'finalizat')),
+    motiv_refuz VARCHAR2(500),
+    CONSTRAINT pk_aplica PRIMARY KEY(id_loc_de_munca, id_cv_candidat)
+);
+
+CREATE TABLE raspunsuri (
+    id_raspuns VARCHAR2(36) CONSTRAINT pk_raspuns PRIMARY KEY,
+    id_aplica NUMBER NOT NULL,
+    id_intrebare VARCHAR2(36) CONSTRAINT fk_raspuns_intrebare REFERENCES intrebari(id_intrebare),
+    raspuns VARCHAR2(4000),
+    CONSTRAINT fk_aplicatie FOREIGN KEY (id_aplicatie) REFERENCES Aplicare(id), -- Cheie extern? c?tre Aplicare
+    CONSTRAINT fk_intrebare FOREIGN KEY (id_intrebare) REFERENCES Intrebare(id) -- Presupunând c? exist? un tabel Intrebare cu un câmp id
+);
+
 -- Inserarea datelor initiale
 INSERT INTO roluri (id_rol, nume_rol, descriere) VALUES 
 (1, 'ROLE_ADMIN', 'The admin is the one who takes care of the management of the application.');
@@ -166,3 +197,4 @@ SELECT * FROM locuri_de_munca;
 SELECT * FROM etape;
 SELECT * FROM contine;
 SELECT * FROM intrebari;
+SELECT * FROM cv;

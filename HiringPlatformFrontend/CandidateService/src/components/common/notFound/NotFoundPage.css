@@ -1,0 +1,31 @@
+.error404 {
+    margin-top: 50px;
+    width: 80%;
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+.title {
+    font-size: xx-large;
+    font-weight: bold;
+    text-align: center;
+    color: firebrick;
+}
+
+#error {
+    margin-top: 30px;
+    float: left;
+}
+
+#error p {
+    padding-top: 30px;
+    font-weight: bolder;
+    font-size: large;
+}
+
+#reasons {
+    list-style-type: square;
+    font-weight: bolder;
+    font-size: large;
+    padding-top: 10px;
+}

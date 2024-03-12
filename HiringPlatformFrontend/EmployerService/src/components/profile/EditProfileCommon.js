@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import ProfileService from "../../services/profile.service";
 import {AppToaster} from "../common/AppToaster";
-import {Button, ControlGroup, FormGroup, InputGroup, Intent} from "@blueprintjs/core";
+import {Button, ControlGroup, Divider, FormGroup, InputGroup, Intent} from "@blueprintjs/core";
 import ImageUpload from "../common/ImageUpload";
 import ReactQuill from "react-quill";
 import {useTranslation} from "react-i18next";
@@ -13,8 +13,7 @@ const EditProfileCommon = ({
                                formDataProps,
                                isAddOperationProps,
                                imgProp,
-                               updateEditionState,
-                               handleImageUploadProps
+                               updateEditionState
                            }) => {
 
     const {t} = useTranslation();
@@ -173,13 +172,11 @@ const EditProfileCommon = ({
 
     return (
         <div>
-            <div className="create-profile-title">{t('create_profile_title')}</div>
             <div className="create-profile-subtitle">
                 *{t('create_profile_subtitle')}
             </div>
             <div className="form-container-profile">
                 <div className="left-column">
-                    <ImageUpload onImageUpload={handleImageUpload} initialImg={imgProp}/>
                     <ControlGroup fill>
                         <FormGroup
                             label={t('phone_number')}
@@ -281,6 +278,8 @@ const EditProfileCommon = ({
                             />
                         </FormGroup>
                     </ControlGroup>
+                    <Divider/>
+                    <ImageUpload onImageUpload={handleImageUpload} initialImg={imgProp}/>
                 </div>
                 <div className="right-column">
                     <FormGroup label={t('description')}

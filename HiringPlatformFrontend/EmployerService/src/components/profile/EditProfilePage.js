@@ -64,8 +64,6 @@ const EditProfilePage = () => {
             <HeaderWithoutProfile/>
             <EditProfileCommon formDataProps={formData} isAddOperationProps={true} imgProp=""
                                updateEditionState={() => {
-                               }}
-                               handleImageUploadProps={() => {
                                }}/>
         </div>
     );

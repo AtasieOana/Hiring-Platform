@@ -16,7 +16,6 @@ const HeaderWithoutProfile = () => {
     // Change the language
     const changeLanguage = () => {
         let oldLanguage = i18n.language;
-        console.log(oldLanguage)
         const newLanguage = oldLanguage === 'ro' ? 'en' : 'ro';
         i18n.changeLanguage(newLanguage);
     };
@@ -51,16 +50,16 @@ const HeaderWithoutProfile = () => {
                 <Popover
                     interactionKind="hover"
                     usePortal={false}
-                    placement="bottom-end"
                     content={
                         <Menu>
                             <MenuItem icon="log-out" color="white" text={t('logout')} onClick={logout}/>
                         </Menu>
                     }
-                    position="bottom"
+                    position="bottom-left"
                 >
                     <Link className="nav-item" to="#" isActive={false}>
                         <Icon size={13} icon="mugshot" color="white" className="nav-icon"/> {employer?.companyName}
+                        <Icon size={13} icon="chevron-down" color="white" className="nav-icon"/>
                     </Link>
 
                 </Popover>

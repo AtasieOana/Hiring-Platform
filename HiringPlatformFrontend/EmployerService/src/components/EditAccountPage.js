@@ -75,7 +75,7 @@ const EditAccountPage = () => {
         let valid = true;
         const newErrors = {...errorsAccount};
         // Name validation
-        const nameRegex = /^[a-zA-Z0-9\-& ]*$/;
+        const nameRegex = /^[a-zA-ZăâîșțĂÂÎȘȚ0-9\-& ]*$/;
         if (!accountInfo.companyName || accountInfo.companyName.length < 3 ||
             !nameRegex.test(accountInfo.companyName)) {
             newErrors.companyName = true;

@@ -72,10 +72,6 @@ const ProfilePage = () => {
         getProfile();
     }
 
-    const handleImageUpload = (image: any) => {
-        setProfileInfo({...profileInfo, imagine: image});
-    };
-
     const renderStaticPage = () => {
         return <div className="profile-container">
             <div className="profile-left-column">
@@ -142,7 +138,6 @@ const ProfilePage = () => {
             description: profileInfo.description
         }
         return <EditProfileCommon formDataProps={formData} isAddOperationProps={false}
-                                  handleImageUploadProps={handleImageUpload}
                                   imgProp={base64ToImage(`data:image/jpeg;base64,${profileInfo.imagine}`)}
                                   updateEditionState={handleUpdate}/>
     }

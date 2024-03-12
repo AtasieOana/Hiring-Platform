@@ -23,8 +23,7 @@ export const base64ToImage = (base64String) => {
     for (let i = 0; i < byteString.length; i++) {
         ia[i] = byteString.charCodeAt(i);
     }
-    const blob = new Blob([ab], {type: 'image/jpeg'});
-    return blob;
+    return new Blob([ab], {type: 'image/jpeg'});
 }
 
 /**
