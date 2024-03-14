@@ -5,6 +5,7 @@
   "dependencies": {
     "@blueprintjs/core": "^4.20.2",
     "@blueprintjs/select": "^4.9.24",
+    "@blueprintjs/table": "^5.1.2",
     "@editorjs/editorjs": "^2.29.0",
     "@editorjs/header": "^2.8.1",
     "@editorjs/list": "^1.9.0",
@@ -21,7 +22,7 @@
     "axios": "^1.6.6",
     "draft-js": "^0.11.7",
     "esri-leaflet-geocoder": "^3.1.4",
-    "firebase": "^10.8.0",
+    "firebase": "^10.8.1",
     "i18next": "^23.7.17",
     "jspdf": "^2.5.1",
     "leaflet": "^1.9.4",

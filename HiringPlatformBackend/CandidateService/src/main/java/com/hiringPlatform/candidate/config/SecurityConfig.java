@@ -43,6 +43,8 @@ public class SecurityConfig   {
                 .authorizeRequests()
                 .antMatchers("/getLoggedUser").permitAll()
                 .antMatchers("/updateAccount").hasAnyAuthority("ROLE_CANDIDATE")
+                .antMatchers("/getCvListForCandidate/{candidateId}").hasAnyAuthority("ROLE_CANDIDATE")
+                .antMatchers("/addCV").hasAnyAuthority("ROLE_CANDIDATE")
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(accessDeniedHandler())

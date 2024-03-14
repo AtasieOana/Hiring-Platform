@@ -1,4 +1,5 @@
 import {useEffect, useState} from "react";
+import CandidateService from "../../services/candidate.service";
 
 export function useMediaQuery(query) {
     const [matches, setMatches] = useState(false);

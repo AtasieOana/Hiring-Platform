@@ -1,6 +1,7 @@
 -- BAZA DE DATE
 
 -- Stergerea tabelelor
+DROP TABLE raspunsuri;
 DROP TABLE aplica;
 DROP TABLE cv;
 DROP TABLE intrebari;
@@ -143,28 +144,28 @@ CREATE TABLE intrebari (
 CREATE TABLE cv (
     id_cv VARCHAR2(36) CONSTRAINT pk_cv PRIMARY KEY,
     id_candidat CONSTRAINT fk_cv_candidat REFERENCES candidati(id_candidat) ON DELETE CASCADE,
-    nume_cv VARCHAR2(100) NOT NULL unique pe nume combinat cu candidat,
-    cale_fisier VARCHAR2(400) NOT NULL,
-    data_incarcarii DATE NOT NULL
+    nume_cv VARCHAR2(100) NOT NULL unique,
+    data_incarcarii DATE NOT NULL,
+    CONSTRAINT nume_cv_unic UNIQUE (nume_cv)
 );
 
 CREATE TABLE aplica (
     id_loc_de_munca VARCHAR2(36) CONSTRAINT fk_aplica_loc_de_munca REFERENCES locuri_de_munca(id_loc_de_munca) ON DELETE CASCADE,
-    id_cv_candidat VARCHAR2(36) CONSTRAINT fk_aplica_cv REFERENCES cv(id_cv) ON DELETE CASCADE,
+    id_cv VARCHAR2(36) CONSTRAINT fk_aplica_cv REFERENCES cv(id_cv) ON DELETE CASCADE,
+    id_candidat VARCHAR2(36) CONSTRAINT fk_aplica_candidat REFERENCES candidati(id_candidat) ON DELETE CASCADE,
     data_aplicarii DATE NOT NULL,
-    id_etapa_curenta VARCHAR2(36) CONSTRAINT fk_aplica_etapa REFERENCES locuri_de_munca(id_loc_de_munca),
-    status VARCHAR2(20) CHECK (status IN ('refuzat', 'in_curs', 'finalizat')),
+    id_etapa_curenta VARCHAR2(36) CONSTRAINT fk_aplica_etapa REFERENCES etape(id_etapa),
+    status VARCHAR2(20) CHECK (status IN ('refuzat', 'in_curs', 'finalizat')) NOT NULL,
     motiv_refuz VARCHAR2(500),
-    CONSTRAINT pk_aplica PRIMARY KEY(id_loc_de_munca, id_cv_candidat)
+    CONSTRAINT pk_aplica PRIMARY KEY(id_loc_de_munca, id_cv, id_candidat),
+    CONSTRAINT candidat_loc_de_munca UNIQUE (id_loc_de_munca, id_candidat)
 );
 
 CREATE TABLE raspunsuri (
     id_raspuns VARCHAR2(36) CONSTRAINT pk_raspuns PRIMARY KEY,
-    id_aplica NUMBER NOT NULL,
+    id_candidat VARCHAR2(36) CONSTRAINT fk_raspuns_candidat REFERENCES candidati(id_candidat) ON DELETE CASCADE,
     id_intrebare VARCHAR2(36) CONSTRAINT fk_raspuns_intrebare REFERENCES intrebari(id_intrebare),
-    raspuns VARCHAR2(4000),
-    CONSTRAINT fk_aplicatie FOREIGN KEY (id_aplicatie) REFERENCES Aplicare(id), -- Cheie extern? c?tre Aplicare
-    CONSTRAINT fk_intrebare FOREIGN KEY (id_intrebare) REFERENCES Intrebare(id) -- Presupunând c? exist? un tabel Intrebare cu un câmp id
+    raspuns VARCHAR2(4000)
 );
 
 -- Inserarea datelor initiale
@@ -198,3 +199,6 @@ SELECT * FROM etape;
 SELECT * FROM contine;
 SELECT * FROM intrebari;
 SELECT * FROM cv;
+SELECT * FROM raspunsuri;
+DELETE FROM cv;
+COMMIT;

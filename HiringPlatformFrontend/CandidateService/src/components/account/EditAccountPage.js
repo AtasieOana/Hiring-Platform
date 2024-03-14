@@ -1,26 +1,29 @@
 import React, {useEffect, useState} from 'react';
-import HeaderPage from "./header/HeaderPage";
 import {useDispatch, useSelector} from "react-redux";
-import {useNavigate} from "react-router-dom";
 import {useTranslation} from "react-i18next";
-import ProfileService from "../services/profile.service";
-import {AppToaster} from "./common/AppToaster";
-import {Button, Card, Divider, Elevation, FormGroup, Icon, InputGroup, Intent} from "@blueprintjs/core";
+import {Button, Card, Divider, Elevation, 
+    FormGroup, Icon, InputGroup, Intent} from "@blueprintjs/core";
 import './EditAccount.css';
-import {setAuthData} from "../redux/actions/authActions";
+import CandidateService from "../../services/candidate.service";
+import {AppToaster} from "../common/AppToaster";
+import {setAuthData} from "../../redux/actions/authActions";
+import HeaderPage from "../header/HeaderPage";
 
 const EditAccountPage = () => {
 
     const {t} = useTranslation();
-    const employer = useSelector(state => state.auth.employer);
+    const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+    const candidate = useSelector(state => state.auth.candidate);
     const [isAccountEdited, setIsAccountEdited] = useState(false);
     const [accountInfo, setAccountInfo] = useState({
-        companyName: "",
+        lastname: "",
+        firstname: "",
         password: "",
         confirmPassword: "",
     })
     const [errorsAccount, setErrorsAccount] = useState({
-        companyName: false,
+        lastname: false,
+        firstname: false,
         password: false,
         confirmPassword: false,
     });
@@ -38,11 +41,17 @@ const EditAccountPage = () => {
     };
 
     useEffect(() => {
-        setAccountInfo({
-            companyName: employer.companyName,
-            password: employer.userDetails.password || "",
-            confirmPassword: employer.userDetails.password || "",
-        })
+        // Choose if the candidate is redirect to cv creation or not
+        if (isAuthenticated) {
+            setAccountInfo({
+                lastname: candidate.lastname,
+                firstname: candidate.firstname,
+                password: "",
+                confirmPassword: "",
+            })
+        } else {
+            window.location.replace('http://localhost:3000/login');
+        }
     }, []);
 
     const handleAccountChange = (e) => {
@@ -54,13 +63,18 @@ const EditAccountPage = () => {
         let valid = true;
         const newErrors = {...errorsAccount};
         // Name validation
-        const nameRegex = /^[a-zA-ZăâîșțĂÂÎȘȚ0-9\-& ]*$/;
-        if (!accountInfo.companyName || accountInfo.companyName.length < 3 ||
-            !nameRegex.test(accountInfo.companyName)) {
-            newErrors.companyName = true;
+        const nameRegex = /^[a-zA-ZăâîșțĂÂÎȘȚ\- ]*$/;
+        if (!accountInfo.lastname || !nameRegex.test(accountInfo.lastname)) {
+            newErrors.lastname = true;
             valid = false;
         } else {
-            newErrors.companyName = false;
+            newErrors.lastname = false;
+        }
+        if (!accountInfo.firstname || !nameRegex.test(accountInfo.firstname)) {
+            newErrors.firstname = true;
+            valid = false;
+        } else {
+            newErrors.firstname = false;
         }
         // Password validation
         if (accountInfo.password && accountInfo.password.length < 5) {
@@ -83,18 +97,20 @@ const EditAccountPage = () => {
     const submitNewAccount = (e) => {
         if (validateAccount()) {
             let request = {
-                email: employer.userDetails.email,
-                newCompanyName: accountInfo.companyName,
+                email: candidate.userDetails.email,
+                newFirstName: accountInfo.firstname,
+                newLastName: accountInfo.lastname,
                 newPassword: accountInfo.password,
             }
-            ProfileService.updateAccount(request)
+            console.log(request)
+            CandidateService.updateAccount(request)
                 .then((response) => {
                     let updateResponse = response.data;
                     AppToaster.show({
                         message: t('update_account_success'),
                         intent: Intent.SUCCESS,
                     });
-                    dispatch(setAuthData(true, updateResponse.employer, updateResponse.token));
+                    dispatch(setAuthData(true, updateResponse.candidate, updateResponse.token));
                     setIsAccountEdited(false)
                 })
                 .catch(error => {
@@ -128,7 +144,7 @@ const EditAccountPage = () => {
                         labelInfo={t('autocompleted')}
                     >
                         <InputGroup
-                            value={employer.userDetails.email}
+                            value={candidate.userDetails.email}
                             placeholder="mail@gmail.com"
                             autoComplete="new-mail"
                             asyncControl={true}
@@ -136,19 +152,34 @@ const EditAccountPage = () => {
                         />
                     </FormGroup>
                     <FormGroup
-                        label={t('company')}
+                        label={t('firstname')}
+                        intent={errorsAccount.firstname ? Intent.DANGER : Intent.NONE}
+                        helperText={errorsAccount.firstname ? t('firstname_err') : ""}
                         className="card-form-group"
-                        intent={errorsAccount.companyName ? Intent.DANGER : Intent.NONE}
-                        helperText={errorsAccount.companyName ? t('company_err') : ""}
                         labelInfo={t('required')}
                     >
                         <InputGroup
                             type="text"
-                            autoComplete="new-name"
-                            value={accountInfo.companyName}
-                            placeholder="Joblistic"
+                            name="firstname"
+                            value={accountInfo.firstname}
+                            placeholder="Maria"
+                            autoComplete="new-user"
+                            onChange={handleAccountChange}
+                        />
+                    </FormGroup>
+                    <FormGroup
+                        label={t('lastname')}
+                        intent={errorsAccount.lastname ? Intent.DANGER : Intent.NONE}
+                        helperText={errorsAccount.lastname ? t('lastname_err') : ""}
+                        className="card-form-group"
+                        labelInfo={t('required')}
+                    >
+                        <InputGroup
+                            type="text"
+                            name="lastname"
+                            value={accountInfo.lastname}
+                            placeholder="Popescu"
                             asyncControl={true}
-                            name="companyName"
                             onChange={handleAccountChange}
                         />
                     </FormGroup>
@@ -157,11 +188,10 @@ const EditAccountPage = () => {
                     </div>
                     <div className="password-fields">
                         <FormGroup
-                            label={t('password')}
+                            label={t('new_password')}
                             intent={errorsAccount.password ? Intent.DANGER : Intent.NONE}
                             helperText={errorsAccount.password ? t('password_err') : ""}
                             className="card-form-group"
-                            labelInfo={t('required')}
                         >
                             <InputGroup
                                 type={showPassword ? 'text' : 'password'}
@@ -187,7 +217,6 @@ const EditAccountPage = () => {
                             intent={errorsAccount.confirmPassword ? Intent.DANGER : Intent.NONE}
                             helperText={errorsAccount.confirmPassword ? t('confirm_password_err') : ""}
                             className="card-form-group"
-                            labelInfo={t('required')}
                         >
                             <InputGroup
                                 name="confirmPassword"
@@ -232,13 +261,19 @@ const EditAccountPage = () => {
                     label={t('email_address') + ":"}
                     className="card-form-group"
                 >
-                    <p className="card-info-content">{employer.userDetails.email}</p>
+                    <p className="card-info-content">{candidate.userDetails.email}</p>
                 </FormGroup>
                 <FormGroup
-                    label={t('company') + ":"}
+                    label={t('firstname') + ":"}
                     className="card-form-group"
                 >
-                    <p className="card-info-content">{employer.companyName}</p>
+                    <p className="card-info-content">{candidate.firstname}</p>
+                </FormGroup>
+                <FormGroup
+                    label={t('lastname') + ":"}
+                    className="card-form-group"
+                >
+                    <p className="card-info-content">{candidate.lastname}</p>
                 </FormGroup>
                 <FormGroup
                     label={t('password') + ":"}

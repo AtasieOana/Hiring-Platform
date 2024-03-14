@@ -5,6 +5,7 @@ import com.hiringPlatform.employer.model.Profile;
 import com.hiringPlatform.employer.model.User;
 import com.hiringPlatform.employer.model.request.UpdateEmployerAccount;
 import com.hiringPlatform.employer.model.response.EmployerResponse;
+import com.hiringPlatform.employer.model.response.GetLoggedUserResponse;
 import com.hiringPlatform.employer.repository.EmployerRepository;
 import com.hiringPlatform.employer.security.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +23,16 @@ public class UserService {
 
     private final JwtService jwtService;
 
+    private final ProfileService profileService;
+
+
 
     @Autowired
-    public UserService(EmployerRepository employerRepository, RedisService redisService, JwtService jwtService) {
+    public UserService(EmployerRepository employerRepository, ProfileService profileService,
+                       RedisService redisService, JwtService jwtService) {
         this.employerRepository = employerRepository;
         this.redisService = redisService;
+        this.profileService = profileService;
         this.jwtService = jwtService;
     }
 
@@ -34,18 +40,20 @@ public class UserService {
      * Method used for getting the logged user
      * @return null if the user is not logged, the user otherwise
      */
-    public EmployerResponse getLoggedUser() {
+    public GetLoggedUserResponse getLoggedUser() {
         String userEmail = redisService.getData("userEmail");
         String userToken = redisService.getData("userToken");
-        if(userEmail == null || userEmail.equals("")){
+        if(userEmail == null || userEmail.isEmpty()){
             return null;
         }
         Optional<Employer> optionalUser = employerRepository.findByEmail(userEmail);
         if(optionalUser.isPresent()){
             if(optionalUser.get().getUserDetails().getAccountEnabled() == 1 && !jwtService.isTokenExpired(userToken)) {
-                EmployerResponse employerResponse = new EmployerResponse();
+                GetLoggedUserResponse employerResponse = new GetLoggedUserResponse();
+                Boolean hasProfile = profileService.hasEmployerProfile(userEmail);
                 employerResponse.setEmployer(optionalUser.get());
                 employerResponse.setToken(userToken);
+                employerResponse.setHasProfile(hasProfile);
                 return employerResponse;
             }
             else{
@@ -67,13 +75,13 @@ public class UserService {
         if(optionalUser.isPresent()){
             Employer employerToBeSaved = optionalUser.get();
             User userDetails = employerToBeSaved.getUserDetails();
-            if(employerAccount.getNewPassword().length() > 0) {
+            if(!employerAccount.getNewPassword().isEmpty()) {
                 BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
                 String encodedPassword = bCryptPasswordEncoder.encode(employerAccount.getNewPassword());
                 userDetails.setPassword(encodedPassword);
             }
             else {
-                userDetails.setPassword(null);
+                userDetails.setPassword(employerToBeSaved.getUserDetails().getPassword());
             }
             employerToBeSaved.setCompanyName(employerAccount.getNewCompanyName());
             employerToBeSaved.setUserDetails(userDetails);

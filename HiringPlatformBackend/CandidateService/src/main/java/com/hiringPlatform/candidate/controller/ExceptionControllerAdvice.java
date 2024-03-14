@@ -1,5 +1,6 @@
 package com.hiringPlatform.candidate.controller;
 
+import com.hiringPlatform.candidate.exception.FileException;
 import com.hiringPlatform.candidate.exception.UnauthorizedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +12,6 @@ public class ExceptionControllerAdvice {
 
     @ExceptionHandler({UnauthorizedException.class})
     public ResponseEntity<String> handleUnauthorizedExceptions(Exception exception) {
-        System.out.println(exception.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(exception.getMessage());
     }

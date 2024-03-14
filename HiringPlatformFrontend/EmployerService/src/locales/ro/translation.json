@@ -146,5 +146,8 @@
   "save_job_desc": "Salvați descrierea",
   "photo_format": "Puteți adăuga o imagine în format jpg sau png.",
   "choose": "Alegeti",
-  "choose_file": "Alegeti un fișier..."
+  "choose_file": "Alegeti un fișier...",
+  "new_password": "Noua parolă",
+  "change_pass": "Schimbați parola",
+  "change_pass_condition": "Cele două câmpuri vor fi completate numai dacă se dorește schimbarea parolei."
 }

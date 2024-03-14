@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import './Header.css';
 import {Button, Dialog, DialogBody, DialogFooter, Icon, Intent, Menu, MenuItem, Popover} from '@blueprintjs/core';
@@ -17,6 +17,28 @@ const HeaderPage = () => {
     const isSmallScreen = useMediaQuery("(max-width: 700px)");
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
     const dispatch = useDispatch();
+    const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+    const hasCv = useSelector(state => state.cv.hasCv);
+
+    useEffect(() => {
+        // Set the language
+        const urlPath = window.location.pathname;
+        const parts = urlPath.split('/').filter(part => part !== '');
+
+        if (parts.length >= 1 && ["ro", "en"].includes(parts[0])) {
+            const paramLanguage = parts[0];
+            i18n.changeLanguage(paramLanguage);
+        }
+
+        // Choose if the candidate is redirect to cv creation or not
+        if (isAuthenticated) {
+            if(!hasCv){
+                navigate("/" + i18n.language)
+            }
+        } else {
+            window.location.replace('http://localhost:3000/login');
+        }
+    }, []);
 
     // Change the language
     const changeLanguage = () => {

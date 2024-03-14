@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import HeaderPageWithoutCV from "../header/HeaderPageWithoutCV";
 import {useTranslation} from "react-i18next";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import jsPDF from 'jspdf';
 import {
@@ -25,6 +25,12 @@ import "./CreateCv.css"
 import EducationIcon from '../../resources-photo/No_education_image.png';
 import ExperienceIcon from '../../resources-photo/No_experience_image.png';
 import {fileToBase64} from "../common/CommonMethods";
+import CandidateService from "../../services/candidate.service";
+import {AppToaster} from "../common/AppToaster";
+import {setCvActionData} from "../../redux/actions/cvActions";
+import firebase from "../../util/firebase";
+import { getStorage, ref, uploadBytes } from 'firebase/storage';
+import {FIREBASE_PATH} from "../../util/constants";
 
 const defaultEd = {
     certificate: '',
@@ -45,10 +51,10 @@ const defaultEx = {
 
 const CreateCV = () => {
 
-    const {t, i18n} = useTranslation();
-    const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+    const {t} = useTranslation();
     const candidate = useSelector(state => state.auth.candidate);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     // State
     const [cvData, setCVData] = useState({
@@ -73,27 +79,11 @@ const CreateCV = () => {
     const [currentPresentEx, setCurrentPresentEx] = useState(false);
 
     useEffect(() => {
-        // Set the language
-        const urlPath = window.location.pathname;
-        const parts = urlPath.split('/').filter(part => part !== '');
-
-        if (parts.length >= 1) {
-            const paramLanguage = parts[0];
-            i18n.changeLanguage(paramLanguage);
-        }
-
-        // Choose if the candidate is redirect to home or has to add a cv
-        if (isAuthenticated) {
-            // todo call sa vezi daca are cv sau nu
-            // daca are:
-            let cvDataCompleted = {...cvData}
-            cvDataCompleted.email = candidate.userDetails.email
-            cvDataCompleted.firstname = candidate.firstname
-            cvDataCompleted.lastname = candidate.lastname
-            setCVData(cvDataCompleted)
-        } else {
-            window.location.replace('http://localhost:3000/login');
-        }
+        let cvDataCompleted = {...cvData}
+        cvDataCompleted.email = candidate.userDetails.email
+        cvDataCompleted.firstname = candidate.firstname
+        cvDataCompleted.lastname = candidate.lastname
+        setCVData(cvDataCompleted)
     }, []);
 
     /**
@@ -232,6 +222,35 @@ const CreateCV = () => {
         updatedEducation[name] = value;
         setCurrentEd(updatedEducation);
     };
+
+    const addCV = (file) =>{
+        // Set file name
+        let uuidWithoutDashes = candidate.candidateId.replace(/-/g, "");
+        let fileName = `${uuidWithoutDashes}_${Date.now()}_${candidate.lastname}_${candidate.firstname}.pdf`;
+
+        let request = {
+            fileName: fileName,
+            candidateId: candidate.candidateId
+        }
+        CandidateService.addCv(request).then(() => {
+            AppToaster.show({
+                message: t('add_cv_success'),
+                intent: Intent.SUCCESS,
+            });
+            setIsDialogOpen(false)
+            dispatch(setCvActionData(true));
+            // Upload file to Firebase Storage
+            const storage = getStorage(firebase);
+            const storageRef = ref(storage, FIREBASE_PATH + fileName);
+            uploadBytes(storageRef, file).then(r =>  navigate("/home"))
+        }).catch(error => {
+            console.error('Error: ', error.message);
+            AppToaster.show({
+                message: t('add_cv_err'),
+                intent: Intent.DANGER,
+            });
+        });
+    }
 
     const finishPDFGeneration = (doc, styling) => {
         const maxWidth = 115;
@@ -407,8 +426,7 @@ const CreateCV = () => {
             lastModified: Date.now()
         });
         // Send the PDF to the backend
-        console.log(file);
-        navigate("/home")
+        addCV(file)
     }
 
     const generatePDF = () => {
@@ -442,9 +460,7 @@ const CreateCV = () => {
     };
 
     const uploadFile = () =>{
-        // TODO call catre backend
-        console.log(cvFile)
-        navigate("/home")
+        addCV(cvFile)
     }
 
     /**

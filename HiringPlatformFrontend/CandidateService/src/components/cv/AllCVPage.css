@@ -1,0 +1,56 @@
+.multiple-cv-motivation{
+    margin: 40px 20px 20px;
+    padding: 0 60px;
+    text-align: justify;
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+.add-cv-options{
+    margin: 0 20px 20px;
+}
+
+.add-cv-options-text{
+    padding: 0 60px;
+    text-align: justify;
+    font-size: 15px;
+    line-height: 1.6;
+    font-weight: 600;
+}
+
+.add-cv-options-button{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    margin-left: 100px;
+    margin-top: 10px;
+    gap: 10px;
+}
+
+.add-cv-option .bp4-button-text{
+    color: #184a90;
+    text-decoration: underline;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.add-cv-option:hover {
+    background: none !important;
+}
+
+.add-cv-option:hover .bp4-button-text{
+    color: #031531;
+}
+
+.add-cv-option:focus{
+    outline: none !important;
+}
+
+.add-cv-option .bp4-icon svg{
+    fill: #184a90;
+}
+
+.add-cv-option:hover .bp4-icon svg{
+    fill: #031531;
+}

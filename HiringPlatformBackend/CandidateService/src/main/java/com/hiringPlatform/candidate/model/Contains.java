@@ -36,8 +36,8 @@ public class Contains {
         this.containsId = new ContainsId();
     }
 
-    public void setStage(Stage Stage) {
-        this.containsId.setStage(Stage);
+    public void setStage(Stage stage) {
+        this.containsId.setStage(stage);
     }
 
     public void setJob(Job job) {

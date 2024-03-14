@@ -2,6 +2,7 @@ package com.hiringPlatform.employer.controller;
 
 import com.hiringPlatform.employer.model.request.UpdateEmployerAccount;
 import com.hiringPlatform.employer.model.response.EmployerResponse;
+import com.hiringPlatform.employer.model.response.GetLoggedUserResponse;
 import com.hiringPlatform.employer.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,8 +26,8 @@ public class UserController {
      * @return null if the user is not logged, the user otherwise
      */
     @GetMapping("/getLoggedUser")
-    public ResponseEntity<EmployerResponse> login() {
-        EmployerResponse user =  userService.getLoggedUser();
+    public ResponseEntity<GetLoggedUserResponse> login() {
+        GetLoggedUserResponse user =  userService.getLoggedUser();
         return ResponseEntity.ok(user);
     }
 

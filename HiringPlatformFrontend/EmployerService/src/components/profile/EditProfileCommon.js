@@ -5,9 +5,10 @@ import {Button, ControlGroup, Divider, FormGroup, InputGroup, Intent} from "@blu
 import ImageUpload from "../common/ImageUpload";
 import ReactQuill from "react-quill";
 import {useTranslation} from "react-i18next";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import {base64ToImage} from "../common/CommonMethods";
+import {setProfileActionData} from "../../redux/actions/profileActions";
 
 const EditProfileCommon = ({
                                formDataProps,
@@ -20,6 +21,7 @@ const EditProfileCommon = ({
     const [formData, setFormData] = useState(formDataProps);
     const employer = useSelector(state => state.auth.employer);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const [errors, setErrors] = useState({
         phoneNumber: false,
@@ -103,6 +105,7 @@ const EditProfileCommon = ({
                     message: t('create_profile_success'),
                     intent: Intent.SUCCESS,
                 });
+                dispatch(setProfileActionData(true));
                 navigate('/home');
             })
             .catch(error => {

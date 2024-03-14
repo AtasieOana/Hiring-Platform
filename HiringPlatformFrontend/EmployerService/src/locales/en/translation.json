@@ -146,5 +146,8 @@
   "save_job_desc": "Save description",
   "photo_format": "You can add a photo in jpg or png format.",
   "choose": "Choose",
-  "choose_file": "Choose a file..."
+  "choose_file": "Choose a file...",
+  "new_password": "New password",
+  "change_pass": "Change password",
+  "change_pass_condition": "The next two fields will only be completed if a password change is desired."
 }

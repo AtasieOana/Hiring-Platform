@@ -11,6 +11,7 @@ import NotFoundPage from "./components/common/notFound/NotFoundPage";
 import EditAccountPage from "./components/EditAccountPage";
 import ProfilePage from "./components/profile/ProfilePage";
 import JobView from "./components/job/JobView";
+import {setProfileActionData} from "./redux/actions/profileActions";
 
 const App = () => {
     const dispatch = useDispatch();
@@ -23,6 +24,7 @@ const App = () => {
             if (registerResponse.token) {
                 setIsAuth(true)
                 dispatch(setAuthData(true, registerResponse.employer, registerResponse.token));
+                dispatch(setProfileActionData(response.data.hasProfile));
             }
         })
             .catch(error => {

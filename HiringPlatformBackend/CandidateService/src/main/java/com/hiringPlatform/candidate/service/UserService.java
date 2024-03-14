@@ -5,6 +5,7 @@ import com.hiringPlatform.candidate.model.Employer;
 import com.hiringPlatform.candidate.model.User;
 import com.hiringPlatform.candidate.model.request.UpdateCandidateAccount;
 import com.hiringPlatform.candidate.model.response.CandidateResponse;
+import com.hiringPlatform.candidate.model.response.GetLoggedUserResponse;
 import com.hiringPlatform.candidate.repository.CandidateRepository;
 import com.hiringPlatform.candidate.repository.EmployerRepository;
 import com.hiringPlatform.candidate.security.JwtService;
@@ -23,19 +24,24 @@ public class UserService {
 
     private final JwtService jwtService;
 
+    private final CVService cvService;
 
     @Autowired
-    public UserService(CandidateRepository candidateRepository, RedisService redisService, JwtService jwtService) {
+    public UserService(CandidateRepository candidateRepository,
+                       RedisService redisService,
+                       JwtService jwtService,
+                       CVService cvService) {
         this.candidateRepository = candidateRepository;
         this.redisService = redisService;
         this.jwtService = jwtService;
+        this.cvService = cvService;
     }
 
     /**
      * Method used for getting the logged user
      * @return null if the user is not logged, the user otherwise
      */
-    public CandidateResponse getLoggedUser() {
+    public GetLoggedUserResponse getLoggedUser() {
         String userEmail = redisService.getData("userEmail");
         String userToken = redisService.getData("userToken");
         if(userEmail == null || userEmail.isEmpty()){
@@ -44,9 +50,11 @@ public class UserService {
         Optional<Candidate> optionalUser = candidateRepository.findByEmail(userEmail);
         if(optionalUser.isPresent()){
             if(optionalUser.get().getUserDetails().getAccountEnabled() == 1 && !jwtService.isTokenExpired(userToken)) {
-                CandidateResponse candidateResponse = new CandidateResponse();
+                GetLoggedUserResponse candidateResponse = new GetLoggedUserResponse();
+                Boolean hasCv = cvService.hasCv(userEmail);
                 candidateResponse.setCandidate(optionalUser.get());
                 candidateResponse.setToken(userToken);
+                candidateResponse.setHasCv(hasCv);
                 return candidateResponse;
             }
             else{
@@ -74,7 +82,7 @@ public class UserService {
                 userDetails.setPassword(encodedPassword);
             }
             else {
-                userDetails.setPassword(null);
+                userDetails.setPassword(candidateToBeSaved.getUserDetails().getPassword());
             }
             candidateToBeSaved.setLastname(candidateAccount.getNewLastName());
             candidateToBeSaved.setFirstname(candidateAccount.getNewFirstName());
