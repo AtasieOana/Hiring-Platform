@@ -1,5 +1,6 @@
 package com.hiringPlatform.candidate.model.response;
 
+import com.hiringPlatform.candidate.model.Employer;
 import com.hiringPlatform.candidate.model.request.QuestionHelperRequest;
 import com.hiringPlatform.candidate.model.request.StageHelperRequest;
 import lombok.*;
@@ -26,7 +27,8 @@ public class JobResponse {
     private String cityName;
     private String regionName;
     private String countryName;
-    private String employerId;
+    private Employer employer;
+    private GetProfileResponse employerProfile;
     List<QuestionHelperRequest> questions;
     List<StageHelperRequest> stages;
 }

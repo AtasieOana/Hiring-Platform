@@ -1,0 +1,95 @@
+package com.hiringPlatform.candidate.service;
+
+import com.hiringPlatform.candidate.model.*;
+import com.hiringPlatform.candidate.model.response.ApplicationResponse;
+import com.hiringPlatform.candidate.repository.ApplicationRepository;
+import com.hiringPlatform.candidate.repository.CVRepository;
+import com.hiringPlatform.candidate.repository.JobRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class ApplicationService {
+
+    private final ApplicationRepository applicationRepository;
+
+    private final JobService jobService;
+    private final CVService cvService;
+    private final CandidateService candidateService;
+    private final StageService stageService;
+
+
+    @Autowired
+    public ApplicationService(ApplicationRepository applicationRepository, JobService jobService,
+                              CandidateService candidateService, CVService cvService, StageService stageService) {
+        this.applicationRepository = applicationRepository;
+        this.jobService = jobService;
+        this.cvService = cvService;
+        this.candidateService = candidateService;
+        this.stageService = stageService;
+    }
+
+    public Application applyToJob(String jobId, String candidateId, String cvId){
+        Application application = new Application();
+        application.setApplicationDate(new Date());
+        application.setStatus("in_curs");
+        application.setRefusalReason("");
+        application.setApplicationId();
+        // CV:
+        CV cv = cvService.getCv(cvId);
+        application.setCv(cv);
+        // Job:
+        Job job = jobService.getJob(jobId);
+        application.setJob(job);
+        // Candidate:
+        Candidate candidate = candidateService.getCandidateById(candidateId);
+        application.setCandidate(candidate);
+        // Stage:
+        Stage stage = stageService.getStageBasedOnJobIdAndStageNumber(jobId, 0);
+        application.setStage(stage);
+        return applicationRepository.save(application);
+    }
+
+    public List<ApplicationResponse> getAllApplicationsForCandidate(String candidateId){
+        return applicationRepository.findApplicationsForCandidate(candidateId).stream().map(a -> {
+            ApplicationResponse applicationResponse = new ApplicationResponse();
+            applicationResponse.setCvId(a.getCv().getCvId());
+            applicationResponse.setCvName(a.getCv().getCvName());
+            applicationResponse.setStatus(a.getStatus());
+            applicationResponse.setRefusalReason(a.getRefusalReason());
+            applicationResponse.setCandidateFirstname(a.getCandidate().getFirstname());
+            applicationResponse.setCandidateEmail(a.getCandidate().getUserDetails().getEmail());
+            applicationResponse.setCandidateLastname(a.getCandidate().getLastname());
+            applicationResponse.setEmployerEmail(a.getJob().getEmployer().getUserDetails().getEmail());
+            applicationResponse.setEmployerCompanyName(a.getJob().getEmployer().getCompanyName());
+            applicationResponse.setAppDate(a.getApplicationDate());
+            applicationResponse.setJob(jobService.getJobResponse(a.getJob().getJobId()));
+            Contains contains = stageService.getCurrentStageForApplication(a.getStage().getStageId(), a.getJob().getJobId());
+            applicationResponse.setStageName(contains.getStage().getStageName());
+            applicationResponse.setStageNr(contains.getStageNr());
+            applicationResponse.setAllStages(stageService.getAllStagesForJob(a.getJob().getJobId()));
+            return applicationResponse;
+        }).toList();
+    }
+
+    public Boolean refuseApplication(String jobId, String candidateId, String reason){
+        Optional<Application> applicationOptional = applicationRepository.findByApplicationId(jobId, candidateId);
+        if(applicationOptional.isPresent()){
+            Application application = applicationOptional.get();
+            application.setStatus("refuzat");
+            application.setRefusalReason(reason);
+            applicationRepository.save(application);
+            return true;
+        }
+        return false;
+    }
+
+    public Boolean checkIfCandidateAppliedToJob(String jobId, String candidateId){
+        Optional<Application> applicationOptional = applicationRepository.findByApplicationId(jobId, candidateId);
+        return applicationOptional.isPresent();
+    }
+}

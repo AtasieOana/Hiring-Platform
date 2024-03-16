@@ -50,7 +50,7 @@ public class Application {
         return applicationId;
     }
 
-    public void setContainsId() {
+    public void setApplicationId() {
         this.applicationId = new ApplicationId();
     }
 

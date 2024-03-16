@@ -6,14 +6,13 @@
     background-color: white;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     gap:2%;
 }
 
 /* Left section (filters) */
 .filter-section {
     flex: 1;
-    background-color: #ececec;
+    background-color: rgba(224, 156, 115, 0.10);
     padding: 20px 20px;
     width: 40%;
     flex: none;
@@ -81,7 +80,7 @@
 /* Styling for buttons */
 .add-job-button
 {
-    background-color: #FFAA33 !important;
+    background-color: #ffaf84 !important;
     border: none !important;
     margin-bottom: 15px !important;
     cursor: pointer !important;
@@ -110,7 +109,7 @@
 }
 
 .add-job-button:hover {
-    background-color: #fc9119 !important;
+    background-color: #e56c06 !important;
 }
 
 .add-job-button:focus,
@@ -154,7 +153,6 @@ input[type="search"] {
 
 /* Styling for job items */
 .job-item {
-    background-color: #ececec;
     padding: 10px;
     margin-bottom: 10px;
     border-radius: 4px;
@@ -196,8 +194,8 @@ input[type="search"] {
 .pagination-button {
     padding: 8px 12px;
     margin: 0 4px;
-    background-color: #ececec;
-    border: 2px solid #b9b9b9;
+    background-color: #ffbc98;
+    border: 2px solid #ffb390;
     border-radius: 4px;
     cursor: pointer;
     font-size: 16px;
@@ -205,18 +203,22 @@ input[type="search"] {
     transition: background-color 0.3s, color 0.3s;
 }
 
+.pagination-button:focus{
+    outline: none !important;
+}
+
 .pagination-button:hover {
-    background-color: #d2d2d2;
+    background-color: #ffbfa1;
 }
 
 .pagination-button:disabled {
-    opacity: 0.5;
+    opacity: 0.6;
     cursor: not-allowed;
 }
 
 .pagination-button.active {
-    background-color: #184a90;
-    color: #fff;
+    background-color: rgba(224, 156, 115, 0.2);
+    border: 2px solid #ffe2d9;
 }
 
 .job-item {
@@ -379,7 +381,6 @@ input[type="search"] {
         align-items: center;
         background-color: white;
         border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
     .filter-section {

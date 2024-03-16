@@ -1,11 +1,14 @@
 package com.hiringPlatform.candidate.service;
 
+import com.hiringPlatform.candidate.model.Contains;
+import com.hiringPlatform.candidate.model.Question;
 import com.hiringPlatform.candidate.model.request.QuestionHelperRequest;
 import com.hiringPlatform.candidate.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,5 +26,10 @@ public class QuestionService {
                 .stream()
                 .map(question -> new QuestionHelperRequest(question.getQuestionText(), question.getQuestionNumber()))
                 .collect(Collectors.toList());
+    }
+
+    public Question getQuestionByJobIdAndNumber(String jobId, Number questionNr){
+        Optional<Question> optionalQuestion = questionRepository.findByJobIdAndQuestionNumber(jobId, questionNr);
+        return optionalQuestion.orElse(null);
     }
 }

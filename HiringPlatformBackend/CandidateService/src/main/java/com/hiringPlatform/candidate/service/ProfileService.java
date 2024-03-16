@@ -17,14 +17,10 @@ import java.util.Optional;
 public class ProfileService {
 
     private final ProfileRepository profileRepository;
-    private final AddressService addressService;
-    private final EmployerRepository employerRepository;
 
     @Autowired
-    public ProfileService(ProfileRepository profileRepository, AddressService addressService, EmployerRepository employerRepository) {
+    public ProfileService(ProfileRepository profileRepository) {
         this.profileRepository = profileRepository;
-        this.addressService = addressService;
-        this.employerRepository = employerRepository;
     }
 
     /**

@@ -191,10 +191,17 @@ const RegisterPage = () => {
             const response = await signInWithGooglePopup();
             let request: UserGoogleRequest = {accountType: "", email: "", familyName: "", givenName: "", name: ""};
             if (response.user.email != null && response.user.displayName != null) {
+                let [givenName, familyName] = response.user.displayName.split(' ');
+                if(givenName === null || familyName === null || givenName === undefined || familyName === undefined || givenName.length === 0 || familyName.length === 0)
+                {
+                    [request.givenName, request.familyName] = [response.user.displayName, response.user.displayName]
+                }
+                else{
+                    [request.givenName, request.familyName] = [givenName, familyName]
+                }
                 request.email = response.user.email;
                 request.name = response.user.displayName;
                 request.accountType = accountType;
-                [request.givenName, request.familyName] = response.user.displayName.split(' ');
             }
             AuthenticationService.authGoogle((request)).then((response: any) => {
                 let url = "";
@@ -387,7 +394,7 @@ const RegisterPage = () => {
                     </div>
                     <Button className="register-button"
                             small={true}
-                            onClick={() => logGoogleUser(EMPLOYER_ACCOUNT)}>
+                            onClick={() => logGoogleUser(CANDIDATE_ACCOUNT)}>
                         {t('sign_google')}
                     </Button>
                 </div>

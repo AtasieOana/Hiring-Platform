@@ -12,6 +12,7 @@ import EditAccountPage from "./components/EditAccountPage";
 import ProfilePage from "./components/profile/ProfilePage";
 import JobView from "./components/job/JobView";
 import {setProfileActionData} from "./redux/actions/profileActions";
+import ApplicationPage from "./components/application/ApplicationPage";
 
 const App = () => {
     const dispatch = useDispatch();
@@ -51,9 +52,10 @@ const App = () => {
                 <Routes>
                     <Route path="/home" element={isAuth ? <HomePage/> : redirectToWelcomePage()}/>
                     <Route path="/profile" element={isAuth ? <ProfilePage/> : redirectToWelcomePage()}/>
-                    <Route path="/:paramLanguage" element={isAuth ? <EditProfilePage/> : redirectToWelcomePage()}/>
+                    <Route path="/applications" element={isAuth ? <ApplicationPage/> : redirectToWelcomePage()}/>
                     <Route path="/editAccount" element={isAuth ? <EditAccountPage/> : redirectToWelcomePage()}/>
                     <Route path="/viewJob" element={isAuth ? <JobView/> : redirectToWelcomePage()}/>
+                    <Route path="/:paramLanguage" element={isAuth ? <EditProfilePage/> : redirectToWelcomePage()}/>
                     <Route path="*" element={<NotFoundPage/>}/>
                 </Routes>
             </Router>

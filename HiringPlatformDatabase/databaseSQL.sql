@@ -97,7 +97,7 @@ CREATE TABLE profiluri (
     descriere CLOB NOT NULL,
     nr_telefon VARCHAR2(10),
     site_oficial VARCHAR2(255),
-    id_adresa VARCHAR2(36) CONSTRAINT fk_profil_adresa REFERENCES adrese(id_adresa),
+    id_adresa VARCHAR2(36) CONSTRAINT fk_profil_adresa REFERENCES adrese(id_adresa) ON DELETE CASCADE,
     id_angajator VARCHAR2(36) CONSTRAINT fk_profil_angajator REFERENCES angajatori(id_angajator) ON DELETE CASCADE,
     CONSTRAINT nr_telefon_corect CHECK(LENGTH(nr_telefon) = 10 AND REGEXP_LIKE(nr_telefon, '^[0-9]+$')),
     CONSTRAINT profil_angajator_unic UNIQUE (id_angajator)
@@ -106,7 +106,7 @@ CREATE TABLE profiluri (
 CREATE TABLE locuri_de_munca (
     id_loc_de_munca VARCHAR2(36) CONSTRAINT pk_loc_de_munca PRIMARY KEY,
     id_angajator VARCHAR2(36) CONSTRAINT fk_loc_munca_angajator REFERENCES angajatori(id_angajator) ON DELETE CASCADE,
-    id_oras VARCHAR2(36) CONSTRAINT fk_loc_de_munca_adresa REFERENCES orase(id_oras),
+    id_oras VARCHAR2(36) CONSTRAINT fk_loc_de_munca_adresa REFERENCES orase(id_oras) ON DELETE CASCADE,
     titlu VARCHAR2(500) NOT NULL,
     descriere CLOB NOT NULL,
     tip_contract VARCHAR2(100) NOT NULL,
@@ -154,7 +154,7 @@ CREATE TABLE aplica (
     id_cv VARCHAR2(36) CONSTRAINT fk_aplica_cv REFERENCES cv(id_cv) ON DELETE CASCADE,
     id_candidat VARCHAR2(36) CONSTRAINT fk_aplica_candidat REFERENCES candidati(id_candidat) ON DELETE CASCADE,
     data_aplicarii DATE NOT NULL,
-    id_etapa_curenta VARCHAR2(36) CONSTRAINT fk_aplica_etapa REFERENCES etape(id_etapa),
+    id_etapa_curenta VARCHAR2(36) CONSTRAINT fk_aplica_etapa REFERENCES etape(id_etapa) ON DELETE CASCADE,
     status VARCHAR2(20) CHECK (status IN ('refuzat', 'in_curs', 'finalizat')) NOT NULL,
     motiv_refuz VARCHAR2(500),
     CONSTRAINT pk_aplica PRIMARY KEY(id_loc_de_munca, id_cv, id_candidat),
@@ -164,7 +164,7 @@ CREATE TABLE aplica (
 CREATE TABLE raspunsuri (
     id_raspuns VARCHAR2(36) CONSTRAINT pk_raspuns PRIMARY KEY,
     id_candidat VARCHAR2(36) CONSTRAINT fk_raspuns_candidat REFERENCES candidati(id_candidat) ON DELETE CASCADE,
-    id_intrebare VARCHAR2(36) CONSTRAINT fk_raspuns_intrebare REFERENCES intrebari(id_intrebare),
+    id_intrebare VARCHAR2(36) CONSTRAINT fk_raspuns_intrebare REFERENCES intrebari(id_intrebare) ON DELETE CASCADE,
     raspuns VARCHAR2(4000)
 );
 
@@ -200,5 +200,6 @@ SELECT * FROM contine;
 SELECT * FROM intrebari;
 SELECT * FROM cv;
 SELECT * FROM raspunsuri;
-DELETE FROM cv;
+SELECT * FROM aplica; 
+DELETE FROM raspunsuri;
 COMMIT;

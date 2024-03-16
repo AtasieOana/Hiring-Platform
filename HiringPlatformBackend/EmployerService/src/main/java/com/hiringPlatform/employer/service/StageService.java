@@ -66,4 +66,21 @@ public class StageService {
         return stageRepository.findAll().stream().sorted(Comparator.comparing(Stage::getStageName))
                 .collect(Collectors.toList());
     }
+
+    public List<Stage> getStagesForJob(String jobId){
+        return containsRepository.findAllByJobId(jobId)
+                .stream()
+                .map(Contains::getStage)
+                .collect(Collectors.toList());
+    }
+
+    public Contains getCurrentStageForApplication(String stageId, String jobId){
+        Optional<Contains> optionalStage = containsRepository.findByJobIdAndStageId(jobId, stageId);
+        return optionalStage.orElse(null);
+    }
+
+    public List<Contains> getAllContainsForJob(String jobId){
+        return containsRepository.findAllByJobId(jobId);
+    }
+
 }

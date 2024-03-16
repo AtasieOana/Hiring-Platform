@@ -648,7 +648,7 @@ const HomePage = () => {
                                     onClick={toggleSort}
                                     small
                                     minimal
-                                    rightIcon={orderByPostDate === 0 ? <Icon size={13} icon="arrow-up" color="black"/> : <Icon size={13} icon="arrow-down" color="black"/>}
+                                    rightIcon={orderByPostDate === 0 ? <Icon size={14} icon="sort-asc" color="black"/> : <Icon size={14} icon="sort-desc" color="black"/>}
                                 >
                                     {t('sort_by_post_date')}
                                 </Button>

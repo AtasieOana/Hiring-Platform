@@ -36,4 +36,10 @@ public class CVController {
         List<CVResponse> list =  cvService.addCV(request.getFileName(), request.getCandidateId());
         return ResponseEntity.ok(list);
     }
+
+    @PostMapping("/deleteCv/{cvId}")
+    public ResponseEntity<List<CVResponse>> deleteCv(@PathVariable String cvId) {
+        List<CVResponse> result =  cvService.deleteCv(cvId);
+        return ResponseEntity.ok(result);
+    }
 }

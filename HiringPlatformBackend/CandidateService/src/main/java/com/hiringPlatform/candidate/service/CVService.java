@@ -1,19 +1,16 @@
 package com.hiringPlatform.candidate.service;
 
-import com.hiringPlatform.candidate.exception.FileException;
 import com.hiringPlatform.candidate.model.*;
 import com.hiringPlatform.candidate.model.response.CVResponse;
 import com.hiringPlatform.candidate.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CVService {
@@ -37,7 +34,9 @@ public class CVService {
             CVResponse response = new CVResponse();
             response.setCandidateEmail(cv.getCandidate().getUserDetails().getEmail());
             response.setCvName(cv.getCvName());
-            response.setUploadDate(cv.getUploadDate());
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            String formattedDate = formatter.format(cv.getUploadDate());
+            response.setUploadDate(formattedDate);
             response.setCandidateLastname(cv.getCandidate().getLastname());
             response.setCandidateFirstname(cv.getCandidate().getFirstname());
             response.setCvId(cv.getCvId());
@@ -63,5 +62,17 @@ public class CVService {
         return getAllCvsForCandidate(candidateId);
     }
 
+    public CV getCv(String cvId){
+        Optional<CV> cv = cvRepository.findById(cvId);
+        return cv.orElse(null);
+    }
 
+    public List<CVResponse> deleteCv(String cvId){
+        Optional<CV> cv = cvRepository.findById(cvId);
+        if(cv.isPresent()){
+            cvRepository.delete(cv.get());
+            return getAllCvsForCandidate(cv.get().getCandidate().getCandidateId());
+        }
+        return new ArrayList<>();
+    }
 }

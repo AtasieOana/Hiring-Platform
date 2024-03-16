@@ -119,12 +119,14 @@ const HeaderPage = () => {
                         usePortal={false}
                         content={
                             <Menu>
-                                <MenuItem icon="list-detail-view" color="white" text={t('posted_jobs')}
+                                <MenuItem icon="print" color="white" text={t('my_resumes')}
                                           onClick={() => navigate('/home')}/>
                                 <MenuItem icon="annotation" color="white"
                                           text={t('edit_account')} onClick={handleGoToEditAccount}/>
-                                <MenuItem icon="search-around" color="white" text={t('my_profile')}
-                                          onClick={() => navigate('/profile')}/>
+                                <MenuItem icon="search-around" color="white" text={t('jobs')}
+                                          onClick={() => navigate('/jobs')}/>
+                                <MenuItem icon="paperclip" color="white" text={t('my_apps')}
+                                          onClick={() => navigate('/applications')}/>
                                 <MenuItem icon="log-out" color="white" text={t('logout')} onClick={logout}/>
                                 <MenuItem icon={<Icon size={13} icon="eraser" color="white" className="nav-icon"/>}
                                           className="delete-menu-item" color="white"
@@ -140,11 +142,14 @@ const HeaderPage = () => {
                         </Link>
                     </Popover>
                 </> : <>
-                    <Link className="nav-item" to="/home">
-                        <Icon size={13} icon="list-detail-view" color="white" className="nav-icon"/> {t('posted_jobs')}
+                    <Link className="nav-item" to="/jobs">
+                        <Icon size={13} icon="search-around" color="white" className="nav-icon"/> {t('jobs')}
                     </Link>
-                    <Link className="nav-item" to="/profile">
-                        <Icon size={13} icon="search-around" color="white" className="nav-icon"/> {t('my_profile')}
+                    <Link className="nav-item" to="/applications">
+                        <Icon size={13} icon="paperclip" color="white" className="nav-icon"/> {t('my_apps')}
+                    </Link>
+                    <Link className="nav-item" to="/home">
+                        <Icon size={13} icon="print" color="white" className="nav-icon"/> {t('my_resumes')}
                     </Link>
                     <Popover
                         interactionKind="hover"

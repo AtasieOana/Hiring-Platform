@@ -1,0 +1,1 @@
+export const FIREBASE_PATH = "cvs/"

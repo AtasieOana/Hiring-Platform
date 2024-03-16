@@ -118,6 +118,11 @@ public class JobService {
         }
     }
 
+    public JobResponse getJobResponse(String jobId){
+        Optional<Job> job = jobRepository.findById(jobId);
+        return job.map(this::buildJobResponse).orElse(null);
+    }
+
     private JobResponse buildJobResponse(Job savedJob) {
         JobResponse jobResponse = new JobResponse();
         jobResponse.setJobId(savedJob.getJobId());

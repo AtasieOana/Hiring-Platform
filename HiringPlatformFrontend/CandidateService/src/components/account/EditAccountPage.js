@@ -124,7 +124,7 @@ const EditAccountPage = () => {
     }
 
     const returnEditableAccountCard = () => {
-        return <Card interactive={true} elevation={Elevation.TWO} className="card-container">
+        return <Card className="card-container">
             <div className="card-title-container">
                 <div className="card-title">
                     <Icon size={16} icon="heatmap" color="#698576" className="nav-icon"/>
@@ -244,7 +244,7 @@ const EditAccountPage = () => {
     }
 
     const returnReadOnlyAccountCard = () => {
-        return <Card interactive={true} elevation={Elevation.TWO} className="card-container">
+        return <Card className="card-container">
             <div className="card-title-container">
                 <div className="card-title">
                     <Icon size={16} icon="heatmap" color="#698576" className="nav-icon"/>
@@ -259,25 +259,29 @@ const EditAccountPage = () => {
             <div className="card-content">
                 <FormGroup
                     label={t('email_address') + ":"}
-                    className="card-form-group"
+                    className="card-form-group-read"
+                    inline={true}
                 >
                     <p className="card-info-content">{candidate.userDetails.email}</p>
                 </FormGroup>
                 <FormGroup
                     label={t('firstname') + ":"}
-                    className="card-form-group"
+                    className="card-form-group-read"
+                    inline={true}
                 >
                     <p className="card-info-content">{candidate.firstname}</p>
                 </FormGroup>
                 <FormGroup
                     label={t('lastname') + ":"}
-                    className="card-form-group"
+                    className="card-form-group-read"
+                    inline={true}
                 >
                     <p className="card-info-content">{candidate.lastname}</p>
                 </FormGroup>
                 <FormGroup
                     label={t('password') + ":"}
-                    className="card-form-group"
+                    className="card-form-group-read"
+                    inline={true}
                 >
                     <p className="card-info-content">******</p>
                 </FormGroup>

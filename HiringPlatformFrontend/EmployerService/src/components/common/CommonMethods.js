@@ -1,4 +1,7 @@
 import {useEffect, useState} from "react";
+import {getDownloadURL, getStorage, ref} from "firebase/storage";
+import firebase from "../../util/firebase";
+import {FIREBASE_PATH} from "../../util/constants";
 
 export function useMediaQuery(query) {
     const [matches, setMatches] = useState(false);
@@ -40,3 +43,12 @@ export const formatDate = (dateString) => {
     return `${day}/${month}/${year} ${hours}:${minutes}`;
 }
 
+export const handleOpenCV = (cv) => {
+    try {
+        const storage = getStorage(firebase);
+        const cvRef = ref(storage, FIREBASE_PATH + cv.cvNameComplete);
+        getDownloadURL(cvRef).then(r=>window.open(r, '_blank'));
+    } catch (error) {
+        console.error('Error opening CV:', error);
+    }
+};

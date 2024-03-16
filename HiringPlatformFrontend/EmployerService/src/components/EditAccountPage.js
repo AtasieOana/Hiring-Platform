@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import HeaderPage from "./header/HeaderPage";
 import {useDispatch, useSelector} from "react-redux";
-import {useNavigate} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 import ProfileService from "../services/profile.service";
 import {AppToaster} from "./common/AppToaster";
@@ -40,8 +39,8 @@ const EditAccountPage = () => {
     useEffect(() => {
         setAccountInfo({
             companyName: employer.companyName,
-            password: employer.userDetails.password || "",
-            confirmPassword: employer.userDetails.password || "",
+            password: "",
+            confirmPassword: "",
         })
     }, []);
 
@@ -108,7 +107,7 @@ const EditAccountPage = () => {
     }
 
     const returnEditableAccountCard = () => {
-        return <Card interactive={true} elevation={Elevation.TWO} className="card-container">
+        return <Card className="card-container">
             <div className="card-title-container">
                 <div className="card-title">
                     <Icon size={16} icon="heatmap" color="#698576" className="nav-icon"/>
@@ -215,7 +214,7 @@ const EditAccountPage = () => {
     }
 
     const returnReadOnlyAccountCard = () => {
-        return <Card interactive={true} elevation={Elevation.TWO} className="card-container">
+        return <Card className="card-container">
             <div className="card-title-container">
                 <div className="card-title">
                     <Icon size={16} icon="heatmap" color="#698576" className="nav-icon"/>
@@ -230,19 +229,22 @@ const EditAccountPage = () => {
             <div className="card-content">
                 <FormGroup
                     label={t('email_address') + ":"}
-                    className="card-form-group"
+                    className="card-form-group-read"
+                    inline={true}
                 >
                     <p className="card-info-content">{employer.userDetails.email}</p>
                 </FormGroup>
                 <FormGroup
                     label={t('company') + ":"}
-                    className="card-form-group"
+                    className="card-form-group-read"
+                    inline={true}
                 >
                     <p className="card-info-content">{employer.companyName}</p>
                 </FormGroup>
                 <FormGroup
                     label={t('password') + ":"}
-                    className="card-form-group"
+                    className="card-form-group-read"
+                    inline={true}
                 >
                     <p className="card-info-content">******</p>
                 </FormGroup>

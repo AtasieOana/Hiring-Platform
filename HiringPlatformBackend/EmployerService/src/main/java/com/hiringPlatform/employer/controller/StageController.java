@@ -32,4 +32,10 @@ public class StageController {
         List<Stage> stages =  stageService.getAllStages();
         return ResponseEntity.ok(stages);
     }
+
+    @GetMapping("/getStagesForJob/{jobId}")
+    public ResponseEntity<List<Stage>> getStagesForJob(@PathVariable String jobId) {
+        List<Stage> stages =  stageService.getStagesForJob(jobId);
+        return ResponseEntity.ok(stages);
+    }
 }

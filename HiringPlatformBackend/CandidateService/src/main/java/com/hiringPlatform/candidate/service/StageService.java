@@ -1,5 +1,6 @@
 package com.hiringPlatform.candidate.service;
 
+import com.hiringPlatform.candidate.model.Contains;
 import com.hiringPlatform.candidate.model.Stage;
 import com.hiringPlatform.candidate.model.request.StageHelperRequest;
 import com.hiringPlatform.candidate.repository.ContainsRepository;
@@ -25,18 +26,6 @@ public class StageService {
         this.containsRepository = containsRepository;
     }
 
-    private Stage saveStageIfNotExist(String name){
-        Optional<Stage> stage = stageRepository.findByStageName(name);
-        if(stage.isPresent()){
-            return stage.get();
-        }
-        else{
-            Stage newStage = new Stage();
-            newStage.setStageName(name);
-            return stageRepository.save(newStage);
-        }
-    }
-
     public List<StageHelperRequest> getAllStagesForJob(String jobId){
         return containsRepository.findAllByJobId(jobId)
                 .stream()
@@ -48,5 +37,15 @@ public class StageService {
     public List<Stage> getAllStages(){
         return stageRepository.findAll().stream().sorted(Comparator.comparing(Stage::getStageName))
                 .collect(Collectors.toList());
+    }
+
+    public Stage getStageBasedOnJobIdAndStageNumber(String jobId, Number stageNr){
+        Optional<Contains> optionalStage = containsRepository.findByJobIdAndStageNumber(jobId, stageNr);
+        return optionalStage.map(Contains::getStage).orElse(null);
+    }
+
+    public Contains getCurrentStageForApplication(String stageId, String jobId){
+        Optional<Contains> optionalStage = containsRepository.findByJobIdAndStageId(jobId, stageId);
+        return optionalStage.orElse(null);
     }
 }

@@ -15,6 +15,10 @@ class CandidateService {
         return apiToken.get("/getCvListForCandidate/" + id)
     }
 
+    async deleteCv(cvId) {
+        return apiToken.post("/deleteCv/" + cvId)
+    }
+
 }
 
 export default new CandidateService();

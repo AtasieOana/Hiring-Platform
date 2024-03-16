@@ -3,7 +3,6 @@ import HeaderPageWithoutCV from "../header/HeaderPageWithoutCV";
 import {useTranslation} from "react-i18next";
 import {useDispatch, useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
-import jsPDF from 'jspdf';
 import {
     Button,
     DialogBody,
@@ -24,7 +23,7 @@ import ImageUpload from "../common/ImageUpload";
 import "./CreateCv.css"
 import EducationIcon from '../../resources-photo/No_education_image.png';
 import ExperienceIcon from '../../resources-photo/No_experience_image.png';
-import {fileToBase64} from "../common/CommonMethods";
+import {fileToBase64, generatePDF} from "../common/CommonMethods";
 import CandidateService from "../../services/candidate.service";
 import {AppToaster} from "../common/AppToaster";
 import {setCvActionData} from "../../redux/actions/cvActions";
@@ -32,7 +31,7 @@ import firebase from "../../util/firebase";
 import { getStorage, ref, uploadBytes } from 'firebase/storage';
 import {FIREBASE_PATH} from "../../util/constants";
 
-const defaultEd = {
+export const defaultEd = {
     certificate: '',
     institute: '',
     startYear: '',
@@ -41,13 +40,18 @@ const defaultEd = {
     description: ''
 }
 
-const defaultEx = {
+export const defaultEx = {
     title: '',
     company: '',
     startYear: '',
     finishYear: '',
     description: ''
 }
+
+export const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+export const usernameRegex = /^(?=.*[a-zA-ZăâîșțĂÂÎȘȚ])([a-zA-ZăâîșțĂÂÎȘȚ\- ]*)$/;
+export const phoneRegex = /^\d{10}$/;
+export const addressRegex = /^[A-Za-zăâîșțĂÂÎȘȚ\d\s.,\-]+$/
 
 const CreateCV = () => {
 
@@ -73,7 +77,7 @@ const CreateCV = () => {
     const [educationDialogOpen, setEducationDialogOpen] = useState(false);
     const [currentEd, setCurrentEd] = useState(defaultEd);
     const [currentEdIndex, setCurrentEdIndex] = useState(0);
-    const [currentEx, setCurrentEx] = useState(defaultEd);
+    const [currentEx, setCurrentEx] = useState(defaultEx);
     const [currentExIndex, setCurrentExIndex] = useState(0);
     const [experienceDialogOpen, setExperienceDialogOpen] = useState(false);
     const [currentPresentEx, setCurrentPresentEx] = useState(false);
@@ -223,10 +227,16 @@ const CreateCV = () => {
         setCurrentEd(updatedEducation);
     };
 
-    const addCV = (file) =>{
+    const addCV = (file, isStandard = true, fileNameUploaded = "") =>{
         // Set file name
         let uuidWithoutDashes = candidate.candidateId.replace(/-/g, "");
-        let fileName = `${uuidWithoutDashes}_${Date.now()}_${candidate.lastname}_${candidate.firstname}.pdf`;
+        let fileName;
+        if(isStandard){
+            fileName = `${uuidWithoutDashes}_${candidate.lastname}_${candidate.firstname}_Standard_1.pdf`;
+        }
+        else{
+            fileName = `${uuidWithoutDashes}_${candidate.lastname}_${candidate.firstname}_${fileNameUploaded}.pdf`;
+        }
 
         let request = {
             fileName: fileName,
@@ -252,215 +262,8 @@ const CreateCV = () => {
         });
     }
 
-    const finishPDFGeneration = (doc, styling) => {
-        const maxWidth = 115;
-
-        const checkAndAddNewPage = (requiredSpace) => {
-            if(rightColumnY > 290){
-                doc.addPage()
-                // Left part of the CV is going to be brown
-                doc.setFillColor(188, 143, 143);
-                doc.rect(0, 0, 70, 300, 'F');
-                rightColumnY = 20;
-            }
-        };
-
-        // Left side - on brown
-        // Contact details
-        doc.setTextColor(255, 255, 255);
-        doc.setFontSize(13);
-        doc.setFont("helvetica", "bold");
-        doc.text('Contact', 10, styling);
-        // Add border after contact title
-        doc.setDrawColor(255, 255, 255);
-        doc.line(10, styling + 5, 100, styling + 5);
-
-        // Contact details: email, phone, address
-        doc.setFont("helvetica", "normal");
-        styling += 12;
-        if (cvData.email) {
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(11);
-            doc.text('Email:', 10, styling);
-            styling += 5;
-            doc.setFont("helvetica", "normal");
-            doc.setFontSize(10);
-            doc.text(cvData.email, 10, styling);
-            styling += 7;
-        }
-        if (cvData.phone) {
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(11);
-            doc.text('Phone:', 10, styling);
-            styling += 5;
-            doc.setFont("helvetica", "normal");
-            doc.setFontSize(10);
-            doc.text(cvData.phone, 10, styling);
-            styling += 7;
-        }
-        if (cvData.address) {
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(11);
-            doc.text('Address:', 10, styling);
-            styling += 5;
-            doc.setFont("helvetica", "normal");
-            doc.setFontSize(10);
-            doc.text(cvData.address, 10, styling);
-        }
-
-        // Right side
-        // Firstname and lastname
-        let name = cvData.firstname + " " + cvData.lastname
-        doc.setTextColor(0, 0, 0);
-        doc.setFontSize(24);
-        doc.setFont("helvetica", "bold");
-        doc.text(name, 85, 25);
-
-        // Professional summary, education and experience on the right
-        let rightColumnX = 85;
-        let rightColumnY = 40;
-        doc.setFontSize(12);
-        doc.setFont("helvetica", "italic");
-        doc.text('Summary', rightColumnX, rightColumnY);
-        rightColumnY += 7;
-
-        // Add border
-        doc.setDrawColor(139, 69, 19); // Maro
-        doc.rect(rightColumnX, rightColumnY - 3, 250, 0.5, 'F');
-        rightColumnY += 5;
-
-        // Summary
-        if (cvData.professionalSummary) {
-            doc.setFont("helvetica", "normal");
-            doc.setFontSize(10);
-            // Add spaces after each word to ensure proper word wrapping
-            const formattedSummary = cvData.professionalSummary.replace(/(\S+)\s*/g, "$1 ");
-            const textLines = doc.splitTextToSize(formattedSummary, maxWidth);
-            for (const line of textLines) {
-                doc.text(line, rightColumnX, rightColumnY);
-                rightColumnY += 5;
-            }
-        }
-
-        rightColumnY += 10;
-        doc.setFontSize(12);
-        doc.setFont("helvetica", "italic");
-        doc.text('Education', rightColumnX, rightColumnY);
-        rightColumnY += 7;
-        doc.setFontSize(10);
-
-        let requiredSpace = 20;
-
-        // Add border
-        doc.setDrawColor(139, 69, 19); // Maro
-        doc.rect(rightColumnX, rightColumnY - 3, 250, 0.5, 'F');
-        rightColumnY += 5;
-
-        // Education
-        if (cvData.education.length > 0) {
-            cvData.education.forEach(ed => {
-                doc.setFontSize(11);
-                doc.setFont("helvetica", "bold");
-                doc.text(`${ed.certificate}, ${ed.specialization}`, rightColumnX, rightColumnY);
-                rightColumnY += 6;
-                doc.setFontSize(10);
-                doc.setFont("helvetica", "normal");
-                doc.text(ed.institute, rightColumnX, rightColumnY);
-                rightColumnY += 6;
-                doc.setFont("helvetica", "italic");
-                doc.text(`${ed.startYear} - ${ed.graduationYear}`, rightColumnX, rightColumnY);
-                rightColumnY += 6;
-                doc.setFont("helvetica", "normal");
-                const descriptionLines = doc.splitTextToSize(ed.description, maxWidth);
-                descriptionLines.forEach(line => {
-                    doc.text(line, rightColumnX, rightColumnY);
-                    rightColumnY += 5;
-                });
-                requiredSpace += cvData.education.length * 35;
-                checkAndAddNewPage(requiredSpace);
-            });
-        }
-
-        // Experience
-        if (cvData.experience.length > 0) {
-            rightColumnY += 10;
-            doc.setFontSize(12);
-            doc.setFont("helvetica", "italic");
-            doc.text('Experience', rightColumnX, rightColumnY);
-            rightColumnY += 7;
-
-            // Add border
-            doc.setDrawColor(139, 69, 19); // Maro
-            doc.rect(rightColumnX, rightColumnY - 3, 250, 0.5, 'F');
-            rightColumnY += 5;
-
-            cvData.experience.forEach(exp => {
-                doc.setFontSize(11);
-                doc.setFont("helvetica", "bold");
-                doc.text(exp.title, rightColumnX, rightColumnY);
-                rightColumnY += 6;
-                doc.setFontSize(10);
-                doc.setFont("helvetica", "normal");
-                doc.text(exp.company, rightColumnX, rightColumnY);
-                rightColumnY += 6;
-                doc.setFont("helvetica", "italic");
-                doc.text(`${exp.startYear} - ${exp.finishYear ? exp.finishYear : "Present"}`, rightColumnX, rightColumnY);
-                rightColumnY += 6;
-                doc.setFont("helvetica", "normal");
-                const descriptionLines = doc.splitTextToSize(exp.description, maxWidth);
-                descriptionLines.forEach(line => {
-                    doc.text(line, rightColumnX, rightColumnY);
-                    rightColumnY += 5;
-                });
-                rightColumnY += 10;
-                requiredSpace += cvData.experience.length * 35;
-                checkAndAddNewPage(requiredSpace);
-            });
-        }
-
-        //doc.save('CV.pdf');
-        // Convert the PDF to a Blob object
-        const pdfBlob = doc.output('blob');
-        const file = new File([pdfBlob], 'CV.pdf', {
-            type: 'application/pdf',
-            lastModified: Date.now()
-        });
-        // Send the PDF to the backend
-        addCV(file)
-    }
-
-    const generatePDF = () => {
-        const doc = new jsPDF();
-        let styling = 76;
-
-        // Add image (if available)
-        if (cvData.image) {
-            fileToBase64(cvData.image)
-                .then(base64String => {
-                    let imgData = 'data:image/jpeg;base64,'+ base64String;
-                    // Left part of the CV is going to be brown
-                    doc.setFillColor(188, 143, 143);
-                    doc.rect(0, 0, 70, 300, 'F');
-                    doc.addImage(imgData, 'JPEG', 13, 15, 45, 45);
-                    // Add border to the photo
-                    doc.setDrawColor(139, 69, 19);
-                    doc.setLineWidth(0.5);
-                    doc.rect(13, 15, 45, 45);
-                    finishPDFGeneration(doc, styling)
-                })
-        }
-        else{
-            // Left part of the CV is going to be brown
-            styling = 39;
-            doc.setLineWidth(0.5);
-            doc.setFillColor(188, 143, 143);
-            doc.rect(0, 0, 70, 300, 'F');
-            finishPDFGeneration(doc, styling)
-        }
-    };
-
     const uploadFile = () =>{
-        addCV(cvFile)
+        addCV(cvFile, false, cvFile.name.slice(0, -4))
     }
 
     /**
@@ -728,11 +531,6 @@ const CreateCV = () => {
         </Dialog>
     }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const usernameRegex = /^(?=.*[a-zA-ZăâîșțĂÂÎȘȚ])([a-zA-ZăâîșțĂÂÎȘȚ\- ]*)$/;
-    const phoneRegex = /^\d{10}$/;
-    const addressRegex = /^[A-Za-zăâîșțĂÂÎȘȚ\d\s.,\-]+$/
-
     return (
         <div>
             <HeaderPageWithoutCV/>
@@ -949,7 +747,7 @@ const CreateCV = () => {
                         }
                         {renderExperienceDialog()}
                     </div>
-                    <Button onClick={generatePDF}
+                    <Button onClick={()=>generatePDF(cvData, addCV)}
                             className="upload-already-existing-cv"
                             disabled={!emailRegex.test(cvData.email) ||
                                 !usernameRegex.test(cvData.firstname) ||

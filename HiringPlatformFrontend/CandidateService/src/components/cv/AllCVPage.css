@@ -54,3 +54,146 @@
 .add-cv-option:hover .bp4-icon svg{
     fill: #031531;
 }
+
+.cv-form-drawer{
+    height: 100vh;
+    overflow: auto;
+    padding: 0 15px;
+}
+
+.cv-form-drawer .bp4-non-ideal-state-visual img{
+    width: 100px;
+    height: 100px;
+}
+
+.section-title-drawer {
+    font-size: 18px;
+    font-weight: bolder;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-decoration: underline;
+}
+
+.cv-drawer{
+    display: flex !important;
+    justify-content: end;
+    align-items: end;
+}
+
+.cv-drawer .bp4-non-ideal-state{
+    margin-bottom: 0 !important;
+}
+
+.cv-table-list tr:nth-child(even) {
+    background-color: rgba(224, 156, 115, 0.2);
+}
+
+.cv-table-list thead tr:first-of-type {
+    background-color: #ffaf84 !important;
+}
+
+table tr th:nth-child(2){
+    width: 35%;
+}
+
+table tr th:nth-child(1){
+    width: 60%;
+}
+
+table tr th:nth-child(3){
+    width: 15%;
+}
+
+.cv-table-list {
+    border-collapse: collapse;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    width: 70%;
+    margin-top: 20px;
+    table-layout: fixed !important;
+}
+
+.cv-table-list th,
+.cv-table-list td {
+    border: 1px solid grey;
+    padding: 12px 15px !important;
+}
+
+.cv-sort-button{
+    cursor: pointer !important;
+}
+
+.cv-sort-button:hover{
+    background-color: #ffaf84 !important;
+}
+
+.cv-sort-button:focus{
+    outline: none !important;
+}
+
+.cv-default-button{
+    cursor: default !important;
+}
+
+.cv-table-list th .bp4-popover-wrapper{
+    display: flex;
+    justify-content: center;
+}
+
+.cv-actions{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 10%;
+}
+
+.cv-table-list th,
+.cv-table-list td {
+    white-space: nowrap !important;
+    overflow: hidden  !important;
+    text-overflow: ellipsis  !important;
+}
+
+
+@media (max-width: 900px) {
+
+    .img-drawer .custom-image{
+        width: 50px;
+        height: 50px;
+    }
+
+    .img-drawer .remove-image-button{
+        font-size: 12px;
+        text-align: center;
+    }
+
+    .img-drawer .file-input-content .bp4-file-input{
+        width: 90%;
+    }
+
+    .multiple-cv-motivation{
+        margin: 40px 20px 20px;
+        padding: 0 30px;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    .add-cv-options-text{
+        font-size: 14px;
+        padding: 0 30px;
+    }
+
+    .add-cv-options-button{
+        margin-left: 70px;
+    }
+
+    .add-cv-option .bp4-button-text{
+        font-size: 14px;
+    }
+
+    .cv-table-list {
+        width: 100%;
+    }
+}

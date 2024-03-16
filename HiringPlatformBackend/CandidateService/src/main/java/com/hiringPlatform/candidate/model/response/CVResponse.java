@@ -2,6 +2,7 @@ package com.hiringPlatform.candidate.model.response;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
@@ -12,7 +13,7 @@ import java.util.Date;
 public class CVResponse {
     private String cvId;
     private String cvName;
-    private Date uploadDate;
+    private String uploadDate;
     private String candidateLastname;
     private String candidateFirstname;
     private String candidateEmail;

@@ -17,6 +17,28 @@ const initialState = {
         employerId: "",
         questions: [],
         stages: [],
+        employer:{
+            employerId: "",
+            companyName: "",
+            userDetails: {
+                userId: "",
+                email: "",
+                password: "",
+                registrationDate: null,
+                accountEnabled: 1,
+            }
+        },
+        employerProfile:{
+            imagine: "",
+            description: "",
+            phone: "",
+            site: "",
+            street: "",
+            zipCode: "",
+            cityName: "",
+            regionName: "",
+            countryName: "",
+        }
     }
 };
 

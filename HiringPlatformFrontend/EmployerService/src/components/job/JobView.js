@@ -140,7 +140,7 @@ const JobView = () => {
      * Handle applicants view
      */
     const handleViewApplicants = () => {
-        console.log("TODO")
+        navigate("/applications")
     };
 
     /**

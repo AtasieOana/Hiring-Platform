@@ -81,7 +81,7 @@ const HeaderWithoutProfile = () => {
                             <MenuItem icon="log-out" color="white" text={t('logout')} onClick={logout}/>
                         </Menu>
                     }
-                    position="bottom-left"
+                    position="bottom-right"
                 >
                     <Link className="nav-item" to="#" isActive={false}>
                         <Icon size={13} icon="mugshot" color="white" className="nav-icon"/> {employer?.companyName}

@@ -26,6 +26,10 @@ class JobService {
         return apiToken.post("/updateJobDescription", request);
     }
 
+    async getStagesForJob(jobId) {
+        return apiToken.get("/getStagesForJob/" + jobId);
+    }
+
 }
 
 export default new JobService();

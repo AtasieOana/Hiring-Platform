@@ -10,6 +10,10 @@ import CreateCV from "./components/cv/CreateCV";
 import EditAccountPage from "./components/account/EditAccountPage";
 import AllCvPage from "./components/cv/AllCVPage";
 import {setCvActionData} from "./redux/actions/cvActions";
+import JobsPage from "./components/job/JobsPage";
+import JobView from "./components/job/JobView";
+import ProfilePage from "./components/profile/ProfilePage";
+import ApplicationPage from "./components/application/ApplicationPage";
 
 const App = () => {
     const dispatch = useDispatch();
@@ -49,6 +53,10 @@ const App = () => {
                 <Routes>
                     <Route path="/home" element={isAuth ? <AllCvPage/> : redirectToWelcomePage()}/>
                     <Route path="/editAccount" element={isAuth ? <EditAccountPage/> : redirectToWelcomePage()}/>
+                    <Route path="/viewJob" element={isAuth ? <JobView/> : redirectToWelcomePage()}/>
+                    <Route path="/profile" element={isAuth ? <ProfilePage/> : redirectToWelcomePage()}/>
+                    <Route path="/jobs" element={isAuth ? <JobsPage/> : redirectToWelcomePage()}/>
+                    <Route path="/applications" element={isAuth ? <ApplicationPage/> : redirectToWelcomePage()}/>
                     <Route path="/:paramLanguage" element={isAuth ? <CreateCV/> : redirectToWelcomePage()}/>
                     <Route path="*" element={<NotFoundPage/>}/>
                 </Routes>
