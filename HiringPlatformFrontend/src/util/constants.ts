@@ -1,0 +1,3 @@
+export const FIREBASE_PATH = "cvs/"
+export const CANDIDATE_ACCOUNT = "ROLE_CANDIDATE"
+export const EMPLOYER_ACCOUNT = "ROLE_EMPLOYER"

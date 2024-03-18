@@ -1,10 +1,10 @@
 -- BAZA DE DATE
 
 -- Stergerea tabelelor
+DROP TABLE recenzii;
 DROP TABLE raspunsuri;
 DROP TABLE aplica;
 DROP TABLE cv;
-DROP TABLE intrebari;
 DROP TABLE intrebari;
 DROP TABLE contine;
 DROP TABLE etape;
@@ -144,7 +144,7 @@ CREATE TABLE intrebari (
 CREATE TABLE cv (
     id_cv VARCHAR2(36) CONSTRAINT pk_cv PRIMARY KEY,
     id_candidat CONSTRAINT fk_cv_candidat REFERENCES candidati(id_candidat) ON DELETE CASCADE,
-    nume_cv VARCHAR2(100) NOT NULL unique,
+    nume_cv VARCHAR2(100) NOT NULL,
     data_incarcarii DATE NOT NULL,
     CONSTRAINT nume_cv_unic UNIQUE (nume_cv)
 );
@@ -166,6 +166,15 @@ CREATE TABLE raspunsuri (
     id_candidat VARCHAR2(36) CONSTRAINT fk_raspuns_candidat REFERENCES candidati(id_candidat) ON DELETE CASCADE,
     id_intrebare VARCHAR2(36) CONSTRAINT fk_raspuns_intrebare REFERENCES intrebari(id_intrebare) ON DELETE CASCADE,
     raspuns VARCHAR2(4000)
+);
+
+CREATE TABLE recenzii (
+    id_recenzie VARCHAR2(36) CONSTRAINT pk_recenzie PRIMARY KEY,
+    id_utilizator VARCHAR2(36) CONSTRAINT fk_recenzie_utilizator REFERENCES utilizatori(id_utilizator) ON DELETE CASCADE,
+    id_angajator VARCHAR2(36) CONSTRAINT fk_recenzie_firma REFERENCES angajatori(id_angajator) ON DELETE CASCADE,
+    id_recenzie_parinte VARCHAR2(36) CONSTRAINT fk_recenzie_raspuns REFERENCES recenzii(id_recenzie) ON DELETE CASCADE,
+    comentariu VARCHAR2(1000) NOT NULL,
+    nota NUMBER NOT NULL CONSTRAINT nota_valida CHECK (nota >= 0 AND nota <= 5)
 );
 
 -- Inserarea datelor initiale
@@ -201,5 +210,6 @@ SELECT * FROM intrebari;
 SELECT * FROM cv;
 SELECT * FROM raspunsuri;
 SELECT * FROM aplica; 
-DELETE FROM raspunsuri;
+SELECT * FROM recenzii;
+DELETE FROM profiluri;
 COMMIT;

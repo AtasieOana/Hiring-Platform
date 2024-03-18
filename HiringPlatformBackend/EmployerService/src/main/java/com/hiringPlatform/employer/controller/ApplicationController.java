@@ -11,7 +11,7 @@ import com.hiringPlatform.employer.model.request.RefuseApplicationRequest;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3001")
+@CrossOrigin(origins = "http://localhost:3000")
 public class ApplicationController {
 
     private final ApplicationService applicationService;

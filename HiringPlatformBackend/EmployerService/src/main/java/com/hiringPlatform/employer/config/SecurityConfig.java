@@ -51,7 +51,7 @@ public class SecurityConfig   {
                 .antMatchers("/getAllJobsForEmployer/{employerId}").hasAnyAuthority("ROLE_EMPLOYER")
                 .antMatchers("/deleteJob/{jobId}").hasAnyAuthority("ROLE_EMPLOYER")
                 .antMatchers("/addJob").hasAnyAuthority("ROLE_EMPLOYER")
-                .antMatchers("/getAllStages").hasAnyAuthority("ROLE_EMPLOYER")
+                .antMatchers("/getAllStages").permitAll()
                 .antMatchers("/getNrJobsForEmployer/{employerId}").hasAnyAuthority("ROLE_EMPLOYER")
                 .antMatchers("/updateJobDescription").hasAnyAuthority("ROLE_EMPLOYER")
                 .antMatchers("/getAllApplicationsForJob/{jobId}").hasAnyAuthority("ROLE_EMPLOYER")

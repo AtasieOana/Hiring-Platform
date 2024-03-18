@@ -1,6 +1,5 @@
 package com.hiringPlatform.candidate.controller;
 
-import com.hiringPlatform.candidate.exception.FileException;
 import com.hiringPlatform.candidate.exception.UnauthorizedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
