@@ -98,6 +98,75 @@
     font-size: 15px;
 }
 
+.app-list-app-info-card{
+    padding: 10px 20px !important;
+    margin-bottom: 10px;
+}
+
+.app-list-header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.app-list-header-res{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px !important;
+}
+
+.app-list-date{
+    font-size: 12px;
+    font-style: italic;
+    font-weight: 600;
+}
+
+.app-list-section-title{
+    font-size: 13px;
+    font-style: italic;
+    font-weight: 600;
+}
+
+.app-list-p-title{
+    font-weight: 600;
+    margin-left: -8px;
+}
+
+.app-list-p{
+    font-size: 13px;
+    display: list-item;
+    list-style-type: square;
+    list-style-position: inside;
+    margin-left: 15px;
+}
+
+.app-list-p-res{
+    font-size: 13px;
+    display: list-item;
+    list-style-type: square;
+    list-style-position: inside;
+}
+
+.app-list-button{
+    font-size: 12px !important;
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+.expand-icon{
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    align-items: center;
+}
+
+.app-list-p-res:last-of-type, .app-list-p:last-of-type, .app-list-header-res .app-list-p-res {
+    margin-bottom: 0 !important;
+}
+
 @media (max-width: 1000px) {
     .stop-process-dialog{
         width: 80% !important;

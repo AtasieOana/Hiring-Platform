@@ -174,7 +174,8 @@ CREATE TABLE recenzii (
     id_angajator VARCHAR2(36) CONSTRAINT fk_recenzie_firma REFERENCES angajatori(id_angajator) ON DELETE CASCADE,
     id_recenzie_parinte VARCHAR2(36) CONSTRAINT fk_recenzie_raspuns REFERENCES recenzii(id_recenzie) ON DELETE CASCADE,
     comentariu VARCHAR2(1000) NOT NULL,
-    nota NUMBER NOT NULL CONSTRAINT nota_valida CHECK (nota >= 0 AND nota <= 5)
+    data_comentariu DATE NOT NULL,
+    nota NUMBER CONSTRAINT nota_valida CHECK (nota >= 0 AND nota <= 5)
 );
 
 -- Inserarea datelor initiale

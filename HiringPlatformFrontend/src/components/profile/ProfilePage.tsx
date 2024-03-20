@@ -15,6 +15,7 @@ import HeaderPageEmployer from "../header/HeaderPageEmployer";
 import HeaderPageCandidate from "../header/HeaderPageCandidate";
 import {base64ToImage} from "../common/CommonMethods";
 import {GetProfileResponse} from "../../types/profile.types";
+import ReviewComponent from "../review/ReviewSection";
 
 const ProfilePage = () => {
 
@@ -117,7 +118,8 @@ const ProfilePage = () => {
     }
 
     const renderStaticPage = () => {
-        return <div className="profile-container">
+        return <div className="profile-review-container">
+            <div className="profile-container">
             <div className="profile-left-column">
                 <Card className="profile-card">
                     <div className="profile-info">
@@ -128,7 +130,7 @@ const ProfilePage = () => {
                             <img className="profile-image" src={Image} alt="Company Logo"/>}
                         <h2 className="profile-name">{usedEmployer.companyName}</h2>
                         <p className="profile-jobs">{t('jobs_available')}: {jobNr}</p>
-                        {employer.employerId !== " " &&
+                        {employer && employer.employerId !== " " &&
                             <Button className="profile-button" onClick={() => {setIsEditing(true)}}>
                                 {t('edit_information')}
                             </Button>
@@ -165,6 +167,10 @@ const ProfilePage = () => {
                         theme={"bubble"}
                     />
                 </Card>
+            </div>
+            </div>
+            <div className="review-section">
+                <ReviewComponent/>
             </div>
         </div>
     }

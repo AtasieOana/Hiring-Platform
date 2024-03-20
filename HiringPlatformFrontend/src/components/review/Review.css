@@ -1,0 +1,218 @@
+.profile-review-container{
+    background-color: rgba(224, 156, 115, 0.1);
+}
+
+.review-section{
+    background-color: rgba(224, 156, 115, 0.1);
+    padding-bottom: 10px;
+}
+
+.review-container{
+    margin: 0 4vw 0 3vw;
+    background-color: white;
+    padding: 20px;
+}
+
+.review-title{
+    margin-top: 10px;
+    margin-bottom: 5px;
+    color: #698576;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.review-header {
+    text-align: center;
+    width: 15vw;
+}
+
+.review-stats-average{
+    font-size: 20px;
+    font-weight: 600;
+    color: #505050;
+    margin: 2px !important;
+}
+
+.review-stats{
+    font-size: 14px;
+}
+
+.review-first-section{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+.review-grade-count{
+    display: flex;
+    flex-direction: row;
+    width: 39vw;
+    align-items: center;
+    gap: 10px;
+}
+
+.review-progress-bar-green .bp4-progress-meter {
+    background-color: #027702 !important;
+}
+
+.review-progress-bar-light-green .bp4-progress-meter{
+    background-color: #6ca86c !important;
+}
+
+.review-progress-bar-yellow .bp4-progress-meter{
+    background-color: #fcc63a !important;
+}
+
+.review-progress-bar-orange .bp4-progress-meter{
+    background-color: #ea9700 !important;
+}
+
+.review-progress-bar-red .bp4-progress-meter{
+    background-color: #fa3030 !important;
+}
+
+.review-progress-info{
+    border-right: 1px solid rgba(17, 20, 24, 0.15);
+    padding-right: 5vw;
+}
+
+.review-progress-container {
+    width: 40vw;
+}
+
+.review-form-container{
+    width: 40vw;
+}
+
+.review-form-group{
+    margin-bottom: 5px !important;
+}
+
+.review-buttons-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.review-content{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 5vw;
+    margin-left: 10px;
+}
+
+.review-username{
+    font-weight: 600;
+    font-size: 15px;
+    text-decoration: underline;
+    margin-bottom: 3px;
+}
+
+.review-date{
+    font-size: 14px;
+    color: #505050;
+}
+
+.review-star-icon{
+    color: #fcb419;
+}
+
+.review-left-content{
+    width: 10vw;
+}
+
+.review-right-content{
+    width: 100%;
+}
+
+.review-comment{
+    margin-top: 5px;
+    margin-bottom: 4px;
+    line-height: 1.6;
+}
+
+.review-comment-form{
+    margin-top: 7px !important;
+    margin-bottom: 4px !important;
+}
+
+.add-review-form{
+    margin-left: 14vw;
+}
+
+.review-reply-container{
+    margin-left: 14vw;
+    margin-top: 10px;
+}
+
+.review-reply-container .review-content{
+    gap: 0;
+}
+
+.review-reply-container .review-left-content{
+    width: 15vw;
+}
+
+
+@media (max-width: 800px) {
+    .review-container{
+        margin: 0 6vw 0 4vw;
+        padding: 5px;
+    }
+
+    .review-title{
+        font-size: 20px;
+        font-weight: 600;
+    }
+
+    .review-header {
+        text-align: center;
+        width: 17vw;
+    }
+
+    .review-stats-average{
+        font-size: 12px;
+        font-weight: 600;
+        margin: 1px !important;
+    }
+
+    .review-stats{
+        font-size: 11px;
+    }
+
+    .review-grade-count{
+        width: 19vw;
+        gap: 5px;
+    }
+
+    .review-progress-container {
+        width: 20vw;
+    }
+
+    .review-form-container{
+        width: 40vw;
+    }
+
+    .review-username{
+        font-size: 12px;
+    }
+
+    .review-date{
+        font-size: 11px;
+    }
+
+    .review-comment{
+        font-size: 12px;
+    }
+
+    .review-content .bp4-button-text, .add-review-form .bp4-button-text{
+        font-size: 12px;
+    }
+
+}

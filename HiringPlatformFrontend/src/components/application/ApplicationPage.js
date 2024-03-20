@@ -6,12 +6,12 @@ import {AppToaster} from "../common/AppToaster";
 import {
     Button, Card, Checkbox,
     Classes, Dialog, DialogBody, DialogFooter, Divider, Drawer,
-    FormGroup, H3, H5,
+    FormGroup, H5,
     Icon,
     InputGroup,
     Intent, MenuItem,
     NonIdealState,
-    Position, TextArea, Tooltip
+    Position, Tag, TextArea, Tooltip
 } from "@blueprintjs/core";
 import AppService from "../../services/app.service";
 import {Select} from "@blueprintjs/select";
@@ -62,9 +62,10 @@ const ApplicationPage = () => {
 
     // Paginating
     const [currentPage, setCurrentPage] = useState(1);
-    const appsPerPage = 4; // Number of apps per page
+    const appsPerPage = 10; // Number of apps per page
     const [paginatingApps, setPaginatingApp] = useState([]);
     const isSmallScreen = useMediaQuery("(max-width: 900px)");
+    const [expandedCards, setExpandedCards] = useState([]);
 
 
     useEffect(() => {
@@ -678,7 +679,117 @@ const ApplicationPage = () => {
         setFilters(allFilters);
     };
 
+    const toggleExpansion = (index) => {
+        if (expandedCards.includes(index)) {
+            setExpandedCards(expandedCards.filter(item => item !== index));
+        } else {
+            setExpandedCards([...expandedCards, index]);
+        }
+    };
 
+    const isCardExpanded = (index) => expandedCards.includes(index);
+
+    const getStatusIntent = (status) => {
+        switch (status) {
+            case 0:
+                return "none";
+            case 1:
+                return "primary";
+            case 2:
+                return "success";
+            default:
+                return "none";
+        }
+    };
+
+    const renderNonExtendedCard = (app, formattedDate, index) => (
+        <Card className="app-list-app-info-card">
+            <div className="app-list-section">
+                <div className="app-list-header-res">
+                    <p className="app-list-p-res"><span className="app-list-p-title">
+                        {t('job')}: </span>{app.job.title}, {t('company_small')} {app.employerCompanyName}</p>
+                    <div className="app-list-date">{formattedDate}</div>
+                </div>
+                <p className="app-list-p-res"><span className="app-list-p-title">
+                        {t('candidate')}: </span>{app.candidateFirstname} {app.candidateLastname}</p>
+                <p className="app-list-p-res"><span className="app-list-p-title">
+                        Status: </span><Tag
+                    intent={getStatusIntent(possibleStatus.findIndex(i => i === app.status))}>{status[possibleStatus.findIndex(i => i === app.status)]}</Tag>
+                </p>
+                <p className="app-list-p-res"><span
+                    className="app-list-p-title">{t('current_stage')}: </span> {app.stageName}</p>
+            </div>
+            <div className="expand-icon">
+                <Tooltip content={t('extend')} position={"bottom"}>
+                <Icon icon="chevron-down" onClick={() => toggleExpansion(index)}/>
+                </Tooltip>
+            </div>
+        </Card>
+    );
+
+    const renderExtendedCard = (app, formattedDate, index) => (
+        <Card className="app-list-app-info-card">
+            <div className="app-list-section">
+                <div className="app-list-header">
+                    <div className="app-list-section-title">{t('info_job')}</div>
+                    <div className="app-list-date">{formattedDate}</div>
+                </div>
+                <Divider/>
+                <p className="app-list-p"><span className="app-list-p-title">{t('the_title')}: </span> {app.job.title}</p>
+                <p className="app-list-p"><span className="app-list-p-title">{t('the_company')}: </span> {app.employerCompanyName}</p>
+                <p className="app-list-p"><span className="app-list-p-title">{t('contact')}:</span> {app.employerEmail}</p>
+            </div>
+            <div className="app-list-section">
+                <Divider/>
+                <div className="app-list-section-title">{t('candidate_info')}</div>
+                <Divider/>
+                <p className="app-list-p"><span className="app-list-p-title">{t('the_candidate')}:</span> {app.candidateFirstname} {app.candidateLastname}</p>
+                <p className="app-list-p"><span className="app-list-p-title">{t('contact')}:</span> {app.candidateEmail}</p>
+            </div>
+            <div className="app-list-section">
+                <Divider/>
+                <div className="app-list-header">
+                    <div className="app-list-section-title">{t('process_info')}</div>
+                    <Button
+                        className="app-list-button"
+                        onClick={() => {
+                            setCurrentApp(app);
+                            toggleDrawer();
+                            if (app.stageNr === 0 && app.status === possibleStatus[1] && employer && employer.employerId !== "") {
+                                goToSecondStep(app);
+                            }
+                        }}
+                        small
+                        minimal
+                        rightIcon={<Icon icon="layout-sorted-clusters" color="black" size={12}/>}
+                    >
+                        {t('see_more')}
+                    </Button>
+                </div>
+                <Divider/>
+                <p className="app-list-p"><span className="app-list-p-title">Status:</span> <Tag
+                    intent={getStatusIntent(possibleStatus.findIndex(i => i === app.status))}>{status[possibleStatus.findIndex(i => i === app.status)]}</Tag></p>
+                <p className="app-list-p"><span className="app-list-p-title">{t('current_stage')}: </span> {app.stageName}</p>
+            </div>
+            <div className="expand-icon">
+                <Tooltip content={t('collapse')}>
+                    <Icon icon="chevron-up" onClick={() => toggleExpansion(index)} />
+                </Tooltip>
+            </div>
+        </Card>
+    );
+
+    const appInfoCard = (app, index) => {
+        const isExpanded = isCardExpanded(index);
+        const formattedDate = formatDate(app.appDate);
+
+        if(isExpanded){
+            return renderExtendedCard(app, formattedDate, index)
+        }
+        else{
+            return renderNonExtendedCard(app, formattedDate, index)
+        }
+    };
 
     const totalPages = Math.ceil(filteredApps.length / appsPerPage);
 
@@ -726,34 +837,39 @@ const ApplicationPage = () => {
                             )}
                         </div>
                     </FormGroup>
-                    <FormGroup label={t('stage')} className={`jobs-contractType-filter ${Classes.FIXED}`}>
-                        {employer && employer.employerId !== "" && stagesName.length > 0 ?
-                            <div className="job-checkbox-container job-checkbox-container-app">
-                                {stagesName.map((obj, index) =>
-                                    <Checkbox
-                                        className="job-checkbox-item"
-                                        label={obj}
-                                        checked={filters.stageName.includes(stagesName[index])}
-                                        onChange={() => handleStageChange(stagesName[index])}
-                                    />
-                                )}
-                            </div> :
-                            employer && employer.employerId !== "" && <div className="no-job-filter">{t('no_app_stage')}</div>
-                        }
-                        {candidate && candidate.candidateId !== "" && companiesName.length > 0 ?
-                            <div className="job-checkbox-container companiesName">
-                                {companiesName.map((obj, index) =>
-                                    <Checkbox
-                                        className="job-checkbox-item"
-                                        label={obj}
-                                        checked={filters.companyName.includes(companiesName[index])}
-                                        onChange={() => handleCompanyChange(companiesName[index])}
-                                    />
-                                )}
-                            </div> :
-                            candidate && candidate.candidateId !== "" && <div className="no-job-filter">{t('no_app_company')}</div>
-                        }
-                    </FormGroup>
+                    {employer && employer.employerId !== "" &&
+                        <FormGroup label={t('stage')} className={`jobs-contractType-filter ${Classes.FIXED}`}>
+                            {employer && employer.employerId !== "" && stagesName.length > 0 ?
+                                <div className="job-checkbox-container job-checkbox-container-app">
+                                    {stagesName.map((obj, index) =>
+                                        <Checkbox
+                                            className="job-checkbox-item"
+                                            label={obj}
+                                            checked={filters.stageName.includes(stagesName[index])}
+                                            onChange={() => handleStageChange(stagesName[index])}
+                                        />
+                                    )}
+                                </div> :
+                                 <div className="no-job-filter">{t('no_app_stage')}</div>
+                            }
+                        </FormGroup>
+                    }
+                    {candidate && candidate.candidateId !== "" &&
+                        <FormGroup label={t('company')} className={`jobs-contractType-filter ${Classes.FIXED}`}>
+                            {candidate && candidate.candidateId !== "" && companiesName.length > 0 ?
+                                <div className="job-checkbox-container companiesName">
+                                    {companiesName.map((obj, index) =>
+                                        <Checkbox
+                                            className="job-checkbox-item"
+                                            label={obj}
+                                            checked={filters.companyName.includes(companiesName[index])}
+                                            onChange={() => handleCompanyChange(companiesName[index])}
+                                        />
+                                    )}
+                                </div> :
+                                <div className="no-job-filter">{t('no_app_company')}</div>
+                            }
+                        </FormGroup>}
                 </div>
                 <div className={"right-section"}>
                     <div className={"job-page-buttons"}>
@@ -782,50 +898,8 @@ const ApplicationPage = () => {
                             <div className="jobs-list-show">
                                 <div className="just-jobs">
                                     {paginatingApps.map((app, index) => (
-                                        <div className="job-item" key={index}>
-                                            <div className="job-details">
-                                                <div className="jobs-detail-text jobs-detail-text-app">
-                                                    <div className="jobs-detail">
-                                                        <div
-                                                            className="job-text-date">{formatDate(app.appDate)}</div>
-                                                    </div>
-                                                    {employer && employer.employerId !== "" && <div className="jobs-detail">
-                                                        <div className="job-text-title"
-                                                        >{app.candidateFirstname} {app.candidateLastname}</div>
-                                                    </div>}
-                                                    {candidate && candidate.candidateId !== "" && <div className="jobs-detail">
-                                                        <div
-                                                            className="job-text-company">{t('company_name')}: {app.employerCompanyName}</div>
-                                                    </div>}
-                                                    <div className="jobs-detail">
-                                                        <div
-                                                            className="job-text-company">{t('job_name')}: {app.job.title}</div>
-                                                    </div>
-                                                    <div className="jobs-detail">
-                                                        <div
-                                                            className="job-text-company">{t('status')}: {status[possibleStatus.findIndex(i => i === app.status)]}</div>
-                                                    </div>
-                                                    <div className="jobs-detail">
-                                                        <div
-                                                            className="job-text-company">{t('current_stage')}: {app.stageName}</div>
-                                                    </div>
-                                                </div>
-                                                <Button
-                                                    className="show-job-button"
-                                                    onClick={() => {
-                                                        setCurrentApp(app)
-                                                        toggleDrawer()
-                                                            if(app.stageNr === 0 && app.status === possibleStatus[1] && employer && employer.employerId !== "") {
-                                                                goToSecondStep(app)
-                                                            }
-                                                        }}
-                                                        small
-                                                        minimal
-                                                        rightIcon={<Icon size={13} icon="layout-sorted-clusters" color="black"/>}
-                                                    >
-                                                        {t('see_more')}
-                                                    </Button>
-                                            </div>
+                                        <div key={index}>
+                                            {appInfoCard(app, index)}
                                         </div>
                                     ))}
                                 </div>

@@ -1,11 +1,10 @@
-package com.hiringPlatform.employer.config;
+package com.hiringPlatform.common.config;
 
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -42,22 +41,10 @@ public class SecurityConfig   {
                 .and()
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/getLoggedUser").permitAll()
-                .antMatchers("/hasEmployerProfile/{email}").hasAnyAuthority("ROLE_EMPLOYER")
-                .antMatchers("/addEmployerProfile").hasAnyAuthority("ROLE_EMPLOYER")
-                .antMatchers("/updateEmployerProfile").hasAnyAuthority("ROLE_EMPLOYER")
-                .antMatchers("/getProfile/{email}").hasAnyAuthority("ROLE_EMPLOYER")
-                .antMatchers("/updateAccount").hasAnyAuthority("ROLE_EMPLOYER")
-                .antMatchers("/getAllJobsForEmployer/{employerId}").hasAnyAuthority("ROLE_EMPLOYER")
-                .antMatchers("/deleteJob/{jobId}").hasAnyAuthority("ROLE_EMPLOYER")
-                .antMatchers("/addJob").hasAnyAuthority("ROLE_EMPLOYER")
-                .antMatchers("/getAllStages").permitAll()
-                .antMatchers("/getNrJobsForEmployer/{employerId}").hasAnyAuthority("ROLE_EMPLOYER", "ROLE_CANDIDATE")
-                .antMatchers("/updateJobDescription").hasAnyAuthority("ROLE_EMPLOYER")
-                .antMatchers("/getAllApplicationsForJob/{jobId}").hasAnyAuthority("ROLE_EMPLOYER")
-                .antMatchers("/refuseApplication").hasAnyAuthority("ROLE_EMPLOYER")
-                .antMatchers("/setNextStage").hasAnyAuthority("ROLE_EMPLOYER")
-                .antMatchers("/getStagesForJob/{jobId}").hasAnyAuthority("ROLE_EMPLOYER")
+                .antMatchers("/getReviewsForEmployer/{employerId}").hasAnyAuthority("ROLE_CANDIDATE", "ROLE_EMPLOYER")
+                .antMatchers("/addReview").hasAnyAuthority("ROLE_CANDIDATE", "ROLE_EMPLOYER")
+                .antMatchers("/editReview").hasAnyAuthority("ROLE_CANDIDATE", "ROLE_EMPLOYER")
+                .antMatchers("/deleteReview/{reviewId}").hasAnyAuthority("ROLE_CANDIDATE", "ROLE_EMPLOYER")
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(accessDeniedHandler())
