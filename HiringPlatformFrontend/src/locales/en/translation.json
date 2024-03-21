@@ -358,5 +358,12 @@
   "save": "Save",
   "add_person": "Add",
   "cancel_person": "Cancel",
-  "reply_delete": "A comment with replies cannot be deleted"
+  "reply_delete": "A comment with replies cannot be deleted",
+  "candidate_name": "Candidate",
+  "status_name": "Status",
+  "date_name": "Date",
+  "action_name": "Actions",
+  "app_for": "Applications for",
+  "normal_login": "Normal login",
+  "as_admin": "Login as administrator"
 }

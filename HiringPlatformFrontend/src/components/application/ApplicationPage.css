@@ -1,3 +1,12 @@
+.application-job-title{
+    padding: 15px 30px 0;
+    font-size: 22px;
+    color: #415d4d;
+    text-decoration: underline;
+    text-align: center;
+    font-weight: bolder;
+}
+
 .see-more-app-card{
     margin: 10px;
 }
@@ -103,7 +112,7 @@
     margin-bottom: 10px;
 }
 
-.app-list-header{
+.app-list-header-extended{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -167,6 +176,49 @@
     margin-bottom: 0 !important;
 }
 
+.app-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fca485 !important;
+    margin-bottom: 5px;
+    padding: 5px 10px;
+}
+
+.column-header {
+    font-weight: bold;
+    width: 100%;
+    text-align: center;
+    border-right: 1px solid #5e1500;
+    height: 100%;
+    padding: 5px 0;
+}
+
+.column-header:last-of-type {
+    border-right: none;
+    width: 50%;
+}
+
+.app-nonextended-list {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px;
+}
+
+.column-nonextended-list {
+    width: 100%;
+    text-align: center;
+    border-right: 1px solid #5e1500;
+    height: 100%;
+    padding: 5px 0;
+}
+
+.column-nonextended-list:last-of-type {
+    border-right: none;
+    width: 50%;
+}
+
 @media (max-width: 1000px) {
     .stop-process-dialog{
         width: 80% !important;
@@ -190,9 +242,21 @@
 
 @media (max-width: 720px) {
 
+    .jobs-component{
+        padding: 10px;
+    }
+
     .filter-section-app {
-        padding: 10px 10px !important;
-        width: 95% !important;
+        padding: 5px 5px !important;
+        width: 98% !important;
         margin-bottom: 10px !important;
+    }
+
+    .column-header, .column-nonextended-list {
+        font-size: 11px;
+    }
+
+    .app-list-header, .app-nonextended-list{
+        padding: 1px;
     }
 }

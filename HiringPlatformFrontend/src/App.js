@@ -18,6 +18,8 @@ import JobView from "./components/job/JobView";
 import ApplicationPage from "./components/application/ApplicationPage";
 import CreateCV from "./components/cv/CreateCV";
 import AllCvPage from "./components/cv/AllCVPage";
+import LoginAdminPage from "./components/auth/LoginAdminPage";
+import UsersPage from "./components/admin/users/UsersPage";
 
 
 const Root = () => {
@@ -31,10 +33,11 @@ const Root = () => {
     const candidate = useSelector(state => state.auth.candidate);
     const employer = useSelector(state => state.auth.employer);
     const hasProfile = useSelector(state => state.profile.hasProfile);
+    const isAuthenticatedAdmin = useSelector(state => state.admin.isAuthenticated);
 
     useEffect(() => {
         // Choose if the user is login or not
-       if (isAuthenticated) {
+       if (isAuthenticated || isAuthenticatedAdmin) {
             if(candidate && candidate.candidateId !== ""){
                 if(!hasCv && location.pathname !== '/addCv'){
                     navigate("/addCv")
@@ -53,11 +56,12 @@ const Root = () => {
         }
        else{
            if(location.pathname !== '/login'
-               || location.pathname !== '/register'
-               || location.pathname !== '/forgotPassword'
-               || location.pathname.includes("/resetPassword/")
-               || location.pathname.includes('/token/')
-               || location.pathname.includes('/')){
+               && location.pathname !== '/loginAdmin'
+               && location.pathname !== '/register'
+               && location.pathname !== '/forgotPassword'
+               && !location.pathname.includes("/resetPassword/")
+               && !location.pathname.includes('/token/')
+               && location.pathname !=='/'){
                navigate("/login")
            }
        }
@@ -65,6 +69,8 @@ const Root = () => {
 
     return (
         <Routes>
+            <Route path="/allUsers" element={<UsersPage/>}/>
+            <Route path="/loginAdmin" element={<LoginAdminPage/>}/>
             <Route path="/allCv" element={<AllCvPage/>}/>
             <Route path="/addCv" element={<CreateCV/>}/>
             <Route path="/applications" element={<ApplicationPage/>}/>

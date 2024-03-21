@@ -113,11 +113,13 @@ const JobsPage = () => {
      * Method that call the job retrieval on first renderer
      */
     useEffect(() => {
-        if(candidate && candidate.id !== ""){
+        if(candidate && candidate.candidateId !== ""){
             getJobsAsCandidate()
         }else{
-            getJobsAsEmployer()
-            getProfile()
+            if(employer && employer.employerId !== ""){
+                getJobsAsEmployer()
+                getProfile()
+            }
         }
     }, []);
 

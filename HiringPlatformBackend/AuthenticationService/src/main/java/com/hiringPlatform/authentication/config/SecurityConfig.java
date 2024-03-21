@@ -41,6 +41,7 @@ public class SecurityConfig   {
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/login/{email}/{password}").permitAll()
+                .antMatchers("/loginAdmin/{email}/{password}").permitAll()
                 .antMatchers("/signUpCandidate").permitAll()
                 .antMatchers("/signUpEmployer").permitAll()
                 .antMatchers("/signUp").permitAll()

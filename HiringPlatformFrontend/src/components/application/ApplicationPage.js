@@ -62,7 +62,7 @@ const ApplicationPage = () => {
 
     // Paginating
     const [currentPage, setCurrentPage] = useState(1);
-    const appsPerPage = 10; // Number of apps per page
+    const appsPerPage = 15; // Number of apps per page
     const [paginatingApps, setPaginatingApp] = useState([]);
     const isSmallScreen = useMediaQuery("(max-width: 900px)");
     const [expandedCards, setExpandedCards] = useState([]);
@@ -73,7 +73,9 @@ const ApplicationPage = () => {
             getAllApplicationsForCandidate()
         }
         else{
-            getAllApplicationsForJob()
+            if(employer && employer.employerId !== ""){
+                getAllApplicationsForJob()
+            }
         }
     }, []);
 
@@ -702,53 +704,110 @@ const ApplicationPage = () => {
         }
     };
 
-    const renderNonExtendedCard = (app, formattedDate, index) => (
-        <Card className="app-list-app-info-card">
-            <div className="app-list-section">
-                <div className="app-list-header-res">
-                    <p className="app-list-p-res"><span className="app-list-p-title">
-                        {t('job')}: </span>{app.job.title}, {t('company_small')} {app.employerCompanyName}</p>
-                    <div className="app-list-date">{formattedDate}</div>
+    const renderAppList = () => (
+        <div className="app-list-container">
+            <div className="app-list-header">
+                <div className="column-header">{employer && employer.employerId !== "" ?
+                    t('candidate_name') : t('job')}</div>
+                {candidate && candidate.candidateId !== "" &&
+                    <div className="column-header">{t('the_company')}</div>}
+                <div className="column-header">{t('status_name')}</div>
+                <div className="column-header">{t('date_name')}</div>
+                <div className="column-header">{t('action_name')}</div>
+            </div>
+            {paginatingApps.map((app, index) => (
+                <div key={index}>
+                    {appInfoCard(app, index)}
                 </div>
-                <p className="app-list-p-res"><span className="app-list-p-title">
-                        {t('candidate')}: </span>{app.candidateFirstname} {app.candidateLastname}</p>
-                <p className="app-list-p-res"><span className="app-list-p-title">
-                        Status: </span><Tag
-                    intent={getStatusIntent(possibleStatus.findIndex(i => i === app.status))}>{status[possibleStatus.findIndex(i => i === app.status)]}</Tag>
-                </p>
-                <p className="app-list-p-res"><span
-                    className="app-list-p-title">{t('current_stage')}: </span> {app.stageName}</p>
+            ))}
+        </div>
+    );
+
+    const renderNonExtendedCardEmployer = (app, formattedDate, index) => (
+        <div className="app-list-container">
+            <div className="app-nonextended-list">
+                <div className="column-nonextended-list">
+                    {app.candidateFirstname} {app.candidateLastname}
+                </div>
+                <div className="column-nonextended-list">
+                    <Tag intent={getStatusIntent(possibleStatus.findIndex(i => i === app.status))}>
+                        {status[possibleStatus.findIndex(i => i === app.status)]}
+                    </Tag>
+                </div>
+                <div className="column-nonextended-list">
+                    {formattedDate}
+                </div>
+                <div className="column-nonextended-list">
+                    <Tooltip content={t('extend')} position={"bottom"}>
+                        <Icon icon="chevron-down"
+                              onClick={() => toggleExpansion(index)}
+                        />
+                    </Tooltip>
+                </div>
             </div>
-            <div className="expand-icon">
-                <Tooltip content={t('extend')} position={"bottom"}>
-                <Icon icon="chevron-down" onClick={() => toggleExpansion(index)}/>
-                </Tooltip>
+            <Divider/>
+        </div>
+    );
+
+    const renderNonExtendedCardCandidate = (app, formattedDate, index) => (
+        <div className="app-list-container">
+            <div className="app-nonextended-list">
+                <div className="column-nonextended-list">
+                    {app.job.title}
+                </div>
+                <div className="column-nonextended-list">
+                    {app.employerCompanyName}
+                </div>
+                <div className="column-nonextended-list">
+                    <Tag intent={getStatusIntent(possibleStatus.findIndex(i => i === app.status))}>
+                        {status[possibleStatus.findIndex(i => i === app.status)]}
+                    </Tag>
+                </div>
+                <div className="column-nonextended-list">
+                    {formattedDate}
+                </div>
+                <div className="column-nonextended-list">
+                    <Tooltip content={t('extend')}>
+                        <Icon icon="chevron-down" onClick={() => toggleExpansion(index)}/>
+                    </Tooltip>
+                </div>
             </div>
-        </Card>
+            <Divider/>
+        </div>
     );
 
     const renderExtendedCard = (app, formattedDate, index) => (
         <Card className="app-list-app-info-card">
             <div className="app-list-section">
-                <div className="app-list-header">
+                <div className="app-list-header-extended">
                     <div className="app-list-section-title">{t('info_job')}</div>
                     <div className="app-list-date">{formattedDate}</div>
                 </div>
-                <Divider/>
-                <p className="app-list-p"><span className="app-list-p-title">{t('the_title')}: </span> {app.job.title}</p>
-                <p className="app-list-p"><span className="app-list-p-title">{t('the_company')}: </span> {app.employerCompanyName}</p>
-                <p className="app-list-p"><span className="app-list-p-title">{t('contact')}:</span> {app.employerEmail}</p>
+                <Divider />
+                <p className="app-list-p">
+                    <span className="app-list-p-title">{t('the_title')}:</span> {app.job.title}
+                </p>
+                <p className="app-list-p">
+                    <span className="app-list-p-title">{t('the_company')}:</span> {app.employerCompanyName}
+                </p>
+                <p className="app-list-p">
+                    <span className="app-list-p-title">{t('contact')}:</span> {app.employerEmail}
+                </p>
             </div>
             <div className="app-list-section">
-                <Divider/>
+                <Divider />
                 <div className="app-list-section-title">{t('candidate_info')}</div>
-                <Divider/>
-                <p className="app-list-p"><span className="app-list-p-title">{t('the_candidate')}:</span> {app.candidateFirstname} {app.candidateLastname}</p>
-                <p className="app-list-p"><span className="app-list-p-title">{t('contact')}:</span> {app.candidateEmail}</p>
+                <Divider />
+                <p className="app-list-p">
+                    <span className="app-list-p-title">{t('the_candidate')}:</span> {app.candidateFirstname} {app.candidateLastname}
+                </p>
+                <p className="app-list-p">
+                    <span className="app-list-p-title">{t('contact')}:</span> {app.candidateEmail}
+                </p>
             </div>
             <div className="app-list-section">
-                <Divider/>
-                <div className="app-list-header">
+                <Divider />
+                <div className="app-list-header-extended">
                     <div className="app-list-section-title">{t('process_info')}</div>
                     <Button
                         className="app-list-button"
@@ -761,15 +820,21 @@ const ApplicationPage = () => {
                         }}
                         small
                         minimal
-                        rightIcon={<Icon icon="layout-sorted-clusters" color="black" size={12}/>}
+                        rightIcon={<Icon icon="layout-sorted-clusters" color="black" size={12} />}
                     >
                         {t('see_more')}
                     </Button>
                 </div>
-                <Divider/>
-                <p className="app-list-p"><span className="app-list-p-title">Status:</span> <Tag
-                    intent={getStatusIntent(possibleStatus.findIndex(i => i === app.status))}>{status[possibleStatus.findIndex(i => i === app.status)]}</Tag></p>
-                <p className="app-list-p"><span className="app-list-p-title">{t('current_stage')}: </span> {app.stageName}</p>
+                <Divider />
+                <p className="app-list-p">
+                    <span className="app-list-p-title">Status: </span>
+                    <Tag intent={getStatusIntent(possibleStatus.findIndex(i => i === app.status))}>
+                        {status[possibleStatus.findIndex(i => i === app.status)]}
+                    </Tag>
+                </p>
+                <p className="app-list-p">
+                    <span className="app-list-p-title">{t('current_stage')}:</span> {app.stageName}
+                </p>
             </div>
             <div className="expand-icon">
                 <Tooltip content={t('collapse')}>
@@ -787,7 +852,12 @@ const ApplicationPage = () => {
             return renderExtendedCard(app, formattedDate, index)
         }
         else{
-            return renderNonExtendedCard(app, formattedDate, index)
+            if(employer && employer.employerId !== ""){
+                return renderNonExtendedCardEmployer(app, formattedDate, index)
+            }
+            else{
+                return renderNonExtendedCardCandidate(app, formattedDate, index)
+            }
         }
     };
 
@@ -796,6 +866,11 @@ const ApplicationPage = () => {
     return (
         <div>
             {candidate && candidate.candidateId !== "" ? <HeaderPageCandidate/> : <HeaderPageEmployer/>}
+            {employer && employer.employerId !== "" &&
+                <div className="application-job-title">
+                    {t('app_for')} "{openedJob.title}"
+                </div>
+            }
             <div className={"jobs-component"}>
                 <div className="filter-section filter-section-app">
                     <div className="filter-section-header">
@@ -876,7 +951,7 @@ const ApplicationPage = () => {
                         <div className="job-page-second-line-buttons">
                             <InputGroup
                                 disabled={false}
-                                placeholder={candidate && candidate.candidateId !== ""  ? t('search_by_candidate') : t('search_by_job')}
+                                placeholder={candidate && candidate.candidateId !== ""  ? t('search_by_job') : t('search_by_candidate')}
                                 type="search"
                                 onChange={(e)=> handleSearchChange(e.target.value)}
                             />
@@ -897,11 +972,7 @@ const ApplicationPage = () => {
                         {paginatingApps.length > 0 ? (
                             <div className="jobs-list-show">
                                 <div className="just-jobs">
-                                    {paginatingApps.map((app, index) => (
-                                        <div key={index}>
-                                            {appInfoCard(app, index)}
-                                        </div>
-                                    ))}
+                                    {renderAppList()}
                                 </div>
                                 <div>
                                     {totalPages > 1 && (

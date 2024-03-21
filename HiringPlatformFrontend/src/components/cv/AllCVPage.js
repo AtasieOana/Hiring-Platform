@@ -63,12 +63,14 @@ const AllCvPage = () => {
     const isSmallScreen = useMediaQuery("(max-width: 700px)");
 
     useEffect(() => {
-        getCvsForCandidate()
-        let cvDataCompleted = {...cvData}
-        cvDataCompleted.email = candidate.userDetails.email
-        cvDataCompleted.firstname = candidate.firstname
-        cvDataCompleted.lastname = candidate.lastname
-        setCVData(cvDataCompleted)
+        if(candidate && candidate.candidateId !== "") {
+            getCvsForCandidate()
+            let cvDataCompleted = {...cvData}
+            cvDataCompleted.email = candidate.userDetails.email
+            cvDataCompleted.firstname = candidate.firstname
+            cvDataCompleted.lastname = candidate.lastname
+            setCVData(cvDataCompleted)
+        }
     }, []);
 
     const getCvsForCandidate = () =>{

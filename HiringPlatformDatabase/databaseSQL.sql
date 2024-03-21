@@ -177,22 +177,6 @@ CREATE TABLE recenzii (
     data_comentariu DATE NOT NULL,
     nota NUMBER CONSTRAINT nota_valida CHECK (nota >= 0 AND nota <= 5)
 );
-
--- Inserarea datelor initiale
-INSERT INTO roluri (id_rol, nume_rol, descriere) VALUES 
-(1, 'ROLE_ADMIN', 'The admin is the one who takes care of the management of the application.');
-INSERT INTO roluri (id_rol, nume_rol, descriere) VALUES 
-(2, 'ROLE_EMPLOYER', 'The employer is the one who seeks to hire a person for a job.');
-INSERT INTO roluri (id_rol, nume_rol, descriere) VALUES 
-(3, 'ROLE_CANDIDATE', 'The candidate wants to be employed at a job.');
-
-INSERT INTO utilizatori (id_utilizator, email, parola, data_inregistrare, cont_activat, id_rol) 
-VALUES (1, 'admin@gmail.com', '05bda27d-974f-4127-b6b1-0a062756687a', sysdate, 1, 1);
-
-INSERT INTO administratori (id_admin, nume_utilizator, id_creator_cont) 
-VALUES (1, 'Admin', null);
-
-COMMIT;
     
 -- Verificarea datelor
 SELECT * FROM roluri;

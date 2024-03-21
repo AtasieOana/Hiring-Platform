@@ -83,11 +83,13 @@ const CreateCV = () => {
     const [currentPresentEx, setCurrentPresentEx] = useState(false);
 
     useEffect(() => {
-        let cvDataCompleted = {...cvData}
-        cvDataCompleted.email = candidate.userDetails.email
-        cvDataCompleted.firstname = candidate.firstname
-        cvDataCompleted.lastname = candidate.lastname
-        setCVData(cvDataCompleted)
+        if(candidate && candidate.candidateId !==""){
+            let cvDataCompleted = {...cvData}
+            cvDataCompleted.email = candidate.userDetails.email
+            cvDataCompleted.firstname = candidate.firstname
+            cvDataCompleted.lastname = candidate.lastname
+            setCVData(cvDataCompleted)
+        }
     }, []);
 
     /**

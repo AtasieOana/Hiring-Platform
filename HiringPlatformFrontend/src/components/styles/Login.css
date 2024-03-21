@@ -97,6 +97,18 @@
     font-weight: 500;
 }
 
+.login-button-admin {
+    margin: 0 auto !important;
+    margin-top: 15px !important;
+    display: block !important;
+    background-color: #ffaf84 !important;
+    width: 50%;
+    text-align: center !important;
+    color: black !important;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
 @media (max-width: 1000px) {
     .login-container-form {
         width: 75vw;
@@ -107,3 +119,4 @@
         margin-right: 3%;
     }
 }
+

@@ -81,8 +81,6 @@ const LoginPage = () => {
                         setCandidateInRedux()
                     } else if (loginResponse.roleName === EMPLOYER_ACCOUNT) {
                         setEmployerInRedux()
-                    } else {
-                        console.log("TODO - ADMIN")
                     }
                 }
             }).catch((error) => {

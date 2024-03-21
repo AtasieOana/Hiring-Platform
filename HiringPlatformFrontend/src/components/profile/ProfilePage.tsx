@@ -65,7 +65,9 @@ const ProfilePage = () => {
                 getProfileAsCandidate()
             }
             else{
-                getProfileAsEmployer()
+                if(employer && employer.employerId !== ""){
+                    getProfileAsEmployer()
+                }
             }
         } else {
             navigate("/login")

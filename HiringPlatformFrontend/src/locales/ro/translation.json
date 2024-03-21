@@ -355,5 +355,15 @@
   "save": "Salvează",
   "add_person": "Adaugă",
   "cancel_person": "Anulează",
-  "reply_delete": "Un comentariu cu răspunsuri nu poate fi șters"
+  "reply_delete": "Un comentariu cu răspunsuri nu poate fi șters",
+  "candidate_name": "Candidat",
+  "status_name": "Status",
+  "date_name": "Data",
+  "action_name": "Acțiuni",
+  "app_for": "Aplicații pentru",
+  "the_title": "Titlu",
+  "the_company": "Companie",
+  "info_job": "Informații despre locul de muncă",
+  "normal_login": "Autentificare normală",
+  "as_admin": "Conectează-te drept administrator"
 }
