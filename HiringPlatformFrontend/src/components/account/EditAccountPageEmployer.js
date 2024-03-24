@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {useTranslation} from "react-i18next";
-import {Button, Card, Divider, Elevation, FormGroup, Icon, InputGroup, Intent} from "@blueprintjs/core";
+import {Button, Card, Divider, FormGroup, Icon, InputGroup, Intent} from "@blueprintjs/core";
 import './EditAccount.css';
 import HeaderPageEmployer from "../header/HeaderPageEmployer";
 import {AppToaster} from "../common/AppToaster";
@@ -221,7 +221,21 @@ const EditAccountPageEmployer = () => {
                     {t('account_information')}
                     <Icon size={16} icon="heatmap" color="#698576" className="nav-icon"/>
                 </div>
-                <Button className="card-button" onClick={() => setIsAccountEdited(true)}>
+                <Button className="card-button" onClick={() => {
+                    setIsAccountEdited(true);
+                    setShowPassword(false)
+                    setShowConfPassword(false)
+                    setAccountInfo({
+                        companyName: employer.companyName,
+                        password: "",
+                        confirmPassword: "",
+                    })
+                    setErrorsAccount({
+                        companyName: false,
+                        password: false,
+                        confirmPassword: false,
+                    })
+                }}>
                     {t('edit_information')}
                 </Button>
             </div>

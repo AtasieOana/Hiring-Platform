@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {useTranslation} from "react-i18next";
-import {Button, Card, Divider, Elevation, 
+import {Button, Card, Divider,
     FormGroup, Icon, InputGroup, Intent} from "@blueprintjs/core";
 import './EditAccount.css';
 import CandidateService from "../../services/candidate.service";
@@ -12,7 +12,6 @@ import HeaderPageCandidate from "../header/HeaderPageCandidate";
 const EditAccountPageCandidate = () => {
 
     const {t} = useTranslation();
-    const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
     const candidate = useSelector(state => state.auth.candidate);
     const [isAccountEdited, setIsAccountEdited] = useState(false);
     const [accountInfo, setAccountInfo] = useState({
@@ -245,7 +244,23 @@ const EditAccountPageCandidate = () => {
                     {t('account_information')}
                     <Icon size={16} icon="heatmap" color="#698576" className="nav-icon"/>
                 </div>
-                <Button className="card-button" onClick={() => setIsAccountEdited(true)}>
+                <Button className="card-button" onClick={() => {
+                    setIsAccountEdited(true);
+                    setShowPassword(false)
+                    setShowConfPassword(false)
+                    setAccountInfo({
+                        lastname: candidate.lastname,
+                        firstname: candidate.firstname,
+                        password: "",
+                        confirmPassword: "",
+                    })
+                    setErrorsAccount({
+                        lastname: false,
+                        firstname: false,
+                        password: false,
+                        confirmPassword: false,
+                    })
+                }}>
                     {t('edit_information')}
                 </Button>
             </div>

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {BrowserRouter as Router, Route, Routes, useLocation, useNavigate} from 'react-router-dom';
 import {useSelector} from 'react-redux';
 import {I18nextProvider} from 'react-i18next';
@@ -20,6 +20,8 @@ import CreateCV from "./components/cv/CreateCV";
 import AllCvPage from "./components/cv/AllCVPage";
 import LoginAdminPage from "./components/auth/LoginAdminPage";
 import UsersPage from "./components/admin/users/UsersPage";
+import ComplainsPage from "./components/admin/complains/ComplainsPage";
+import ActivitiesPage from "./components/admin/charts/ActivitiesPage";
 
 
 const Root = () => {
@@ -69,6 +71,8 @@ const Root = () => {
 
     return (
         <Routes>
+            <Route path="/activities" element={<ActivitiesPage/>}/>
+            <Route path="/complains" element={<ComplainsPage/>}/>
             <Route path="/allUsers" element={<UsersPage/>}/>
             <Route path="/loginAdmin" element={<LoginAdminPage/>}/>
             <Route path="/allCv" element={<AllCvPage/>}/>

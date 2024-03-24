@@ -41,10 +41,19 @@ public class SecurityConfig   {
                 .and()
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/getReviewsForEmployer/{employerId}").hasAnyAuthority("ROLE_CANDIDATE", "ROLE_EMPLOYER")
-                .antMatchers("/addReview").hasAnyAuthority("ROLE_CANDIDATE", "ROLE_EMPLOYER")
-                .antMatchers("/editReview").hasAnyAuthority("ROLE_CANDIDATE", "ROLE_EMPLOYER")
-                .antMatchers("/deleteReview/{reviewId}").hasAnyAuthority("ROLE_CANDIDATE", "ROLE_EMPLOYER")
+                .antMatchers("/getUserList").hasAnyAuthority("ROLE_ADMIN")
+                .antMatchers("/editAdmin").hasAnyAuthority("ROLE_ADMIN")
+                .antMatchers("/addAdmin").hasAnyAuthority("ROLE_ADMIN")
+                .antMatchers("/deleteAdmin/{newCreatorEmail}/{adminEmailToBeDeleted}").hasAnyAuthority("ROLE_ADMIN")
+                .antMatchers("/getAllComplaints").hasAnyAuthority("ROLE_ADMIN")
+                .antMatchers("/addComplaint").permitAll()
+                .antMatchers("/updateComplaintStatus").hasAnyAuthority("ROLE_ADMIN")
+                .antMatchers("/getJobCategoryDistribution").hasAnyAuthority("ROLE_ADMIN")
+                .antMatchers("/getApplicationStatusPercentage").hasAnyAuthority("ROLE_ADMIN")
+                .antMatchers("/getAccountCreationTrend").hasAnyAuthority("ROLE_ADMIN")
+                .antMatchers("/getTopEmployersWithApplications").hasAnyAuthority("ROLE_ADMIN")
+                .antMatchers("/getJobsExperiencePercentage").hasAnyAuthority("ROLE_ADMIN")
+                .antMatchers("/getApplicationsPerDate").hasAnyAuthority("ROLE_ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(accessDeniedHandler())
@@ -73,8 +82,6 @@ public class SecurityConfig   {
 
     @Bean
     public AuthenticationEntryPoint accessDeniedHandler() {
-        return (request, response, authException) -> {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, HttpStatus.UNAUTHORIZED.getReasonPhrase());
-        };
+        return (request, response, authException) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED, HttpStatus.UNAUTHORIZED.getReasonPhrase());
     }
 }

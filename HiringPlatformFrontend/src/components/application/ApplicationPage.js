@@ -23,6 +23,7 @@ import HeaderPageEmployer from "../header/HeaderPageEmployer";
 import {formatDate, handleOpenCV, useMediaQuery} from "../common/CommonMethods";
 import {useNavigate} from "react-router-dom";
 import {setJobData} from "../../redux/actions/jobActions";
+import ComplaintDialog from "../common/ComplaintDialog";
 
 export const possibleStatus = ['refuzat', 'in_curs', 'finalizat']
 export const statusEn = ['Refused', 'In Progress', 'Completed']
@@ -67,6 +68,9 @@ const ApplicationPage = () => {
     const isSmallScreen = useMediaQuery("(max-width: 900px)");
     const [expandedCards, setExpandedCards] = useState([]);
 
+    const [complaintDialogOpen, setComplaintDialogOpen] = useState(false);
+    const [complainedUserEmail, setComplainedUserEmail] = useState("");
+    const [complainantUserEmail, setComplainantUserEmail] = useState("");
 
     useEffect(() => {
         if(candidate && candidate.candidateId !== ""){
@@ -493,6 +497,22 @@ const ApplicationPage = () => {
         navigate("/viewJob")
     }
 
+    const openComplainDialog = (email) =>{
+        setComplaintDialogOpen(true)
+        setComplainedUserEmail(email)
+        if(candidate && candidate.candidateId !== ""){
+            setComplainantUserEmail(candidate.userDetails.email)
+        } else if(employer && employer.employerId !== ""){
+            setComplainantUserEmail(employer.userDetails.email)
+        }
+    }
+
+    const closeComplainDialog = (email) =>{
+        setComplaintDialogOpen(false)
+        setComplainedUserEmail("")
+        setComplainantUserEmail("")
+    }
+
     const renderTemplateCvDrawerCandidate = () => {
         let currentStageNr = currentApp.stageNr
         let cvShortName = currentApp.cvName.split("_").slice(1).join("_")
@@ -554,15 +574,22 @@ const ApplicationPage = () => {
                     ))}
                 </Card>
             </div>
-            <div className={Classes.DRAWER_FOOTER + " cv-drawer"}>
+            <div className={Classes.DRAWER_FOOTER + " app-drawer"}>
+                <Button onClick={() => openComplainDialog(currentApp?.employerEmail)}
+                        intent={Intent.DANGER}
+                        icon="issue"
+                >
+                    {t('report')}
+                </Button>
                 {currentApp.status === possibleStatus[1] && <Button
                     onClick={() => setIsStopDialogOpen(true)}
-                    intent={Intent.DANGER}
+                    intent={Intent.WARNING}
                     icon="stopwatch"
                 >
                     {t('stop_process')}
                 </Button>}
             </div>
+            <ComplaintDialog isOpen={complaintDialogOpen} onClose={closeComplainDialog} complainedUser={complainedUserEmail} complainantUser={complainantUserEmail}></ComplaintDialog>
             {renderStopProcessDialog()}
         </Drawer>
     }
@@ -644,6 +671,12 @@ const ApplicationPage = () => {
                 }
             </div>
             <div className={Classes.DRAWER_FOOTER + " app-drawer"}>
+                <Button onClick={() => openComplainDialog(currentApp?.candidateEmail)}
+                        intent={Intent.DANGER}
+                        icon="issue"
+                >
+                    {t('report')}
+                </Button>
                 {currentApp.status === possibleStatus[1] && <Button
                     onClick={() => goToNextStep()}
                     intent={Intent.SUCCESS}
@@ -653,12 +686,13 @@ const ApplicationPage = () => {
                 </Button>}
                 {currentApp.status === possibleStatus[1] && <Button
                     onClick={() => setIsStopDialogOpen(true)}
-                    intent={Intent.DANGER}
+                    intent={Intent.WARNING}
                     icon="stopwatch"
                 >
                     {t('stop_process')}
                 </Button>}
             </div>
+            <ComplaintDialog isOpen={complaintDialogOpen} onClose={closeComplainDialog} complainedUser={complainedUserEmail} complainantUser={complainantUserEmail}></ComplaintDialog>
             {renderStopProcessDialog()}
         </Drawer>
     }

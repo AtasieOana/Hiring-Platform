@@ -9,6 +9,10 @@ class AuthenticationService {
         return apiAuth.delete("/deleteUser/" + email)
     }
 
+    async deleteUserByAdmin(email) {
+        return apiAuth.delete("/deleteUserByAdmin/" + email)
+    }
+
     async registerCandidate(registerRequest) {
         return apiAuth.post("/signUpCandidate", registerRequest)
     }

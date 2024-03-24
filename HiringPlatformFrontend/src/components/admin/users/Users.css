@@ -1,0 +1,162 @@
+.users-info-text {
+    font-size: 14px;
+    line-height: 1.7;
+    text-align: justify;
+    margin: 20px 5vw 5px;
+}
+
+.users-add-container{
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 5vw;
+}
+
+.users-add-button{
+    background-color: #ffaf84 !important;
+    width: 20vw !important;
+    text-align: center !important;
+    color: black !important;
+    font-weight: 600;
+    letter-spacing: 1px;
+    margin-bottom: 15px;
+}
+
+.add-admin-dialog{
+    width: 50vw !important;
+}
+
+.users-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.roles-checkbox {
+    margin-left: 5vw;
+    display: flex;
+    gap: 25px;
+}
+
+.search-and-sort {
+    margin-right: 5vw;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.search-and-sort .bp4-input{
+    width: 20vw !important;
+    border-radius: 0 !important;
+}
+
+.users-search-bar {
+    margin-right: 10px;
+}
+
+.users-table {
+    margin: 10px 5vw 20px;
+    border: 1px solid rgba(17, 20, 24, 0.15) !important;
+}
+
+.users-table th {
+    background-color: #fca485 !important;
+    font-weight: bold !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+}
+
+.users-table td {
+    text-align: center !important;
+    vertical-align: middle !important;
+}
+
+.users-table th:first-of-type {
+    width: 20vw !important;
+}
+
+.users-table th:nth-of-type(2) {
+    width: 16vw !important;
+}
+
+.users-table th:nth-of-type(3) {
+    width: 13vw !important;
+}
+
+.users-table th:nth-of-type(4) {
+    width: 12vw !important;
+}
+
+.users-table th:nth-of-type(5) {
+    width: 10vw !important;
+}
+
+.users-table th:nth-of-type(6) {
+    width: 13vw !important;
+}
+
+.users-table th:nth-of-type(7) {
+    width: 6vw !important;
+}
+
+.no-users-found{
+    margin-bottom: 20px;
+}
+
+.no-users-found img{
+    width: 200px !important;
+    height: 200px !important;
+}
+
+.no-users-found .bp4-non-ideal-state-visual{
+    margin-bottom: 0 !important;
+}
+
+.users-table::-webkit-scrollbar {
+    width: 5px !important;
+    height: 5px !important;
+}
+
+@media (max-width: 1050px) {
+
+    .users-add-button{
+        width: 30vw !important;
+    }
+
+    .search-and-sort .bp4-input{
+        width: 30vw !important;
+    }
+}
+
+@media (max-width: 800px) {
+
+    .users-add-button{
+        width: 45vw !important;
+    }
+
+    .users-actions {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-end;
+        margin-bottom: 5px;
+    }
+
+    .roles-checkbox {
+        margin-right: 5vw;
+    }
+
+    .search-and-sort .bp4-input{
+        width: 45vw !important;
+    }
+
+    .users-table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .add-admin-dialog{
+        width: 85vw !important;
+    }
+}

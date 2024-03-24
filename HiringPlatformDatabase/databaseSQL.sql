@@ -1,6 +1,7 @@
 -- BAZA DE DATE
 
 -- Stergerea tabelelor
+DROP TABLE reclamatii;
 DROP TABLE recenzii;
 DROP TABLE raspunsuri;
 DROP TABLE aplica;
@@ -80,8 +81,8 @@ CREATE TABLE administratori (
 	id_admin VARCHAR2(36) CONSTRAINT pk_admin PRIMARY KEY,
     nume_utilizator VARCHAR2(100) NOT NULL,
     id_creator_cont VARCHAR2(36),
-    CONSTRAINT fk_utilizator_admin FOREIGN KEY (id_admin) REFERENCES utilizatori(id_utilizator),
-    CONSTRAINT fk_creator_admin FOREIGN KEY (id_creator_cont) REFERENCES utilizatori(id_utilizator)
+    CONSTRAINT fk_utilizator_admin FOREIGN KEY (id_admin) REFERENCES utilizatori(id_utilizator) ON DELETE CASCADE,
+    CONSTRAINT fk_creator_admin FOREIGN KEY (id_creator_cont) REFERENCES administratori(id_admin)
 );
 
 CREATE TABLE token_autentificare (
@@ -178,6 +179,16 @@ CREATE TABLE recenzii (
     nota NUMBER CONSTRAINT nota_valida CHECK (nota >= 0 AND nota <= 5)
 );
     
+CREATE TABLE reclamatii (
+    id_reclamatie VARCHAR2(36) CONSTRAINT pk_reclamatie PRIMARY KEY,
+    id_utilizator_reclamant VARCHAR2(36) CONSTRAINT fk_utilizator_reclamant REFERENCES utilizatori(id_utilizator) ON DELETE CASCADE,
+    id_utilizator_reclamat VARCHAR2(36) CONSTRAINT fk_utilizator_reclamat REFERENCES utilizatori(id_utilizator) ON DELETE CASCADE,
+    motiv CLOB NOT NULL,
+    data_reclamatie DATE NOT NULL,
+    status VARCHAR2(20) CHECK (status IN ('procesat', 'neprocesat')) NOT NULL,
+    id_admin_procesare VARCHAR2(36) CONSTRAINT fk_admin_reclamatie REFERENCES administratori(id_admin) ON DELETE CASCADE
+);
+
 -- Verificarea datelor
 SELECT * FROM roluri;
 SELECT * FROM utilizatori;
@@ -189,12 +200,11 @@ SELECT * FROM adrese;
 SELECT * FROM token_autentificare;
 SELECT * FROM profiluri;
 SELECT * FROM locuri_de_munca;
+SELECT * FROM cv;
 SELECT * FROM etape;
 SELECT * FROM contine;
 SELECT * FROM intrebari;
-SELECT * FROM cv;
 SELECT * FROM raspunsuri;
 SELECT * FROM aplica; 
 SELECT * FROM recenzii;
-DELETE FROM profiluri;
-COMMIT;
+SELECT * FROM reclamatii;

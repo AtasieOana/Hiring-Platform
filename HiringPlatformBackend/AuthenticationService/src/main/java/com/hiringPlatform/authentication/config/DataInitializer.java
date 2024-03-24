@@ -35,9 +35,9 @@ public class DataInitializer implements CommandLineRunner {
     public void run(String... args) {
         try {
         // Create the roles: ADMIN, EMPLOYER, CANDIDATE
-        Role adminRole = createRoleIfNotExists("ADMIN", "The admin is the one who takes care of the management of the application.");
-        createRoleIfNotExists("EMPLOYER", "The employer is the one who seeks to hire a person for a job.");
-        createRoleIfNotExists("CANDIDATE", "The candidate wants to be employed at a job.");
+        Role adminRole = createRoleIfNotExists("ROLE_ADMIN", "The admin is the one who takes care of the management of the application.");
+        createRoleIfNotExists("ROLE_EMPLOYER", "The employer is the one who seeks to hire a person for a job.");
+        createRoleIfNotExists("ROLE_CANDIDATE", "The candidate wants to be employed at a job.");
         // Create default admin user
         createUserIfNotExists("admin.joblistic@gmail.com", "adminPassword", adminRole);
         } catch (Exception e) {

@@ -16,6 +16,7 @@ import ReviewService from "../../services/review.service";
 import {useSelector} from "react-redux";
 import {useTranslation} from "react-i18next";
 import {formatDate} from "../common/CommonMethods";
+import ComplaintDialog from "../common/ComplaintDialog";
 
 
 let defaultReview = {
@@ -73,6 +74,9 @@ const ReviewComponent = () => {
         totalReviews: 0,
         averageGrade: 0
     });
+    const [complaintDialogOpen, setComplaintDialogOpen] = useState(false);
+    const [complainedUserEmail, setComplainedUserEmail] = useState("");
+    const [complainantUserEmail, setComplainantUserEmail] = useState("");
 
     useEffect(() => {
         getReviewsForEmployer();
@@ -293,7 +297,6 @@ const ReviewComponent = () => {
         else{
             errors.editComment = false
             setErrors(errorCopy)
-            console.log(editedReview)
             let request = {
                 reviewId: editedReview.reviewId,
                 newComment: editedReview.comment,
@@ -340,6 +343,22 @@ const ReviewComponent = () => {
             }
             addReview(request)
         }
+    }
+
+    const openComplainDialog = (email) =>{
+        setComplaintDialogOpen(true)
+        setComplainedUserEmail(email)
+        if(candidate && candidate.candidateId !== ""){
+            setComplainantUserEmail(candidate.userDetails.email)
+        } else if(employer && employer.employerId !== ""){
+            setComplainantUserEmail(employer.userDetails.email)
+        }
+    }
+
+    const closeComplainDialog = (email) =>{
+        setComplaintDialogOpen(false)
+        setComplainedUserEmail("")
+        setComplainantUserEmail("")
     }
 
     /**
@@ -472,6 +491,17 @@ const ReviewComponent = () => {
                                                 </Button>
                                                 <Divider/>
                                             </>
+                                        }
+                                        {userIdLogged !== review.userId &&
+                                            <Button onClick={() => openComplainDialog(review.userEmail)}
+                                                    minimal intent={Intent.DANGER}
+                                                    icon={<Icon
+                                                        icon={"issue"}
+                                                        size={13}/>}
+                                                    small
+                                            >
+                                                {t('report')}
+                                            </Button>
                                         }
                                         {!review.parentReviewId &&
                                             <Button onClick={() => handleAddReplyClick(review.reviewId)}
@@ -629,6 +659,7 @@ const ReviewComponent = () => {
                 !review.parentReviewId &&
                 renderReviewWithReplies(review)
             ))}
+            <ComplaintDialog isOpen={complaintDialogOpen} onClose={closeComplainDialog} complainedUser={complainedUserEmail} complainantUser={complainantUserEmail}></ComplaintDialog>
         </Card>
     );
 }

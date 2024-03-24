@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import "../styles/Login.css"
-import {Button, FormGroup, InputGroup, Intent, Text} from "@blueprintjs/core";
+import {Button, FormGroup, InputGroup, Intent, Spinner, Text} from "@blueprintjs/core";
 import {useTranslation} from "react-i18next";
 import AuthenticationService from "../../services/authentication.service";
 import {LoginResponse, UserGoogleRequest} from "../../types/auth.types";
@@ -26,6 +26,8 @@ const LoginPage = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [loginInvalid, setLoginInvalid] = useState(false);
 
+    const [isLoading, setIsLoading] = useState(false);
+
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
     };
@@ -36,6 +38,7 @@ const LoginPage = () => {
             if (registerResponse.token) {
                 dispatch(setAuthData(true, null, registerResponse.employer, registerResponse.token));
                 dispatch(setProfileActionData(response.data.hasProfile));
+                setIsLoading(false)
                 if(response.data.hasProfile) {
                     navigate("/allJobs")
                 }
@@ -54,6 +57,7 @@ const LoginPage = () => {
             if (registerResponse.token) {
                 dispatch(setAuthData(true, registerResponse.candidate,null, registerResponse.token));
                 dispatch(setProfileActionData(response.data.hasCv));
+                setIsLoading(false)
                 if(response.data.hasCv) {
                     navigate("/allCv")
                 }
@@ -71,10 +75,12 @@ const LoginPage = () => {
         if (!email || !emailRegex.test(email) || !password) {
             setLoginInvalid(true)
         } else {
+            setIsLoading(true)
             AuthenticationService.login(email, password).then((response: any) => {
                 let loginResponse: LoginResponse = response.data;
                 if (loginResponse.token === '') {
                     setLoginInvalid(true)
+                    setIsLoading(false)
                 } else {
                     setLoginInvalid(false)
                     if (loginResponse.roleName === CANDIDATE_ACCOUNT) {
@@ -84,6 +90,7 @@ const LoginPage = () => {
                     }
                 }
             }).catch((error) => {
+                setIsLoading(false)
                 console.error("Error during login: " + error.message);
                 AppToaster.show({
                     message: t('login_error'),
@@ -196,20 +203,23 @@ const LoginPage = () => {
                         </Text>
                     </div>
                 </form>
-                <Button onClick={handleLogin}
-                        small={true}
-                        className="login-button"
-                >
-                    {t('login_button')}
-                </Button>
-                <div className="text-or">
-                    OR
-                </div>
-                <Button className="register-button"
-                        small={true}
-                        onClick={() => logGoogleUser(EMPLOYER_ACCOUNT)}>
-                    {t('sign_google')}
-                </Button>
+                {isLoading ? <Spinner className="central-spinner"
+                                      size={20}/> :
+                                <div><Button onClick={handleLogin}
+                                    small={true}
+                                    className="login-button"
+                            >
+                                {t('login_button')}
+                            </Button>
+                            <div className="text-or">
+                                OR
+                            </div>
+                            <Button className="register-button"
+                                    small={true}
+                                    onClick={() => logGoogleUser(EMPLOYER_ACCOUNT)}>
+                                {t('sign_google')}
+                            </Button>
+                    </div>}
             </div>
             <div className="login-go-to-register">
                 <Link to="/register">

@@ -1,4 +1,4 @@
-export const setAdminData = (isAdmin, admin, token) => ({
+export const setAdminData = (isAuthenticated, admin, token) => ({
     type: 'SET_ADMIN_DATA',
-    payload: {isAdmin, admin, token},
+    payload: {isAuthenticated, admin, token},
 });

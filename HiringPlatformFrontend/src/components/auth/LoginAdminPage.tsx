@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import "../styles/Login.css"
-import {Button, FormGroup, InputGroup, Intent, Text} from "@blueprintjs/core";
+import {Button, FormGroup, InputGroup, Intent, Spinner, Text} from "@blueprintjs/core";
 import {useTranslation} from "react-i18next";
 import AuthenticationService from "../../services/authentication.service";
 import {LoginResponse} from "../../types/auth.types";
@@ -21,6 +21,7 @@ const LoginAdminPage = () => {
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [loginInvalid, setLoginInvalid] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
@@ -31,17 +32,21 @@ const LoginAdminPage = () => {
         if (!email || !emailRegex.test(email) || !password) {
             setLoginInvalid(true)
         } else {
+            setIsLoading(true)
             AdminService.loginAdmin(email, password).then((response: any) => {
                 let loginResponse: LoginResponse = response.data;
                 if (loginResponse.token === '') {
                     setLoginInvalid(true)
+                    setIsLoading(false)
                 } else {
                     setLoginInvalid(false)
                     // Set admin in redux
                     dispatch(setAdminData(true, response.data.admin, response.data.token));
+                    setIsLoading(false)
                     navigate("/allUsers")
                 }
             }).catch((error) => {
+                setIsLoading(false)
                 console.error("Error during login: " + error.message);
                 AppToaster.show({
                     message: t('login_error'),
@@ -99,12 +104,14 @@ const LoginAdminPage = () => {
                         />
                     </FormGroup>
                 </form>
+                {isLoading ? <Spinner className="central-spinner"
+                                      size={20}/> :
                 <Button onClick={handleLogin}
                         small={true}
                         className="login-button-admin"
                 >
                     {t('login_button')}
-                </Button>
+                </Button>}
             </div>
             </div>
         </div>

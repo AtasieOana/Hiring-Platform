@@ -17,8 +17,6 @@ import javax.persistence.*;
 public class Admin {
 
     @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
     @Column(name = "id_admin")
     private String adminId;
 
@@ -30,8 +28,8 @@ public class Admin {
     @JoinColumn(name ="id_admin")
     private User userDetails;
 
-    @OneToOne(cascade={CascadeType.MERGE}, fetch=FetchType.EAGER)
+    @ManyToOne(cascade={CascadeType.MERGE}, fetch=FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name ="id_creator_cont")
-    private User creatorUser;
+    private Admin creatorUser;
 }

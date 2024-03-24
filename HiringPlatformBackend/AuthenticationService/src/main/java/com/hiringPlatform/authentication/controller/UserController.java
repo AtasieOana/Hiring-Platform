@@ -149,12 +149,22 @@ public class UserController {
     }
 
     /**
-     * Method used for deleting an account for an employer
+     * Method used for deleting an account for a user
      * @return boolean
      */
     @DeleteMapping("/deleteUser/{email}")
     public ResponseEntity<Boolean> deleteUser(@PathVariable String email) {
         redisService.removeData("userToken");
+        Boolean data = userService.deleteUser(email);
+        return ResponseEntity.ok(data);
+    }
+
+    /**
+     * Method used for deleting an account for a user by an admin
+     * @return boolean
+     */
+    @DeleteMapping("/deleteUserByAdmin/{email}")
+    public ResponseEntity<Boolean> deleteUserByAdmin(@PathVariable String email) {
         Boolean data = userService.deleteUser(email);
         return ResponseEntity.ok(data);
     }

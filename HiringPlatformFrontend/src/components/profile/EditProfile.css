@@ -111,6 +111,10 @@
     height: 51vh;
 }
 
+.right-column .ql-editor:focus{
+    outline: none !important;
+}
+
 .right-column .bp4-form-group{
     margin: 0 !important;
 }

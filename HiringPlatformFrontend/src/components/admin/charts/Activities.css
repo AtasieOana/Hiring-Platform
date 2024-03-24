@@ -1,0 +1,124 @@
+.chart-group{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin: 25px 5vw;
+}
+
+.activity-chart{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: 45vw;
+    border: 1px solid darkgrey;
+    padding: 10px;
+    height: 60vh;
+    margin: 10px;
+}
+
+.activity-chart-long{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: 45vw;
+    border: 1px solid darkgrey;
+    padding: 10px;
+    height: 50vh;
+    margin: 10px;
+}
+
+
+.activity-chart-title{
+    font-weight: 700;
+    font-size: 20px;
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+.activity-chart-desc{
+    font-style: italic;
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+.activity-chart-display-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.activity-chart-display{
+    width: 300px;
+    height: 300px;
+    padding: 10px;
+}
+
+.activity-chart-display-long{
+    width: 500px;
+    height: 300px;
+    padding: 10px;
+}
+
+@media (max-width: 1200px) {
+    .chart-group{
+        margin: 25px 2vw;
+    }
+}
+
+@media (max-width: 1100px) {
+    .chart-group{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin: 25px 5vw;
+    }
+
+    .activity-chart{
+        width: 80vw;
+        height: 65vh;
+    }
+
+    .activity-chart-display-long{
+        width: 500px;
+        height: 500px;
+        padding: 10px;
+    }
+
+    .activity-chart-long{
+        width: 80vw;
+        height: 50vh;
+    }
+}
+
+@media (max-width: 900px) {
+
+    .chart-group{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin: 25px 5vw;
+    }
+
+    .activity-chart{
+        width: 80vw;
+        height: 65vh;
+    }
+
+    .activity-chart-display-long{
+        width: 400px;
+        height: 300px;
+        padding: 10px;
+    }
+
+    .activity-chart-long{
+        width: 80vw;
+        height: 50vh;
+    }
+}

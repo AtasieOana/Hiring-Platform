@@ -52,7 +52,7 @@ const HeaderPageEmployer = () => {
     const deleteAccount = () => {
         AuthenticationService.deleteAccount(employer.userDetails.email)
             .then(() => {
-                window.location.replace('http://localhost:3000/register');
+                navigate("/register");
             })
             .catch(error => {
                 console.error('Error: ', error.message);

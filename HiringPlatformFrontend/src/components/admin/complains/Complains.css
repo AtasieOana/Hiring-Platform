@@ -1,0 +1,91 @@
+.admin-instructions {
+    font-size: 14px;
+    line-height: 1.7;
+    text-align: justify;
+    margin: 20px 5vw 5px;
+}
+
+.complaints-table {
+    margin: 10px 5vw 20px;
+    border: 1px solid rgba(17, 20, 24, 0.15) !important;
+}
+
+.complaints-table th {
+    background-color: #fca485 !important;
+    font-weight: bold !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+}
+
+.complaints-table td {
+    text-align: center !important;
+    vertical-align: middle !important;
+}
+
+.complaints-table th:first-of-type {
+    width: 22vw !important;
+}
+
+.complaints-table th:nth-of-type(2) {
+    width: 22vw !important;
+}
+
+.complaints-table th:nth-of-type(3) {
+    width: 12vw !important;
+}
+
+.complaints-table th:nth-of-type(4) {
+    width: 15vw !important;
+}
+
+.complaints-table th:nth-of-type(5) {
+    width: 12vw !important;
+}
+
+.complaints-table th:nth-of-type(6) {
+    width: 7vw !important;
+}
+
+.complaint-actions{
+    display: flex;
+    justify-content: space-between;
+}
+
+.complaint-show-dialog{
+    width: 70vw !important;
+    height: 80vh !important;
+}
+
+.complaint-show-dialog .ql-editor{
+    overflow: auto;
+    max-width: 70vw;
+    margin: auto;
+    height: 60vh;
+}
+
+.complaints-table::-webkit-scrollbar {
+    width: 5px !important;
+    height: 5px !important;
+}
+
+.red-status-complaint{
+    color: darkred !important;
+    font-weight: 600;
+}
+
+@media (max-width: 800px) {
+
+    .complaint-show-dialog{
+        width: 90vw !important;
+    }
+
+    .complaints-table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .complaint-show-dialog .ql-editor{
+        max-width: 90vw;
+    }
+}

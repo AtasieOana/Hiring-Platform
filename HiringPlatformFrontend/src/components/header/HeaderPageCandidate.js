@@ -29,7 +29,7 @@ const HeaderPageCandidate = () => {
     const deleteAccount = () => {
         AuthenticationService.deleteAccount(candidate.userDetails.email)
             .then(() => {
-                window.location.replace('http://localhost:3000/register');
+                navigate("/register");
             })
             .catch(error => {
                 console.error('Error: ', error.message);

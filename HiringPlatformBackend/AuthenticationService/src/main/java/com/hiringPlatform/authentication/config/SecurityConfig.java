@@ -52,6 +52,7 @@ public class SecurityConfig   {
                 .antMatchers("/authGoogle").permitAll()
                 .antMatchers("/loginGoogle").permitAll()
                 .antMatchers("/deleteUser/{email}").permitAll()
+                .antMatchers("/deleteUserByAdmin/{email}").permitAll()
                 .antMatchers("/seeUsers").hasAnyAuthority("ROLE_ADMIN")
                 .anyRequest().authenticated()
                 .and()

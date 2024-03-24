@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
-import {Button, FormGroup, InputGroup, Intent} from '@blueprintjs/core';
+import {Button, FormGroup, InputGroup, Intent, Spinner} from '@blueprintjs/core';
 import "../styles/Register.css"
 import {useTranslation} from "react-i18next";
 import {CANDIDATE_ACCOUNT, EMPLOYER_ACCOUNT} from '../../util/constants';
@@ -54,6 +54,7 @@ const RegisterPage = () => {
     const {t, i18n} = useTranslation();
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const [isLoading, setIsLoading] = useState(false);
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
@@ -69,12 +70,16 @@ const RegisterPage = () => {
             if (registerResponse.token) {
                 dispatch(setAuthData(true, null, registerResponse.employer, registerResponse.token));
                 dispatch(setProfileActionData(response.data.hasProfile));
+                setIsLoading(false)
                 if(response.data.hasProfile) {
                     navigate("/allJobs")
                 }
                 else{
                     navigate("/addProfile")
                 }
+            }
+            else{
+                setIsLoading(false)
             }
         }).catch(error => {
             navigate("/login")
@@ -87,12 +92,16 @@ const RegisterPage = () => {
             if (registerResponse.token) {
                 dispatch(setAuthData(true, registerResponse.candidate,null, registerResponse.token));
                 dispatch(setProfileActionData(response.data.hasCv));
+                setIsLoading(false)
                 if(response.data.hasCv) {
                     navigate("/allCv")
                 }
                 else{
                     navigate("/addCv")
                 }
+            }
+            else{
+                setIsLoading(false)
             }
         }).catch(error => {
             navigate("/login")
@@ -149,6 +158,7 @@ const RegisterPage = () => {
     }
 
     const registerUserCandidate = () => {
+        setIsLoading(true)
         let registerRequest: RegisterCandidateRequest = {
             accountType: "",
             email: "",
@@ -163,6 +173,7 @@ const RegisterPage = () => {
         registerRequest.accountType = userType;
         AuthenticationService.registerCandidate((registerRequest)).then((response: any) => {
             let registerResponse: RegisterResponse = response.data;
+            setIsLoading(false)
             navigate(`/token/${registerResponse.email}`);
         }).catch((error) => {
             console.error("Error during authentication: " + error.message);
@@ -213,6 +224,7 @@ const RegisterPage = () => {
     };
 
     const registerUserEmployer = () => {
+        setIsLoading(true)
         let registerRequest: RegisterEmployerRequest = {accountType: "", companyName: "", email: "", password: ""};
         registerRequest.email = email;
         registerRequest.password = password;
@@ -220,6 +232,7 @@ const RegisterPage = () => {
         registerRequest.accountType = userType;
         AuthenticationService.registerEmployer((registerRequest)).then((response: any) => {
             let registerResponse: RegisterResponse = response.data;
+            setIsLoading(false)
             navigate(`/token/${registerResponse.email}`);
         }).catch((error) => {
             console.error("Error during authentication: " + error.message);
@@ -232,6 +245,7 @@ const RegisterPage = () => {
 
     const logGoogleUser = async (accountType: string) => {
         try {
+            setIsLoading(true)
             const response = await signInWithGooglePopup();
             let request: UserGoogleRequest = {accountType: "", email: "", familyName: "", givenName: "", name: ""};
             if (response.user.email != null && response.user.displayName != null) {
@@ -252,10 +266,9 @@ const RegisterPage = () => {
                     setCandidateInRedux()
                 } else if (response.data.roleName === EMPLOYER_ACCOUNT) {
                     setEmployerInRedux()
-                } else {
-                    console.log("TODO - ADMIN")
                 }
             }).catch((error) => {
+                setIsLoading(false)
                 console.error("Error during authentication: " + error.message);
                 AppToaster.show({
                     message: t('auth_error'),
@@ -421,20 +434,24 @@ const RegisterPage = () => {
                         </FormGroup>
                         {generatePasswordFields()}
                     </form>
-                    <Button onClick={handleRegisterCandidate}
-                            small={true}
-                            className="register-button"
-                    >
-                        {t('register_button')}
-                    </Button>
-                    <div className="text-or">
-                        OR
-                    </div>
-                    <Button className="register-button"
-                            small={true}
-                            onClick={() => logGoogleUser(CANDIDATE_ACCOUNT)}>
-                        {t('sign_google')}
-                    </Button>
+                    {isLoading ? <Spinner className="central-spinner"
+                                          size={20}/> :
+                        <div>
+                            <Button onClick={handleRegisterCandidate}
+                                    small={true}
+                                    className="register-button"
+                            >
+                                {t('register_button')}
+                            </Button>
+                            <div className="text-or">
+                                OR
+                            </div>
+                            <Button className="register-button"
+                                    small={true}
+                                    onClick={() => logGoogleUser(CANDIDATE_ACCOUNT)}>
+                                {t('sign_google')}
+                            </Button>
+                        </div>}
                 </div>
                 <div className="register-go-to-login">
                     <Link to="/login">
@@ -482,20 +499,24 @@ const RegisterPage = () => {
                         </FormGroup>
                         {generatePasswordFields()}
                     </form>
-                    <Button onClick={handleRegisterEmployer}
-                            small={true}
-                            className="register-button"
-                    >
-                        {t('register_button')}
-                    </Button>
-                    <div className="text-or">
-                        OR
-                    </div>
-                    <Button className="register-button"
-                            small={true}
-                            onClick={() => logGoogleUser(EMPLOYER_ACCOUNT)}>
-                        {t('sign_google')}
-                    </Button>
+                    {isLoading ? <Spinner className="central-spinner"
+                                          size={20}/> :
+                        <div>
+                            <Button onClick={handleRegisterEmployer}
+                                    small={true}
+                                    className="register-button"
+                            >
+                                {t('register_button')}
+                            </Button>
+                            <div className="text-or">
+                                OR
+                            </div>
+                            <Button className="register-button"
+                                    small={true}
+                                    onClick={() => logGoogleUser(EMPLOYER_ACCOUNT)}>
+                                {t('sign_google')}
+                            </Button>
+                        </div>}
                 </div>
                 <div className="register-go-to-login">
                     <Link to="/login">

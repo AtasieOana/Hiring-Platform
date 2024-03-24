@@ -4,7 +4,7 @@ import {
     Button, Card, Checkbox, Classes,
     Dialog,
     DialogBody,
-    DialogFooter, Divider, Drawer, DrawerSize,
+    DialogFooter, Divider, Drawer,
     FileInput,
     FormGroup,
     Icon, InputGroup,
