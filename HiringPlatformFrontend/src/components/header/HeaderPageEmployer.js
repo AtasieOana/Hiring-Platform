@@ -22,25 +22,15 @@ const HeaderPageEmployer = () => {
     const hasProfile = useSelector(state => state.profile.hasProfile);
 
     useEffect(() => {
-        // Set the language
-        const urlPath = window.location.pathname;
-        const parts = urlPath.split('/').filter(part => part !== '');
-
-        if (parts.length >= 1 && ["ro", "en"].includes(parts[0])) {
-            const paramLanguage = parts[0];
-            i18n.changeLanguage(paramLanguage);
-        }
-
         // Choose if the employer is redirect to profile creation or not
-        if (isAuthenticated) {
+        if (isAuthenticated && employer && employer.employerId !== "") {
             if(!hasProfile){
-                navigate("/" + i18n.language)
+                navigate("/addProfile")
             }
         } else {
-            window.location.replace('http://localhost:3000/login');
+            navigate("/login")
         }
     }, []);
-
 
     // Change the language
     const changeLanguage = () => {
@@ -128,6 +118,8 @@ const HeaderPageEmployer = () => {
                                           text={t('edit_account')} onClick={handleGoToEditAccount}/>
                                 <MenuItem icon="search-around" color="white" text={t('my_profile')}
                                           onClick={() => navigate('/profile')}/>
+                                <MenuItem icon="helper-management" color="white"
+                                          text={t('contact')} onClick={() => navigate('/contacts')}/>
                                 <MenuItem icon="log-out" color="white" text={t('logout')} onClick={logout}/>
                                 <MenuItem icon={<Icon size={13} icon="eraser" color="white" className="nav-icon"/>}
                                           className="delete-menu-item" color="white"
@@ -156,6 +148,8 @@ const HeaderPageEmployer = () => {
                             <Menu>
                                 <MenuItem icon="annotation" color="white"
                                           text={t('edit_account')} onClick={handleGoToEditAccount}/>
+                                <MenuItem icon="helper-management" color="white"
+                                          text={t('contact')} onClick={() => navigate('/contacts')}/>
                                 <MenuItem icon="log-out" color="white" text={t('logout')} onClick={logout}/>
                                 <MenuItem icon={<Icon size={13} icon="eraser" color="white" className="nav-icon"/>}
                                           className="delete-menu-item" color="white"

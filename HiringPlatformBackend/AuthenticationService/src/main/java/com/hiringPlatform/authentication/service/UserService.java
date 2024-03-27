@@ -7,10 +7,16 @@ import com.hiringPlatform.authentication.model.response.RegisterResponse;
 import com.hiringPlatform.authentication.repository.RoleRepository;
 import com.hiringPlatform.authentication.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
+
+import static com.hiringPlatform.authentication.constant.Constant.SEND_MAIL_URL;
 
 @Service
 public class UserService {
@@ -20,15 +26,18 @@ public class UserService {
     private final RoleRepository roleRepository;
     private final CandidateService candidateService;
     private final EmployerService employerService;
+    private final RestTemplate restTemplate;
 
     @Autowired
     public UserService(UserRepository userRepository, AuthenticationTokenService authenticationTokenService,
-                       RoleRepository roleRepository, CandidateService candidateService, EmployerService employerService) {
+                       RoleRepository roleRepository, CandidateService candidateService,
+                       EmployerService employerService, RestTemplate restTemplate) {
         this.userRepository = userRepository;
         this.authenticationTokenService = authenticationTokenService;
         this.roleRepository = roleRepository;
         this.candidateService = candidateService;
         this.employerService = employerService;
+        this.restTemplate = restTemplate;
     }
 
     /**
@@ -103,7 +112,7 @@ public class UserService {
             if(optionalUser.get().getAccountEnabled() == 1) {
                 BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
                 boolean passwordMatch = bCryptPasswordEncoder.matches(password, optionalUser.get().getPassword());
-                if (!passwordMatch) {
+                if (!passwordMatch || Objects.equals(optionalUser.get().getUserRole().getRoleName(), "ROLE_ADMIN")) {
                     return null;
                 } else {
                     return optionalUser.get();
@@ -287,5 +296,32 @@ public class UserService {
         else{
             return false;
         }
+    }
+
+    public Boolean deleteUserByAdmin(String email, String emailAdmin, String reason) {
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+        if(optionalUser.isPresent()){
+            String emailContent = "<div style='background-color: #f4f4f4; padding: 20px;'>" +
+                    "<p>Hello,</p>" +
+                    "</br><p>We are sorry, but your account from <b>Joblistic</b> platform has been deleted by the administrator <b>" + emailAdmin + "</b>. The reason is:</p>" +
+                    "<p><div style='color: darkorange;'><b>" + reason + "<b></div></p>" +
+                    "<p>If you have any doubts, please contact the administrator. Thank you,</p>" +
+                    "<p><b>Joblistic Team</b></p>" +
+                    "</div>";
+            this.sendMailCall(email, emailContent, "Account deleted in JOBLISTIC");
+            userRepository.delete(optionalUser.get());
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    private void sendMailCall(String email, String content, String subject){
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        SendMailRequest requestEmail = new SendMailRequest(email, content, subject);
+        HttpEntity<SendMailRequest> request = new HttpEntity<>(requestEmail, headers);
+        restTemplate.postForObject(SEND_MAIL_URL, request, String.class);
     }
 }

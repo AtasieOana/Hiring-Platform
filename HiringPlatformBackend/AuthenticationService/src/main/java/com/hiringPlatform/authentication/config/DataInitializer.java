@@ -15,6 +15,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
+import static com.hiringPlatform.authentication.constant.Constant.ADMIN_USER_EMAIL;
+
 @Component
 public class DataInitializer implements CommandLineRunner {
     private final UserRepository userRepository;
@@ -39,7 +41,7 @@ public class DataInitializer implements CommandLineRunner {
         createRoleIfNotExists("ROLE_EMPLOYER", "The employer is the one who seeks to hire a person for a job.");
         createRoleIfNotExists("ROLE_CANDIDATE", "The candidate wants to be employed at a job.");
         // Create default admin user
-        createUserIfNotExists("admin.joblistic@gmail.com", "adminPassword", adminRole);
+        createUserIfNotExists(ADMIN_USER_EMAIL, "adminPassword", adminRole);
         } catch (Exception e) {
             System.out.println("Database not ready");
         }

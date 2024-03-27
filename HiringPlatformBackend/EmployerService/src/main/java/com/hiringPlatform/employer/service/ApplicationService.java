@@ -3,13 +3,22 @@ package com.hiringPlatform.employer.service;
 
 import com.hiringPlatform.employer.model.Contains;
 import com.hiringPlatform.employer.model.Application;
+import com.hiringPlatform.employer.model.Job;
+import com.hiringPlatform.employer.model.Stage;
+import com.hiringPlatform.employer.model.request.SendMailRequest;
 import com.hiringPlatform.employer.model.response.ApplicationResponse;
 import com.hiringPlatform.employer.repository.ApplicationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Optional;
+
+import static com.hiringPlatform.employer.constant.Constant.SEND_MAIL_URL;
 
 @Service
 public class ApplicationService {
@@ -19,15 +28,18 @@ public class ApplicationService {
     private final JobService jobService;
     private final AnswerService answerService;
     private final StageService stageService;
+    private final RestTemplate restTemplate;
 
 
     @Autowired
     public ApplicationService(ApplicationRepository applicationRepository, JobService jobService,
-                              AnswerService answerService, StageService stageService) {
+                              AnswerService answerService, StageService stageService,
+                              RestTemplate restTemplate) {
         this.applicationRepository = applicationRepository;
         this.jobService = jobService;
         this.answerService = answerService;
         this.stageService = stageService;
+        this.restTemplate = restTemplate;
     }
     public List<ApplicationResponse> getAllApplicationsForJob(String jobId){
         return applicationRepository.findApplicationsForJob(jobId).stream().map(this::buildAppResponse).toList();
@@ -40,6 +52,8 @@ public class ApplicationService {
             application.setStatus("refuzat");
             application.setRefusalReason(reason);
             applicationRepository.save(application);
+            buildMailBasedOnStatus(application.getCandidate().getUserDetails().getEmail(),
+                    0, application.getJob(), application.getStage());
             return true;
         }
         return false;
@@ -56,10 +70,14 @@ public class ApplicationService {
                 // The candidate is hired
                 app.setStatus("finalizat");
                 app.setStage(allStageContains.get(stageSize-1).getStage());
+                buildMailBasedOnStatus(app.getCandidate().getUserDetails().getEmail(),
+                        2, app.getJob(), allStageContains.get(stageSize-1).getStage());
             }
             else{
                 // The candidate only go to the next step
                 app.setStage(allStageContains.get(currentStageContains.getStageNr() + 1).getStage());
+                buildMailBasedOnStatus(app.getCandidate().getUserDetails().getEmail(),
+                        1, app.getJob(), allStageContains.get(currentStageContains.getStageNr() + 1).getStage());
             }
             Application savedApp = applicationRepository.save(app);
             return buildAppResponse(savedApp);
@@ -87,5 +105,45 @@ public class ApplicationService {
         applicationResponse.setAllStages(stageService.getAllStagesForJob(a.getJob().getJobId()));
         applicationResponse.setAllAnswers(answerService.getAnswersForJobQuestions(a.getJob().getJobId()));
         return applicationResponse;
+    }
+
+    private void buildMailBasedOnStatus(String email, Integer status, Job job, Stage nextStage){
+        String emailContent = "";
+        String emailTitle = "Update regarding your application on " + job.getEmployer().getCompanyName();
+        if(status == 0){
+             // if 0, then the user is refused
+             emailContent = "<div style='background-color: #f4f4f4; padding: 20px;'>" +
+                    "<p>Hello,</p>" +
+                    "</br><p>This email is related to your application for the job <b>" + job.getTitle() + "</b> in the company <b>" + job.getEmployer().getCompanyName() + "</b> after applying on the <b>Joblistic</b> platform. Unfortunately, your recruitment process has been stopped by the employer. The reason for this can be viewed within the platform on the Applications page.</p>" +
+                    "<p>We wish you good luck in everything you want to achieve,</p>" +
+                    "<p><b>Joblistic Team</b></p>" +
+                    "</div>";
+        }
+        else if(status == 1){
+            // if 1, then the user go to next stage
+            emailContent = "<div style='background-color: #f4f4f4; padding: 20px;'>" +
+                    "<p>Hello,</p>" +
+                    "</br><p>This email is related to your application for the job <b>" + job.getTitle() + "</b> in the company <b>" + job.getEmployer().getCompanyName() + "</b> after applying on the <b>Joblistic</b> platform. We are happy to announce that your recruitment process has progressed to the next stage: <b>" + nextStage.getStageName() + "</b>. You can see more information in the application.</p>" +
+                    "<p>We wish you good luck in the next step,</p>" +
+                    "<p><b>Joblistic Team</b></p>" +
+                    "</div>";
+        } else{
+            // if 2, then the user is employed
+            emailContent = "<div style='background-color: #f4f4f4; padding: 20px;'>" +
+                    "<p>Hello,</p>" +
+                    "</br><p>This email is related to your application for the job <b>" + job.getTitle() + "</b> in the company <b>" + job.getEmployer().getCompanyName() + "</b> after applying on the <b>Joblistic</b> platform. We are happy to announce that your recruitment process has been successfully completed. You can see more details in the application.</p>" +
+                    "<p>Congratulations and all the best,</p>" +
+                    "<p><b>Joblistic Team</b></p>" +
+                    "</div>";
+        }
+        this.sendMailCall(email, emailContent, emailTitle);
+    }
+
+    private void sendMailCall(String email, String content, String subject){
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        SendMailRequest requestEmail = new SendMailRequest(email, content, subject);
+        HttpEntity<SendMailRequest> request = new HttpEntity<>(requestEmail, headers);
+        restTemplate.postForObject(SEND_MAIL_URL, request, String.class);
     }
 }

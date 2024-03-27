@@ -423,7 +423,7 @@
   "status_complains_success": "Starea a fost actualizată.",
   "chart_err": "A apărut o eroare la încercarea de a configura diagrama.",
   "app_status_chart_title": "Aplicații în funcție de status",
-  "app_status_chart_desc": "Grafic care arată procentul de cereri care au fost acceptate, respinse sau sunt în așteptare",
+  "app_status_chart_desc": "Grafic care arată procentul de aplicații a candidaților la firme care au fost acceptate, respinse sau sunt în așteptare",
   "in_curs": "În curs",
   "finalizat": "Finalizat",
   "refuzat": "Refuzat",
@@ -441,5 +441,13 @@
   "app_count_time_title": "Numărul de aplicații adăugate zilnic",
   "app_count_time_desc": "Grafic care arată numărul de aplicații adăugate în fiecare zi",
   "acc_count_time_title": "Numărul de conturi adăugate zilnic după rol",
-  "acc_count_time_desc": "Grafic care arată numărul de conturi adăugate în fiecare zi pe baza rolului"
+  "acc_count_time_desc": "Grafic care arată numărul de conturi adăugate în fiecare zi pe baza rolului",
+  "remove_reason_in": "Motivul nu poate fi gol.",
+  "reason_for_removal": "Motivul ștergerii contului:",
+  "retrieve_admin_err": "A apărut o eroare la preluarea informațiilor de contact despre administratori.",
+  "principal_contact": "Contact principal",
+  "contact_us": "Contactează-ne",
+  "contact_text": "Echipa noastră de administrare este aici pentru a vă ajuta cu orice aveți nevoie. Administratorii pot fi contactați oricând pentru orice întrebare, problemă sau asistență prin e-mail sau chat și vor încerca să răspundă cât de repede pot.",
+  "add_cv": "CV",
+  "profile": "Profil"
 }

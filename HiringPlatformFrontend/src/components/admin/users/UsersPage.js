@@ -14,7 +14,7 @@ import {
     Icon,
     InputGroup,
     Intent,
-    NonIdealState,
+    NonIdealState, TextArea,
     Tooltip
 } from '@blueprintjs/core';
 import HeaderPageAdmin from "../../header/HeaderAdmin";
@@ -50,6 +50,10 @@ const UsersPage = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfPassword, setShowConfPassword] = useState(false);
 
+    const [reason, setReason] = useState("");
+    const [reasonError, setReasonError] = useState(false);
+
+
     useEffect(() => {
         if (admin && admin.adminId !== "") {
             getAllUsers();
@@ -67,6 +71,17 @@ const UsersPage = () => {
                 intent: Intent.DANGER,
             });
         });
+    }
+
+    const validateComplaint = () =>{
+        if(reason.length <= 0){
+            setReasonError(true)
+            return true;
+        }
+        else{
+            setReasonError(false)
+            return false;
+        }
     }
 
     const handleAddUser = () => {
@@ -114,12 +129,19 @@ const UsersPage = () => {
     };
 
     const handleDeleteUser = () => {
-        if (!userToDelete) return;
-        AuthenticationService.deleteUserByAdmin(userToDelete.email)
+        if (!userToDelete || validateComplaint()) return;
+        let request = {
+            emailUser: userToDelete.email,
+            emailAdmin: admin.userDetails.email,
+            reason: reason,
+        }
+        AuthenticationService.deleteUserByAdmin(request)
             .then(() => {
                 getAllUsers()
                 setIsDeleteModalOpen(false);
-                setUserToDelete(null)
+                setReason("");
+                setReasonError(false);
+                setUserToDelete(null);
                 AppToaster.show({
                     message: t('delete_admin_success'),
                     intent: Intent.SUCCESS,
@@ -254,11 +276,31 @@ const UsersPage = () => {
         >
             <div className={Classes.DIALOG_BODY}>
                 <p>{t('delete_conf')}</p>
+                {
+                    userToDelete?.userRole !== ADMIN_ACCOUNT &&
+                    <FormGroup
+                        intent={reasonError ? Intent.DANGER : Intent.NONE}
+                        helperText={reasonError ? t('remove_reason_in') : ""}
+                        label={t('reason_for_removal')}
+                    >
+                        <TextArea
+                            value={reason}
+                            onChange={(e) => setReason(e.target.value)}
+                            rows={3}
+                            style={{width: "100%", resize: "none"}}
+                        />
+                    </FormGroup>
+                }
             </div>
             <div className={Classes.DIALOG_FOOTER}>
                 <div className={Classes.DIALOG_FOOTER_ACTIONS}>
                     <Button intent="danger" onClick={userToDelete?.userRole === ADMIN_ACCOUNT ? handleDeleteAdmin : handleDeleteUser}>{t('delete')}</Button>
-                    <Button onClick={() => setIsDeleteModalOpen(false)}>{t('cancel_person')}</Button>
+                    <Button onClick={() => {
+                        setIsDeleteModalOpen(false);
+                        setReason("")
+                        setReasonError(false)
+                        }
+                    }>{t('cancel_person')}</Button>
                 </div>
             </div>
         </Dialog>

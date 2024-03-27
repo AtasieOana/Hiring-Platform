@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import './Header.css';
 import {Button, Dialog, DialogBody, DialogFooter, Icon, Intent, Menu, MenuItem, Popover} from '@blueprintjs/core';
@@ -19,13 +19,18 @@ const HeaderPageAdmin = () => {
     const isSmallScreen = useMediaQuery("(max-width: 700px)");
     const dispatch = useDispatch();
 
+    useEffect(() => {
+        if(!admin || admin.adminId === ""){
+            navigate("/login")
+        }
+    }, []);
+
     // Change the language
     const changeLanguage = () => {
         let oldLanguage = i18n.language;
         const newLanguage = oldLanguage === 'ro' ? 'en' : 'ro';
         i18n.changeLanguage(newLanguage);
     };
-
 
     // Logout
     const logout = () => {

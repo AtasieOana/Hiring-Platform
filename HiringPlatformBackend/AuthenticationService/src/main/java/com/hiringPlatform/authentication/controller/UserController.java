@@ -163,9 +163,9 @@ public class UserController {
      * Method used for deleting an account for a user by an admin
      * @return boolean
      */
-    @DeleteMapping("/deleteUserByAdmin/{email}")
-    public ResponseEntity<Boolean> deleteUserByAdmin(@PathVariable String email) {
-        Boolean data = userService.deleteUser(email);
+    @PostMapping("/deleteUserByAdmin")
+    public ResponseEntity<Boolean> deleteUserByAdmin(@RequestBody DeleteUserByAdminRequest request) {
+        Boolean data = userService.deleteUserByAdmin(request.getEmailUser(), request.getEmailAdmin(), request.getReason());
         return ResponseEntity.ok(data);
     }
 }

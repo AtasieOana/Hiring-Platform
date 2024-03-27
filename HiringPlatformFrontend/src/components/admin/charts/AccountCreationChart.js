@@ -36,21 +36,18 @@ const AccountCreationChart = () => {
 
     const processData = (dataSend) => {
         const roles = Object.keys(dataSend);
-        const allDates = roles.reduce((accumulator, role) => {
-            dataSend[role].forEach(item => {
-                if (!accumulator.includes(item.date)) {
-                    accumulator.push(item.date);
-                }
-            });
-            return accumulator;
-        }, []).sort();
+        let distinctDates = [];
+        roles.forEach(role => {
+            const dates = Object.keys(dataSend[role]);
+            distinctDates = distinctDates.concat(dates.filter(date => !distinctDates.includes(date)));
+        });
+        let allDates = distinctDates.sort()
         let formatted =  {
             labels: allDates,
             datasets: roles.map(role => ({
                 label: role,
                 data: allDates.map(date => {
-                    const roleData = dataSend[role].find(item => item.date === date);
-                    return roleData ? roleData.count : 0;
+                    return dataSend[role][date] !== undefined ? dataSend[role][date] : 0;
                 }),
                 fill: false,
                 borderColor: roleColors[role],

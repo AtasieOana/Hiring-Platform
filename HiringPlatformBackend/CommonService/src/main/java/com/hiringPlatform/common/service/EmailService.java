@@ -1,5 +1,6 @@
-package com.hiringPlatform.authentication.service;
+package com.hiringPlatform.common.service;
 
+import com.hiringPlatform.common.exception.EmailNotSendException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -52,7 +53,7 @@ public class EmailService {
             t.close();
             System.out.println("Mail send successfully!");
         } catch (MessagingException ex) {
-            ex.printStackTrace();
+            throw new EmailNotSendException("Error when sending the email");
         }
     }
 }

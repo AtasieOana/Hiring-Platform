@@ -99,7 +99,7 @@ const ApplicationsTimelineChart = () => {
     }
 
     return (
-        <div className="activity-chart-long">
+        <div className="activity-chart-long chart-background chart-background-small">
             <div className="activity-chart-title">{t('app_count_time_title')}</div>
             <div className="activity-chart-desc">{t('app_count_time_desc')}</div>
             <div className="activity-chart-display-container">

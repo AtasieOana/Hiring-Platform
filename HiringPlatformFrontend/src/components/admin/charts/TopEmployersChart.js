@@ -84,7 +84,7 @@ const TopEmployersChart = () => {
     };
 
     return (
-        <div className="activity-chart-long">
+        <div className="activity-chart-long chart-background">
             <div className="activity-chart-title">{t('top_employer_title')}</div>
             <div className="activity-chart-desc">{t('top_employer_title_desc')}</div>
             <div className="activity-chart-display-container">

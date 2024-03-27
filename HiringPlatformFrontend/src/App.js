@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {BrowserRouter as Router, Route, Routes, useLocation, useNavigate} from 'react-router-dom';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {I18nextProvider} from 'react-i18next';
 import i18n from "./util/i18n";
 import NotFoundPage from "./components/common/notFound/NotFoundPage";
@@ -22,6 +22,11 @@ import LoginAdminPage from "./components/auth/LoginAdminPage";
 import UsersPage from "./components/admin/users/UsersPage";
 import ComplainsPage from "./components/admin/complains/ComplainsPage";
 import ActivitiesPage from "./components/admin/charts/ActivitiesPage";
+import {setAuthData} from "./redux/actions/authActions";
+import {setAdminData} from "./redux/actions/adminActions";
+import ContactPage from "./components/contact/ContactPage";
+import {setCvActionData} from "./redux/actions/cvActions";
+import {setProfileActionData} from "./redux/actions/profileActions";
 
 
 const Root = () => {
@@ -36,12 +41,25 @@ const Root = () => {
     const employer = useSelector(state => state.auth.employer);
     const hasProfile = useSelector(state => state.profile.hasProfile);
     const isAuthenticatedAdmin = useSelector(state => state.admin.isAuthenticated);
+    const dispatch = useDispatch();
 
     useEffect(() => {
+        if(location.pathname === '/login'
+            || location.pathname === '/loginAdmin'
+            || location.pathname === '/register'
+            || location.pathname === '/forgotPassword'
+            || location.pathname.includes("/resetPassword/")
+            || location.pathname.includes('/token/')
+            || location.pathname ==='/'){
+            dispatch(setAuthData(false, null, null, ""));
+            dispatch(setAdminData(false, null, ""));
+            dispatch(setCvActionData(false))
+            dispatch(setProfileActionData(false))
+        }
         // Choose if the user is login or not
        if (isAuthenticated || isAuthenticatedAdmin) {
             if(candidate && candidate.candidateId !== ""){
-                if(!hasCv && location.pathname !== '/addCv'){
+                if(!hasCv && (location.pathname !== '/addCv' ||  location.pathname !== '/contacts')){
                     navigate("/addCv")
                 }
                 else if(hasCv && location.pathname === '/addCv'){
@@ -71,6 +89,7 @@ const Root = () => {
 
     return (
         <Routes>
+            <Route path="/contacts" element={<ContactPage/>}/>
             <Route path="/activities" element={<ActivitiesPage/>}/>
             <Route path="/complains" element={<ComplainsPage/>}/>
             <Route path="/allUsers" element={<UsersPage/>}/>

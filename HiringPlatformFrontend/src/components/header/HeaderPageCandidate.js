@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import './Header.css';
 import {Button, Dialog, DialogBody, DialogFooter, Icon, Intent, Menu, MenuItem, Popover} from '@blueprintjs/core';
@@ -18,6 +18,19 @@ const HeaderPageCandidate = () => {
     const isSmallScreen = useMediaQuery("(max-width: 700px)");
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
     const dispatch = useDispatch();
+    const hasCv = useSelector(state => state.cv.hasCv);
+    const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+
+    useEffect(() => {
+        // Choose if the candidate is redirect to CV creation or not
+        if (isAuthenticated && candidate && candidate.candidateId !== "") {
+            if(!hasCv){
+                navigate("/addCv")
+            }
+        } else {
+            navigate("/login")
+        }
+    }, []);
 
     // Change the language
     const changeLanguage = () => {
@@ -105,6 +118,8 @@ const HeaderPageCandidate = () => {
                                           text={t('edit_account')} onClick={handleGoToEditAccount}/>
                                 <MenuItem icon="search-around" color="white" text={t('jobs')}
                                           onClick={() => navigate('/allJobs')}/>
+                                <MenuItem icon="helper-management" color="white"
+                                          text={t('contact')} onClick={() => navigate('/contacts')}/>
                                 <MenuItem icon="paperclip" color="white" text={t('my_apps')}
                                           onClick={() => navigate('/applications')}/>
                                 <MenuItem icon="log-out" color="white" text={t('logout')} onClick={logout}/>
@@ -138,6 +153,8 @@ const HeaderPageCandidate = () => {
                             <Menu>
                                 <MenuItem icon="annotation" color="white"
                                           text={t('edit_account')} onClick={handleGoToEditAccount}/>
+                                <MenuItem icon="helper-management" color="white"
+                                          text={t('contact')} onClick={() => navigate('/contacts')}/>
                                 <MenuItem icon="log-out" color="white" text={t('logout')} onClick={logout}/>
                                 <MenuItem icon={<Icon size={13} icon="eraser" color="white" className="nav-icon"/>}
                                           className="delete-menu-item" color="white"

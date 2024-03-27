@@ -3,34 +3,42 @@ package com.hiringPlatform.candidate.service;
 import com.hiringPlatform.candidate.model.*;
 import com.hiringPlatform.candidate.model.response.ApplicationResponse;
 import com.hiringPlatform.candidate.repository.ApplicationRepository;
-import com.hiringPlatform.candidate.repository.CVRepository;
-import com.hiringPlatform.candidate.repository.JobRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+import com.hiringPlatform.candidate.model.request.SendMailRequest;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import static com.hiringPlatform.candidate.constant.Constant.SEND_MAIL_URL;
+
 @Service
 public class ApplicationService {
 
     private final ApplicationRepository applicationRepository;
-
     private final JobService jobService;
     private final CVService cvService;
     private final CandidateService candidateService;
     private final StageService stageService;
+    private final RestTemplate restTemplate;
 
 
     @Autowired
     public ApplicationService(ApplicationRepository applicationRepository, JobService jobService,
-                              CandidateService candidateService, CVService cvService, StageService stageService) {
+                              CandidateService candidateService,
+                              CVService cvService, StageService stageService,
+                              RestTemplate restTemplate) {
         this.applicationRepository = applicationRepository;
         this.jobService = jobService;
         this.cvService = cvService;
         this.candidateService = candidateService;
         this.stageService = stageService;
+        this.restTemplate = restTemplate;
     }
 
     public Application applyToJob(String jobId, String candidateId, String cvId){
@@ -83,6 +91,8 @@ public class ApplicationService {
             application.setStatus("refuzat");
             application.setRefusalReason(reason);
             applicationRepository.save(application);
+            buildMail(application.getJob().getEmployer().getUserDetails().getEmail(),
+                    application.getJob(), application.getCandidate());
             return true;
         }
         return false;
@@ -91,5 +101,26 @@ public class ApplicationService {
     public Boolean checkIfCandidateAppliedToJob(String jobId, String candidateId){
         Optional<Application> applicationOptional = applicationRepository.findByApplicationId(jobId, candidateId);
         return applicationOptional.isPresent();
+    }
+
+    private void buildMail(String email, Job job, Candidate candidate){
+        String emailTitle = "Update regarding an application on " + job.getTitle() + " job";
+        String emailContent = "<div style='background-color: #f4f4f4; padding: 20px;'>" +
+                "<p>Hello,</p>" +
+                "</br><p>This email is related to the application of the candidate <b>" + candidate.getFirstname() + " " +
+                candidate.getLastname() + "</b> for the job <b>" + job.getTitle() + "</b> in your company <b>" + job.getEmployer().getCompanyName() + "</b> after applying on the <b>Joblistic</b> platform. Unfortunately, your recruitment process has been stopped by the candidate. The reason for this can be viewed within the platform on the Applications page for this job.</p>" +
+                "<p>We wish you luck with the other applicants,</p>" +
+                "<p><b>Joblistic Team</b></p>" +
+                "</div>";
+
+        this.sendMailCall(email, emailContent, emailTitle);
+    }
+
+    private void sendMailCall(String email, String content, String subject){
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        SendMailRequest requestEmail = new SendMailRequest(email, content, subject);
+        HttpEntity<SendMailRequest> request = new HttpEntity<>(requestEmail, headers);
+        restTemplate.postForObject(SEND_MAIL_URL, request, String.class);
     }
 }

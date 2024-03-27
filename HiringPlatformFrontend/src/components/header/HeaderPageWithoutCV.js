@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import './Header.css';
 import {Icon, Intent, Menu, MenuItem, Popover} from '@blueprintjs/core';
@@ -15,6 +15,12 @@ const HeaderWithoutCV = () => {
     const candidate = useSelector(state => state.auth.candidate);
     const navigate = useNavigate();
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        if(!candidate || candidate.candidateId === ""){
+            navigate("/login")
+        }
+    }, []);
 
     // Change the language
     const changeLanguage = () => {
@@ -50,6 +56,12 @@ const HeaderWithoutCV = () => {
             <div className="navigation">
                 <Link className="nav-item" to="#" isActive={false} onClick={changeLanguage}>
                     <Icon size={13} icon="translate" color="white" className="nav-icon"/> En/Ro
+                </Link>
+                <Link to="/contacts" className="nav-item-auth">
+                    <Icon size={13} icon="helper-management" color="white" className="nav-icon-auth"/> {t('contact')}
+                </Link>
+                <Link to="/addCv" className="nav-item-auth">
+                    <Icon size={13} icon="document" color="white" className="nav-icon-auth"/> {t('add_cv')}
                 </Link>
                 <Popover
                     interactionKind="hover"

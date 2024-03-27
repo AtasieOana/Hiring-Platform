@@ -54,6 +54,7 @@ public class SecurityConfig   {
                 .antMatchers("/getTopEmployersWithApplications").hasAnyAuthority("ROLE_ADMIN")
                 .antMatchers("/getJobsExperiencePercentage").hasAnyAuthority("ROLE_ADMIN")
                 .antMatchers("/getApplicationsPerDate").hasAnyAuthority("ROLE_ADMIN")
+                .antMatchers("/getAdminList").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(accessDeniedHandler())

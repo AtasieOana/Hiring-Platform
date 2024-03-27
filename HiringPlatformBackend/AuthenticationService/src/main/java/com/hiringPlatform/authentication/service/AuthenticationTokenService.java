@@ -2,9 +2,12 @@ package com.hiringPlatform.authentication.service;
 
 import com.hiringPlatform.authentication.model.AuthenticationToken;
 import com.hiringPlatform.authentication.model.User;
+import com.hiringPlatform.authentication.model.request.SendMailRequest;
 import com.hiringPlatform.authentication.repository.AuthenticationTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.Date;
 import java.util.Objects;
@@ -12,16 +15,19 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
+import static com.hiringPlatform.authentication.constant.Constant.SEND_MAIL_URL;
+
 @Service
 public class AuthenticationTokenService {
 
     private final AuthenticationTokenRepository authenticationTokenRepository;
-    private final EmailService emailService;
+    private final RestTemplate restTemplate;
 
     @Autowired
-    public AuthenticationTokenService(AuthenticationTokenRepository authenticationTokenRepository, EmailService emailService) {
+    public AuthenticationTokenService(AuthenticationTokenRepository authenticationTokenRepository,
+                                      RestTemplate restTemplate) {
         this.authenticationTokenRepository = authenticationTokenRepository;
-        this.emailService = emailService;
+        this.restTemplate = restTemplate;
     }
 
     /**
@@ -37,7 +43,7 @@ public class AuthenticationTokenService {
                     "<p>Thank you,</p>" +
                     "<p><b>Joblistic Team</b></p>" +
                     "</div>";
-            this.emailService.sendEmailToUserAsync(user.getEmail(), emailContent, "Authentication to JOBLISTIC");
+            this.sendMailCall(user.getEmail(), emailContent, "Authentication to JOBLISTIC");
         }
         else{
             Optional<AuthenticationToken> authenticationTokenOptional = authenticationTokenRepository.findByUserEmail(user.getEmail());
@@ -50,7 +56,7 @@ public class AuthenticationTokenService {
                             "<p>Thank you,</p>" +
                             "<p><b>Joblistic Team</b></p>" +
                             "</div>";
-                    this.emailService.sendEmailToUserAsync(user.getEmail(), emailContent, "Authentication to JOBLISTIC");
+                    this.sendMailCall(user.getEmail(), emailContent, "Authentication to JOBLISTIC");
                 }
                 // token is invalid, another token is needed
                 else {
@@ -63,7 +69,7 @@ public class AuthenticationTokenService {
                             "<p>Thank you,</p>" +
                             "<p> <b>Joblistic Team</b></p>" +
                             "</div>";
-                    this.emailService.sendEmailToUserAsync(user.getEmail(), emailContent, "Authentication to JOBLISTIC");
+                    this.sendMailCall(user.getEmail(), emailContent, "Authentication to JOBLISTIC");
                 }
             }
             else{
@@ -75,7 +81,7 @@ public class AuthenticationTokenService {
                         "<p>Thank you,</p>" +
                         "<p> <b>Joblistic Team</b></p>" +
                         "</div>";
-                this.emailService.sendEmailToUserAsync(user.getEmail(), emailContent, "Authentication to JOBLISTIC");
+                this.sendMailCall(user.getEmail(), emailContent, "Authentication to JOBLISTIC");
             }
         }
     }
@@ -98,7 +104,7 @@ public class AuthenticationTokenService {
                             "<p>Thank you,</p>" +
                             "<p><b>Joblistic Team</b></p>" +
                             "</div>";
-                    this.emailService.sendEmailToUserAsync(user.getEmail(), emailContent, "Authentication to JOBLISTIC");
+                    this.sendMailCall(user.getEmail(), emailContent, "Reset password on JOBLISTIC");
                 }
                 // token is invalid, another token is needed
                 else {
@@ -111,7 +117,7 @@ public class AuthenticationTokenService {
                             "<p>Thank you,</p>" +
                             "<p><b>Joblistic Team</b></p>" +
                             "</div>";
-                    this.emailService.sendEmailToUserAsync(email, emailContent, "Reset password on JOBLISTIC");
+                    this.sendMailCall(email, emailContent, "Reset password on JOBLISTIC");
                 }
             }
             else{
@@ -123,7 +129,7 @@ public class AuthenticationTokenService {
                         "<p>Thank you,</p>" +
                         "<p><b>Joblistic Team</b></p>" +
                         "</div>";
-                this.emailService.sendEmailToUserAsync(email, emailContent, "Reset password on JOBLISTIC");
+                this.sendMailCall(email, emailContent, "Reset password on JOBLISTIC");
             }
         }
         else{
@@ -133,14 +139,9 @@ public class AuthenticationTokenService {
                     "<p>Thank you,</p>" +
                     "<p><b>Joblistic Team</b></p>" +
                     "</div>";
-            this.emailService.sendEmailToUserAsync(email, emailContent, "Reset password on JOBLISTIC");
+            this.sendMailCall(email, emailContent, "Reset password on JOBLISTIC");
         }
-
-
-
-
     }
-
 
     /**
      * Method used for generating token
@@ -175,5 +176,13 @@ public class AuthenticationTokenService {
     public void deleteToken(String email){
         Optional<AuthenticationToken> authenticationTokenOptional = authenticationTokenRepository.findByUserEmail(email);
         authenticationTokenOptional.ifPresent(authenticationTokenRepository::delete);
+    }
+
+    private void sendMailCall(String email, String content, String subject){
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        SendMailRequest requestEmail = new SendMailRequest(email, content, subject);
+        HttpEntity<SendMailRequest> request = new HttpEntity<>(requestEmail, headers);
+        restTemplate.postForObject(SEND_MAIL_URL, request, String.class);
     }
 }

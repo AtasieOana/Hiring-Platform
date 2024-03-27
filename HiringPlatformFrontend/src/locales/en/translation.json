@@ -423,8 +423,7 @@
   "status_complains_success": "The status was updated.",
   "chart_err": "An error occurred while trying to setup the chart.",
   "app_status_chart_title": "Applications by status",
-  "app_status_chart_desc": "Graph showing the percentage of applications that have been accepted, rejected, or are pending",
-  "in_curs": "Pending",
+  "app_status_chart_desc": "Chart showing the percentage of candidate applications to companies that have been accepted, rejected or are pending",  "in_curs": "Pending",
   "finalizat": "Finished",
   "refuzat": "Refused",
   "app_percentage": "Percentage of application",
@@ -441,5 +440,13 @@
   "app_count_time_title": "Number of applications added daily",
   "app_count_time_desc": "Graph showing the number of applications added every day",
   "acc_count_time_title": "Number of accounts added daily by role",
-  "acc_count_time_desc": "Graph showing the number of accounts added every day based on role"
+  "acc_count_time_desc": "Graph showing the number of accounts added every day based on role",
+  "remove_reason_in": "The reason can't be empty.",
+  "reason_for_removal": "Reason for account deletion:",
+  "retrieve_admin_err": "An error occurred while retrieve the contact info about the admins.",
+  "principal_contact": "Principal contact",
+  "contact_us": "Contact us",
+  "contact_text": "Our admin team is here to help you with anything you need. They can be reached anytime for any question, issue or support via email or chat and they will try to answer as quickly as they can.",
+  "add_cv": "CV",
+  "profile": "Profile"
 }

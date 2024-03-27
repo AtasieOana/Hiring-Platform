@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -35,7 +36,7 @@ public class AdminService {
         if(optionalUser.isPresent()) {
             BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
             boolean passwordMatch = bCryptPasswordEncoder.matches(password, optionalUser.get().getUserDetails().getPassword());
-            if (!passwordMatch) {
+            if (!passwordMatch || !Objects.equals(optionalUser.get().getUserDetails().getUserRole().getRoleName(), "ROLE_ADMIN")) {
                 return null;
             } else {
                 return optionalUser.get();

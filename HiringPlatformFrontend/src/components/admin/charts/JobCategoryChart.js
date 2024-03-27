@@ -73,7 +73,7 @@ const JobCategoryChart = () => {
     }
 
     return (
-        <div className="activity-chart-long">
+        <div className="activity-chart-long chart-background-small">
             <div className="activity-chart-title">{t('job_distribution_title')}</div>
             <div className="activity-chart-desc">{t('job_distribution_desc')}</div>
             <div className="activity-chart-display-container">

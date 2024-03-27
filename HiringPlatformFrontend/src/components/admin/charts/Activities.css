@@ -3,31 +3,40 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-start;
-    margin: 25px 5vw;
+    margin: 0 5vw 0;
+}
+
+
+.chart-group:last-of-type{
+    margin-bottom: 25px;
+}
+
+.chart-group:nth-of-type(2){
+    margin-top: 25px;
+}
+
+.chart-background {
+    background-color: rgba(255, 120, 53, 0.1);
 }
 
 .activity-chart{
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    align-items: center;
     width: 45vw;
     border: 1px solid darkgrey;
     padding: 10px;
     height: 60vh;
-    margin: 10px;
 }
 
 .activity-chart-long{
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    align-items: center;
     width: 45vw;
     border: 1px solid darkgrey;
     padding: 10px;
     height: 50vh;
-    margin: 10px;
 }
 
 
@@ -35,13 +44,12 @@
     font-weight: 700;
     font-size: 20px;
     margin-bottom: 5px;
-    text-align: center;
 }
 
 .activity-chart-desc{
     font-style: italic;
     margin-bottom: 5px;
-    text-align: center;
+    text-align: justify;
 }
 
 .activity-chart-display-container{
@@ -65,8 +73,9 @@
 }
 
 @media (max-width: 1200px) {
-    .chart-group{
-        margin: 25px 2vw;
+    .chart-group:nth-of-type(2){
+        margin-left: 6vw;
+        margin-right: 5vw;
     }
 }
 
@@ -76,7 +85,15 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        margin: 25px 5vw;
+        margin: 0 5vw;
+    }
+
+    .chart-background{
+        background-color: white;
+    }
+
+    .chart-background-small {
+        background-color: rgba(255, 120, 53, 0.1) !important;
     }
 
     .activity-chart{
@@ -103,7 +120,15 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        margin: 25px 5vw;
+        margin: 0 5vw;
+    }
+
+    .chart-background{
+        background-color: white;
+    }
+
+    .chart-background-small {
+        background-color: rgba(255, 120, 53, 0.1) !important;
     }
 
     .activity-chart{

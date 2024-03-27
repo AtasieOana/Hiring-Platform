@@ -1,5 +1,6 @@
 import apiAuth from "../util/apiAuth";
 import apiAdmin from "../util/apiAdmin";
+import apiAdminWithoutAdmin from "../util/apiAdminWithoutAdmin";
 
 class AdminService {
 
@@ -25,6 +26,10 @@ class AdminService {
 
     async getAdmin(adminId) {
         return apiAdmin.get("/getAdmin/" + adminId);
+    }
+
+    async getAllAdmins() {
+        return apiAdminWithoutAdmin.get("/getAdminList");
     }
 }
 

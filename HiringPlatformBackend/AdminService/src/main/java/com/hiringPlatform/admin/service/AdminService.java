@@ -2,11 +2,13 @@ package com.hiringPlatform.admin.service;
 
 import com.hiringPlatform.admin.model.Admin;
 import com.hiringPlatform.admin.model.User;
+import com.hiringPlatform.admin.model.response.AdminListResponse;
 import com.hiringPlatform.admin.model.response.AdminResponse;
 import com.hiringPlatform.admin.repository.AdminRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -76,6 +78,18 @@ public class AdminService {
             return adminResponse;
         }
         return null;
+    }
+
+    public List<AdminListResponse> getAdminsList(){
+        List<AdminListResponse> adminList = new ArrayList<>();
+        List<Admin> admins = adminRepository.getAllAdminsInOrder();
+        admins.forEach(admin -> {
+            AdminListResponse adminListResponse = new AdminListResponse();
+            adminListResponse.setUsername(admin.getUsername());
+            adminListResponse.setEmail(admin.getUserDetails().getEmail());
+            adminList.add(adminListResponse);
+        });
+        return adminList;
     }
 
 }

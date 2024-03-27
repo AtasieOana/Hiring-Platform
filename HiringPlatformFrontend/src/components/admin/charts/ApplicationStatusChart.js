@@ -80,7 +80,7 @@ const ApplicationStatusChart = () => {
     }
 
     return (
-        <div className="activity-chart">
+        <div className="activity-chart chart-background chart-background-small">
             <div className="activity-chart-title">{t('app_status_chart_title')}</div>
             <div className="activity-chart-desc">{t('app_status_chart_desc')}</div>
             <div className="activity-chart-display-container">
