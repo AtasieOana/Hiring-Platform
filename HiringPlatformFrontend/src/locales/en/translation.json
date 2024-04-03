@@ -448,5 +448,6 @@
   "contact_us": "Contact us",
   "contact_text": "Our admin team is here to help you with anything you need. They can be reached anytime for any question, issue or support via email or chat and they will try to answer as quickly as they can.",
   "add_cv": "CV",
-  "profile": "Profile"
+  "profile": "Profile",
+  "chat_err": "An error occurred while trying to setup the chat"
 }

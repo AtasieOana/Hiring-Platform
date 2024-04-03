@@ -1,5 +1,6 @@
 import apiCandidate from "../util/apiCandidate";
 import apiEmployer from "../util/apiEmployer";
+import apiCommon from "../util/apiCommon";
 
 class JobService {
 
@@ -33,6 +34,10 @@ class JobService {
 
     async getStagesForJob(jobId) {
         return apiEmployer.get("/getStagesForJob/" + jobId);
+    }
+
+    async getRecommendedJobs(candidateId) {
+        return apiCommon.get("/getRecommendedJobs/" + candidateId);
     }
 }
 

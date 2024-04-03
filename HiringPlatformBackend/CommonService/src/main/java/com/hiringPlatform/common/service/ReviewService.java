@@ -7,7 +7,7 @@ import com.hiringPlatform.common.model.Review;
 import com.hiringPlatform.common.model.User;
 import com.hiringPlatform.common.model.request.AddReviewRequest;
 import com.hiringPlatform.common.model.request.EditReviewRequest;
-import com.hiringPlatform.common.model.request.ReviewResponse;
+import com.hiringPlatform.common.model.response.ReviewResponse;
 import com.hiringPlatform.common.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -2,7 +2,7 @@ package com.hiringPlatform.common.controller;
 
 import com.hiringPlatform.common.model.request.AddReviewRequest;
 import com.hiringPlatform.common.model.request.EditReviewRequest;
-import com.hiringPlatform.common.model.request.ReviewResponse;
+import com.hiringPlatform.common.model.response.ReviewResponse;
 import com.hiringPlatform.common.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

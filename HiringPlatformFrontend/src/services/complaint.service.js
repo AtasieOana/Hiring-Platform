@@ -10,7 +10,6 @@ class ComplaintService {
         return apiAdmin.post("/addComplaint", request);
     }
 
-
     async getAllComplaints() {
         return apiAdmin.get("/getAllComplaints");
     }

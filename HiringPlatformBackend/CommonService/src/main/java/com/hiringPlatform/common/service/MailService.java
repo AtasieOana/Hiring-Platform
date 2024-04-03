@@ -12,7 +12,7 @@ import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
 @Service
-public class EmailService {
+public class MailService {
 
     @Value("${spring.mail.host}")
     String host;

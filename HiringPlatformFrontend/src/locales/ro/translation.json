@@ -449,5 +449,6 @@
   "contact_us": "Contactează-ne",
   "contact_text": "Echipa noastră de administrare este aici pentru a vă ajuta cu orice aveți nevoie. Administratorii pot fi contactați oricând pentru orice întrebare, problemă sau asistență prin e-mail sau chat și vor încerca să răspundă cât de repede pot.",
   "add_cv": "CV",
-  "profile": "Profil"
+  "profile": "Profil",
+  "chat_err": "A apărut o eroare în timpul încercării de a configura chat-ul"
 }

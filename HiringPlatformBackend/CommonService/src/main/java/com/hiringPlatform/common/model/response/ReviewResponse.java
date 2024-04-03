@@ -1,4 +1,4 @@
-package com.hiringPlatform.common.model.request;
+package com.hiringPlatform.common.model.response;
 
 import lombok.*;
 

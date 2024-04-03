@@ -92,19 +92,15 @@ const JobView = () => {
      * Method that verify if a job is opened
      */
     useEffect(() => {
-        console.log("anbsaj")
         if(openedJob.title === ""){
             navigate("/allJobs")
         }
         else{
             if(employer && employer.employerId !== ""){
                 setUsedEmployer(employer)
-
                 getProfile();
-                console.log(employer)
             }
             else{
-                console.log("aicii")
                 setIsLoading(true)
                 getCvsForCandidate();
                 getApplicationForCandidate()

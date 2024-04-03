@@ -123,6 +123,7 @@ const LoginPage = () => {
                 request.name = response.user.displayName;
                 request.accountType = accountType;
             }
+            setIsLoading(true)
             AuthenticationService.loginGoogle((request)).then((response: any) => {
                 if (response.data.token === "") {
                     setLoginInvalid(true)
@@ -132,11 +133,10 @@ const LoginPage = () => {
                         setCandidateInRedux()
                     } else if (response.data.roleName === EMPLOYER_ACCOUNT) {
                         setEmployerInRedux()
-                    } else {
-                        console.log("TODO - ADMIN")
                     }
                 }
             }).catch((error) => {
+                setIsLoading(false)
                 console.error("Error during authentication: " + error.message);
                 AppToaster.show({
                     message: t('login_error'),

@@ -1,8 +1,7 @@
 package com.hiringPlatform.common.controller;
 
-import com.hiringPlatform.common.model.request.ReviewResponse;
 import com.hiringPlatform.common.model.request.SendMailRequest;
-import com.hiringPlatform.common.service.EmailService;
+import com.hiringPlatform.common.service.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -12,12 +11,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @CrossOrigin(origins = {"http://localhost:3000"})
-public class EmailController {
+public class MailController {
 
-    private final EmailService emailService;
+    private final MailService emailService;
 
     @Autowired
-    public EmailController(EmailService emailService){
+    public MailController(MailService emailService){
         this.emailService = emailService;
     }
 

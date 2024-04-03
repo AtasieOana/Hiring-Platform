@@ -86,6 +86,7 @@ const JobsPage = () => {
     // States
     const [filteredJobs, setFilteredJobs] = useState([]);
     const [jobs, setJobs] = useState([]);
+    const [recommendedJobs, setRecommendedJobs] = useState([]);
     const [filters, setFilters] = useState({
         contractType: possibleContractType,
         employmentRegime: possibleRegimeEmp,
@@ -204,6 +205,18 @@ const JobsPage = () => {
                 setRegions(regionsResponse)
                 setCountries(countriesResponse)
                 setFilteredJobs(jobsResponse)
+                JobService.getRecommendedJobs(candidate.candidateId)
+                    .then((responseRecommended) => {
+                        setRecommendedJobs(responseRecommended.data)
+                        console.log(responseRecommended.data)
+                    })
+                    .catch(error => {
+                        console.error('Error: ', error.message);
+                        AppToaster.show({
+                            message: t('job_list_err'),
+                            intent: Intent.DANGER,
+                        });
+                    });
             })
             .catch(error => {
                 console.error('Error: ', error.message);
