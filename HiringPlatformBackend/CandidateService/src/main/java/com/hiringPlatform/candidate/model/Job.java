@@ -47,6 +47,9 @@ public class Job {
     @Column(name = "experienta")
     private String experience;
 
+    @Column(name = "status")
+    private String status;
+
     @ManyToOne(cascade={CascadeType.MERGE}, fetch=FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name ="id_oras")

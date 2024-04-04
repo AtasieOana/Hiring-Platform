@@ -29,15 +29,17 @@ public class JobService {
 
     private final QuestionService questionService;
 
+    private final ApplicationService applicationService;
 
     @Autowired
     public JobService(JobRepository jobRepository, EmployerRepository employerRepository, AddressService addressService,
-                      StageService stageService, QuestionService questionService) {
+                      StageService stageService, QuestionService questionService, ApplicationService applicationService) {
         this.jobRepository = jobRepository;
         this.employerRepository = employerRepository;
         this.addressService = addressService;
         this.stageService = stageService;
         this.questionService = questionService;
+        this.applicationService = applicationService;
     }
 
     /**
@@ -76,15 +78,31 @@ public class JobService {
      * Method used for deleting a job
      * @return the status of the deleting
      */
-    public Boolean deleteJob(String jobId){
+    public Boolean closeJob(String jobId){
         Optional<Job> jobOptional = jobRepository.findById(jobId);
         if(jobOptional.isPresent()){
-            jobRepository.delete(jobOptional.get());
+            Job updatedJob = jobOptional.get();
+            updatedJob.setStatus("inchis");
+            jobRepository.save(updatedJob);
+            applicationService.refuseApplicationAfterJobClosing(jobId);
             return true;
         }
         else{
             throw new JobNotFoundException("Job was not found in database");
         }
+    }
+
+    /**
+     * Method used for getting the list of opened jobs for the employer
+     * @return the list of jobs
+     */
+    public List<JobResponse> getAllOpenedJobsForEmployer(String employerId){
+        List<JobResponse> jobResponseList = new ArrayList<>();
+        List<Job> jobs = jobRepository.findOpenedJobByEmployer(employerId);
+        for(Job job: jobs){
+            jobResponseList.add(buildJobResponse(job));
+        }
+        return jobResponseList;
     }
 
     /**
@@ -137,6 +155,7 @@ public class JobService {
         jobResponse.setQuestions(questionService.getAllQuestionsForJob(savedJob.getJobId()));
         jobResponse.setStages(stageService.getAllStagesForJob(savedJob.getJobId()));
         jobResponse.setIndustry(savedJob.getIndustry());
+        jobResponse.setStatus(savedJob.getStatus());
         jobResponse.setPostingDate(savedJob.getPostingDate());
         jobResponse.setWorkMode(savedJob.getWorkMode());
         jobResponse.setTitle(savedJob.getTitle());

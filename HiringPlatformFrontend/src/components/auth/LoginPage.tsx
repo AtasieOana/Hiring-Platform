@@ -14,6 +14,7 @@ import {setAuthData} from "../../redux/actions/authActions";
 import {setProfileActionData} from "../../redux/actions/profileActions";
 import CandidateService from "../../services/candidate.service";
 import HeaderAuth from "../header/HeaderAuth";
+import {setCvActionData} from "../../redux/actions/cvActions";
 
 const LoginPage = () => {
 
@@ -56,9 +57,9 @@ const LoginPage = () => {
             let registerResponse = response.data;
             if (registerResponse.token) {
                 dispatch(setAuthData(true, registerResponse.candidate,null, registerResponse.token));
-                dispatch(setProfileActionData(response.data.hasCv));
+                dispatch(setCvActionData(response.data.hasCv));
                 setIsLoading(false)
-                if(response.data.hasCv) {
+                if(response.data.hasCv === true) {
                     navigate("/allCv")
                 }
                 else{

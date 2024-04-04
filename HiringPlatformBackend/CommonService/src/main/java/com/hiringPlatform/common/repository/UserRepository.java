@@ -12,8 +12,5 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, String> {
     Optional<User> findByEmail(String email);
 
-    @Query("SELECT e FROM User e ORDER BY e.email")
-    List<User> findAllOrderByEmail();
 
-    List<User> findAllByUserRole_RoleName(String roleName);
 }

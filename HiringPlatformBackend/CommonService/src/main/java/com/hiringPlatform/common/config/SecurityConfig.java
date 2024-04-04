@@ -45,7 +45,6 @@ public class SecurityConfig   {
                 .antMatchers("/addReview").hasAnyAuthority("ROLE_CANDIDATE", "ROLE_EMPLOYER")
                 .antMatchers("/editReview").hasAnyAuthority("ROLE_CANDIDATE", "ROLE_EMPLOYER")
                 .antMatchers("/deleteReview/{reviewId}").hasAnyAuthority("ROLE_CANDIDATE", "ROLE_EMPLOYER")
-                .antMatchers("/getRecommendedJobs/{candidateId}").hasAnyAuthority("ROLE_CANDIDATE")
                 .antMatchers("/sendMail").permitAll()
                 .anyRequest().authenticated()
                 .and()

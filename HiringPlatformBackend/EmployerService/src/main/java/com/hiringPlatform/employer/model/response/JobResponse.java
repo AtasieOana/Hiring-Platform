@@ -27,6 +27,7 @@ public class JobResponse {
     private String regionName;
     private String countryName;
     private String employerId;
+    private String status;
     List<QuestionHelperRequest> questions;
     List<StageHelperRequest> stages;
 }

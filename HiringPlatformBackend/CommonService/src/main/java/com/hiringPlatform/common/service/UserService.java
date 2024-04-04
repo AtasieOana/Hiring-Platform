@@ -34,11 +34,6 @@ public class UserService {
         return optionalUser.orElse(null);
     }
 
-    public User getUserByEmail(String email){
-        Optional<User> optionalUser = userRepository.findByEmail(email);
-        return optionalUser.orElse(null);
-    }
-
     public String constructNameForUser(User user){
         if(Objects.equals(user.getUserRole().getRoleName(), "ROLE_EMPLOYER")){
             Employer employer = employeeService.getEmployer(user.getUserId());
@@ -54,22 +49,4 @@ public class UserService {
         }
     }
 
-    public List<UserResponse> getAllMappedUserExceptUser(String userEmail){
-        List<User> list = userRepository.findAllOrderByEmail();
-        List<UserResponse> userResponses = new ArrayList<>();
-        list.forEach(user -> {
-            if(!Objects.equals(user.getEmail(), userEmail) && user.getAccountEnabled() != 0){
-                UserResponse userResponse = new UserResponse();
-                userResponse.setEmail(user.getEmail());
-                userResponse.setRoleName(user.getUserRole().getRoleName());
-                userResponse.setName(constructNameForUser(user));
-                userResponses.add(userResponse);
-            }
-        });
-        return userResponses;
-    }
-
-    public List<User> findUsersByRole(String roleName){
-        return userRepository.findAllByUserRole_RoleName(roleName);
-    }
 }

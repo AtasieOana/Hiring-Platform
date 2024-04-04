@@ -179,6 +179,7 @@
   "search_by_title": "Căutați după titlul postului...",
   "search_by_title_or_company": "Căutați după titlul postului sau numele companiei...",
   "sort_by_post_date": "Sortare după dată",
+  "sort_by_relevance": "Sortare după relevanță",
   "sort_job_asc": "Sortați locurile de muncă crescător după data postării",
   "sort_job_desc": "Sortați locurile de muncă descrescător după data postării",
   "no_jobs_found": "Nu au fost găsite locuri de muncă!",
@@ -316,10 +317,11 @@
   "add_new_job_button": "Postează un job",
   "view_applicants": "Vezi candidații",
   "remove_job": "Șterge postarea",
-  "confirm_job_delete": "Confirmarea ștergerii jobului",
-  "message_job_delete": "Sunteți sigur că doriți să ștergeți locul de muncă? Acesta va fi șters definitiv fără posibilitatea de recuperare. Toate procesele de recrutare pentru acesta vor fi oprite.",
-  "delete_job_err": "A apărut o eroare la ștergerea locului de muncă.",
-  "delete_job_success": "Locul de muncă a fost eliminat cu succes.",
+  "close_job": "Închideți postarea",
+  "confirm_job_delete": "Confirmarea închiderii jobului",
+  "message_job_delete": "Sunteți sigur că doriți să închideți anunțul locului de muncă? Acesta va fi închis definitiv fără posibilitatea de recuperare. Toate procesele de recrutare și aplicările pentru acesta vor fi oprite.",
+  "delete_job_err": "A apărut o eroare la închiderea anunțului pentru locul de muncă.",
+  "delete_job_success": "Anunțul a fost închis cu succes.",
   "update_desc_err": "A apărut o eroare la încercarea de a actualiza descrierea.",
   "edit_job_desc": "Editați descrierea",
   "save_job_desc": "Salvați descrierea",
@@ -447,8 +449,11 @@
   "retrieve_admin_err": "A apărut o eroare la preluarea informațiilor de contact despre administratori.",
   "principal_contact": "Contact principal",
   "contact_us": "Contactează-ne",
-  "contact_text": "Echipa noastră de administrare este aici pentru a vă ajuta cu orice aveți nevoie. Administratorii pot fi contactați oricând pentru orice întrebare, problemă sau asistență prin e-mail sau chat și vor încerca să răspundă cât de repede pot.",
+  "contact_text": "Echipa noastră de administrare este aici pentru a vă ajuta cu orice aveți nevoie. Administratorii pot fi contactați oricând pentru orice întrebare, problemă sau asistență prin e-mail și vor încerca să răspundă cât de repede pot.",
   "add_cv": "CV",
   "profile": "Profil",
-  "chat_err": "A apărut o eroare în timpul încercării de a configura chat-ul"
+  "chat_err": "A apărut o eroare în timpul încercării de a configura chat-ul",
+  "closed_job": "(Anunț închis)",
+  "close": "Închide"
+
 }

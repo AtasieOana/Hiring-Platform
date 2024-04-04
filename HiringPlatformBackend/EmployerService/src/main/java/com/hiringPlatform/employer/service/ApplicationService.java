@@ -1,13 +1,14 @@
 package com.hiringPlatform.employer.service;
 
-
 import com.hiringPlatform.employer.model.Contains;
 import com.hiringPlatform.employer.model.Application;
 import com.hiringPlatform.employer.model.Job;
 import com.hiringPlatform.employer.model.Stage;
 import com.hiringPlatform.employer.model.request.SendMailRequest;
 import com.hiringPlatform.employer.model.response.ApplicationResponse;
+import com.hiringPlatform.employer.model.response.JobResponse;
 import com.hiringPlatform.employer.repository.ApplicationRepository;
+import com.hiringPlatform.employer.repository.JobRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static com.hiringPlatform.employer.constant.Constant.SEND_MAIL_URL;
@@ -25,21 +27,22 @@ public class ApplicationService {
 
     private final ApplicationRepository applicationRepository;
 
-    private final JobService jobService;
+    private final JobRepository jobRepository;
     private final AnswerService answerService;
     private final StageService stageService;
     private final RestTemplate restTemplate;
-
+    private final QuestionService questionService;
 
     @Autowired
-    public ApplicationService(ApplicationRepository applicationRepository, JobService jobService,
+    public ApplicationService(ApplicationRepository applicationRepository, JobRepository jobRepository,
                               AnswerService answerService, StageService stageService,
-                              RestTemplate restTemplate) {
+                              RestTemplate restTemplate, QuestionService questionService) {
         this.applicationRepository = applicationRepository;
-        this.jobService = jobService;
+        this.jobRepository = jobRepository;
         this.answerService = answerService;
         this.stageService = stageService;
         this.restTemplate = restTemplate;
+        this.questionService = questionService;
     }
     public List<ApplicationResponse> getAllApplicationsForJob(String jobId){
         return applicationRepository.findApplicationsForJob(jobId).stream().map(this::buildAppResponse).toList();
@@ -57,6 +60,15 @@ public class ApplicationService {
             return true;
         }
         return false;
+    }
+
+    public void refuseApplicationAfterJobClosing(String jobId){
+        List<Application> list = applicationRepository.findApplicationsForJob(jobId);
+        list.forEach(application -> {
+            if(Objects.equals(application.getStatus(), "in_curs")){
+                refuseApplication(jobId, application.getCandidate().getCandidateId(), "The employer has closed the job advertisement.");
+            }
+        });
     }
 
     public ApplicationResponse setNextStage(String jobId, String candidateId){
@@ -98,7 +110,7 @@ public class ApplicationService {
         applicationResponse.setEmployerEmail(a.getJob().getEmployer().getUserDetails().getEmail());
         applicationResponse.setEmployerCompanyName(a.getJob().getEmployer().getCompanyName());
         applicationResponse.setAppDate(a.getApplicationDate());
-        applicationResponse.setJob(jobService.getJobResponse(a.getJob().getJobId()));
+        applicationResponse.setJob(getJobResponse(a.getJob().getJobId()));
         Contains contains = stageService.getCurrentStageForApplication(a.getStage().getStageId(), a.getJob().getJobId());
         applicationResponse.setStageName(contains.getStage().getStageName());
         applicationResponse.setStageNr(contains.getStageNr());
@@ -146,4 +158,31 @@ public class ApplicationService {
         HttpEntity<SendMailRequest> request = new HttpEntity<>(requestEmail, headers);
         restTemplate.postForObject(SEND_MAIL_URL, request, String.class);
     }
+
+    private JobResponse buildJobResponse(Job savedJob) {
+        JobResponse jobResponse = new JobResponse();
+        jobResponse.setJobId(savedJob.getJobId());
+        jobResponse.setDescription(savedJob.getDescription());
+        jobResponse.setContractType(savedJob.getContractType());
+        jobResponse.setExperience(savedJob.getExperience());
+        jobResponse.setEmploymentRegime(savedJob.getEmploymentRegime());
+        jobResponse.setCityName(savedJob.getCity().getCityName());
+        jobResponse.setRegionName(savedJob.getCity().getRegion().getRegionName());
+        jobResponse.setCountryName(savedJob.getCity().getRegion().getCountry().getCountryName());
+        jobResponse.setEmployerId(savedJob.getEmployer().getEmployerId());
+        jobResponse.setQuestions(questionService.getAllQuestionsForJob(savedJob.getJobId()));
+        jobResponse.setStages(stageService.getAllStagesForJob(savedJob.getJobId()));
+        jobResponse.setIndustry(savedJob.getIndustry());
+        jobResponse.setStatus(savedJob.getStatus());
+        jobResponse.setPostingDate(savedJob.getPostingDate());
+        jobResponse.setWorkMode(savedJob.getWorkMode());
+        jobResponse.setTitle(savedJob.getTitle());
+        return jobResponse;
+    }
+
+    private JobResponse getJobResponse(String jobId){
+        Optional<Job> job = jobRepository.findById(jobId);
+        return job.map(this::buildJobResponse).orElse(null);
+    }
+
 }

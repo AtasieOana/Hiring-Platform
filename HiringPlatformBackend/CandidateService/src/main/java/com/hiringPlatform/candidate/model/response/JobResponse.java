@@ -27,6 +27,7 @@ public class JobResponse {
     private String cityName;
     private String regionName;
     private String countryName;
+    private String status;
     private Employer employer;
     private GetProfileResponse employerProfile;
     List<QuestionHelperRequest> questions;

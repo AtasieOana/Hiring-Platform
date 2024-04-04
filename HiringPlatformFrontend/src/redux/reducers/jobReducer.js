@@ -15,6 +15,7 @@ const initialState = {
         regionName: "",
         countryName: "",
         employerId: "",
+        status: "",
         questions: [],
         stages: [],
         employer:{

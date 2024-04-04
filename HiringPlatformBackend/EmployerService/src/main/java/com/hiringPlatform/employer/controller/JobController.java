@@ -24,7 +24,7 @@ public class JobController {
 
     @GetMapping("/getNrJobsForEmployer/{employerId}")
     public ResponseEntity<Number> getNrJobsForEmployer(@PathVariable String employerId) {
-        List<JobResponse> jobResponseList =  jobService.getAllJobsForEmployer(employerId);
+        List<JobResponse> jobResponseList =  jobService.getAllOpenedJobsForEmployer(employerId);
         return ResponseEntity.ok(jobResponseList.size());
     }
 
@@ -39,12 +39,12 @@ public class JobController {
     }
 
     /**
-     * Method used for deleting a job
-     * @return the status of the deleting
+     * Method used for closing a job
+     * @return the status of the closing
      */
-    @PostMapping("/deleteJob/{jobId}")
-    public ResponseEntity<Boolean> deleteJob(@PathVariable String jobId) {
-        Boolean value =  jobService.deleteJob(jobId);
+    @PostMapping("/closeJob/{jobId}")
+    public ResponseEntity<Boolean> closeJob(@PathVariable String jobId) {
+        Boolean value =  jobService.closeJob(jobId);
         return ResponseEntity.ok(value);
     }
 

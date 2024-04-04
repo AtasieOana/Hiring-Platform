@@ -53,6 +53,7 @@ public class SecurityConfig   {
                 .antMatchers("/checkApplication/{candidateId}/{jobId}").hasAnyAuthority("ROLE_CANDIDATE")
                 .antMatchers("/addAnswersForQuestions").hasAnyAuthority("ROLE_CANDIDATE")
                 .antMatchers("/deleteCv/{cvId}").hasAnyAuthority("ROLE_CANDIDATE")
+                .antMatchers("/getRecommendedJobs/{candidateId}").hasAnyAuthority("ROLE_CANDIDATE")
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(accessDeniedHandler())

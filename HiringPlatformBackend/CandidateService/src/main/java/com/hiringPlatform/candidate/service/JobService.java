@@ -67,7 +67,7 @@ public class JobService {
         return job.map(this::buildJobResponse).orElse(null);
     }
 
-    private JobResponse buildJobResponse(Job savedJob) {
+    protected JobResponse buildJobResponse(Job savedJob) {
         JobResponse jobResponse = new JobResponse();
         jobResponse.setJobId(savedJob.getJobId());
         jobResponse.setDescription(savedJob.getDescription());
@@ -82,6 +82,7 @@ public class JobService {
         jobResponse.setQuestions(questionService.getAllQuestionsForJob(savedJob.getJobId()));
         jobResponse.setStages(stageService.getAllStagesForJob(savedJob.getJobId()));
         jobResponse.setIndustry(savedJob.getIndustry());
+        jobResponse.setStatus(savedJob.getStatus());
         jobResponse.setPostingDate(savedJob.getPostingDate());
         jobResponse.setWorkMode(savedJob.getWorkMode());
         jobResponse.setTitle(savedJob.getTitle());

@@ -1,10 +1,15 @@
-package com.hiringPlatform.common.service;
+package com.hiringPlatform.candidate.service;
 
-import com.hiringPlatform.common.model.*;
-import com.hiringPlatform.common.repository.ApplicationRepository;
-import com.hiringPlatform.common.repository.EmployerRepository;
-import com.hiringPlatform.common.repository.JobRepository;
-import com.hiringPlatform.common.repository.ReviewRepository;
+
+import com.hiringPlatform.candidate.model.Application;
+import com.hiringPlatform.candidate.model.Employer;
+import com.hiringPlatform.candidate.model.Job;
+import com.hiringPlatform.candidate.model.User;
+import com.hiringPlatform.candidate.model.response.JobResponse;
+import com.hiringPlatform.candidate.repository.ApplicationRepository;
+import com.hiringPlatform.candidate.repository.EmployerRepository;
+import com.hiringPlatform.candidate.repository.JobRepository;
+import com.hiringPlatform.candidate.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,32 +19,32 @@ import java.util.*;
 public class RecommendationSystemService {
 
     private final UserService userService;
-
     private final ApplicationRepository applicationRepository;
-
     private final EmployerRepository employerRepository;
-
     private final ReviewRepository reviewRepository;
     private final JobRepository jobRepository;
+    private final JobService jobService;
 
     @Autowired
     public RecommendationSystemService(UserService userService,
                                        ApplicationRepository applicationRepository,
                                        EmployerRepository employerRepository,
                                        ReviewRepository reviewRepository,
-                                       JobRepository jobRepository) {
+                                       JobRepository jobRepository,
+                                       JobService jobService) {
         this.userService = userService;
         this.applicationRepository = applicationRepository;
         this.employerRepository = employerRepository;
         this.reviewRepository = reviewRepository;
         this.jobRepository = jobRepository;
+        this.jobService = jobService;
     }
 
     /**
      * Make job recommendation for user
      * @param userId the id of the user
       */
-    public List<Job> generateJobRecommendations(String userId) {
+    public List<JobResponse> generateJobRecommendations(String userId) {
         User user = userService.getUser(userId);
         List<Job> recommendedJobs;
 
@@ -58,7 +63,8 @@ public class RecommendationSystemService {
             recommendedJobs = generateInitialRecommendations();
         }
 
-        return recommendedJobs;
+
+        return recommendedJobs.stream().map(jobService::buildJobResponse).toList();
     }
 
     private Map<User, Double> calculateSimilarityScores(User user) {

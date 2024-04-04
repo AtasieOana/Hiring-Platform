@@ -8,11 +8,13 @@ import com.hiringPlatform.candidate.model.response.CandidateResponse;
 import com.hiringPlatform.candidate.model.response.GetLoggedUserResponse;
 import com.hiringPlatform.candidate.repository.CandidateRepository;
 import com.hiringPlatform.candidate.repository.EmployerRepository;
+import com.hiringPlatform.candidate.repository.UserRepository;
 import com.hiringPlatform.candidate.security.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -26,15 +28,19 @@ public class UserService {
 
     private final CVService cvService;
 
+    private final UserRepository userRepository;
+
     @Autowired
     public UserService(CandidateRepository candidateRepository,
                        RedisService redisService,
                        JwtService jwtService,
-                       CVService cvService) {
+                       CVService cvService,
+                       UserRepository userRepository) {
         this.candidateRepository = candidateRepository;
         this.redisService = redisService;
         this.jwtService = jwtService;
         this.cvService = cvService;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -96,6 +102,15 @@ public class UserService {
         else{
             return null;
         }
+    }
+
+    public List<User> findUsersByRole(String roleName){
+        return userRepository.findAllByUserRole_RoleName(roleName);
+    }
+
+    public User getUser(String userId){
+        Optional<User> optionalUser = userRepository.findById(userId);
+        return optionalUser.orElse(null);
     }
 
 }

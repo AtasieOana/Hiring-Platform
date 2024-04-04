@@ -1,7 +1,7 @@
-package com.hiringPlatform.common.controller;
+package com.hiringPlatform.candidate.controller;
 
-import com.hiringPlatform.common.model.Job;
-import com.hiringPlatform.common.service.RecommendationSystemService;
+import com.hiringPlatform.candidate.model.response.JobResponse;
+import com.hiringPlatform.candidate.service.RecommendationSystemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,8 +21,8 @@ public class RecommendationSystemController {
     }
 
     @GetMapping("/getRecommendedJobs/{candidateId}")
-    public ResponseEntity<List<Job>> getRecommendedJobs(@PathVariable String candidateId) {
-        List<Job> list = recommendationSystemService.generateJobRecommendations(candidateId);
+    public ResponseEntity<List<JobResponse>> getRecommendedJobs(@PathVariable String candidateId) {
+        List<JobResponse> list = recommendationSystemService.generateJobRecommendations(candidateId);
         return ResponseEntity.ok(list);
     }
 }

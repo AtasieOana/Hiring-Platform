@@ -116,6 +116,8 @@ CREATE TABLE locuri_de_munca (
     industrie VARCHAR2(100) NOT NULL,
     mod_lucru VARCHAR2(100) NOT NULL,
     experienta VARCHAR2(100) NOT NULL,
+    status VARCHAR2(10),
+    CONSTRAINT status_corect CHECK(status IN ('deschis', 'inchis')),
     CONSTRAINT tip_contract_corect CHECK(tip_contract IN ('Norma intreaga', 'Norma redusa', 'Norma variabila')),
     CONSTRAINT regim_angajare_corect CHECK(regim_angajare IN ('Stagiu', 'Proiect', 'Contract determinat', 'Contract nedeterminat')),
     CONSTRAINT experienta_corecta CHECK(experienta IN ('Entry-Level', 'Junior', 'Intermediar')),

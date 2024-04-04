@@ -10,7 +10,7 @@ import {
     NonIdealState,
     Position,
     MenuItem,
-    Icon,
+    Icon, ButtonGroup, Divider,
 } from "@blueprintjs/core";
 import {useDispatch, useSelector} from "react-redux";
 import {useTranslation} from "react-i18next";
@@ -27,6 +27,7 @@ import HeaderPageCandidate from "../header/HeaderPageCandidate";
 import HeaderPageEmployer from "../header/HeaderPageEmployer";
 import ProfileService from "../../services/profile.service";
 import AddJobDialog from "./AddJobDialog";
+import {CLOSED, OPENED} from "../../util/constants";
 
 export const industriesRo = [
     "Toate industriile", "Administrație", "Agricultură", "Arhitectură/Design interior", "Audit",
@@ -65,6 +66,10 @@ export const possibleDates = ['Oricand', 'Luna trecuta', 'Saptamana trecuta', 'Z
 export const dateEn = ["Anytime", "In the last month", "In the last week", "In the last day"]
 export const dateRo = ["Oricând", "În ultima lună", "În ultima săptămână", "În ultima zi"]
 
+export const possibleStatus = [CLOSED, OPENED]
+export const statusEn = ["Closed", "Opened"]
+export const statusRo = ["Închis", "Deschis"]
+
 const JobsPage = () => {
 
     const {t, i18n} = useTranslation();
@@ -78,6 +83,7 @@ const JobsPage = () => {
     const regimes = i18n.language === "ro" ? regimeRo : regimeEn
     const works = i18n.language === "ro" ? workRo : workEn
     const date = i18n.language === "ro" ? dateRo : dateEn
+    const status = i18n.language === "ro" ? statusRo : statusEn
 
     const defaultIndustry = i18n.language === "ro" ? "Toate industriile" : "All industries"
     const employer = useSelector(state => state.auth.employer);
@@ -87,6 +93,9 @@ const JobsPage = () => {
     const [filteredJobs, setFilteredJobs] = useState([]);
     const [jobs, setJobs] = useState([]);
     const [recommendedJobs, setRecommendedJobs] = useState([]);
+    const [showBasedOnRecommendation, setShowBasedOnRecommendation] = useState(false);
+    const [orderByPostDate, setOrderByPostDate] = useState(0)
+
     const [filters, setFilters] = useState({
         contractType: possibleContractType,
         employmentRegime: possibleRegimeEmp,
@@ -97,8 +106,8 @@ const JobsPage = () => {
         regionName: [],
         countryName: [],
         postingDate: possibleDates[0],
+        status: [possibleStatus[1]]
     });
-    const [orderByPostDate, setOrderByPostDate] = useState(0)
     const [searchTerm, setSearchTerm] = useState('');
     const [cities, setCities] = useState([])
     const [regions, setRegions] = useState([])
@@ -129,30 +138,38 @@ const JobsPage = () => {
      */
     useEffect(() => {
         setCurrentPage(1)
-        // Filter by contract type
-        let allJobs = [...jobs]
-        let filtered = allJobs.filter(job =>
-            (job.title.toLowerCase().includes(searchTerm) ||
+        let allJobs = []
+        if(showBasedOnRecommendation){
+            allJobs = [...recommendedJobs];
+        } else{
+            allJobs = [...jobs]
+        }
+        let filtered = allJobs.filter(job => {
+            return (job.title.toLowerCase().includes(searchTerm) ||
                 (candidate && candidate.candidateId !== "" &&  job.employer.companyName &&
                     job.employer.companyName.toLowerCase().includes(searchTerm)))
-            && filters.contractType.includes(job.contractType)
-            && filters.employmentRegime.includes(job.employmentRegime)
-            && filters.workMode.includes(job.workMode)
-            && filters.experience.includes(job.experience)
-            && (filters.industry.includes(job.industry) || filters.industry === defaultIndustry)
-            && filters.cityName.includes(job.cityName)
-            && filters.regionName.includes(job.regionName)
-            && filters.countryName.includes(job.countryName)
-            && filterByDate(filters.postingDate, job.postingDate))
-        if(orderByPostDate === 1) {
-            filtered.sort((a, b) => new Date(a.postingDate) - new Date(b.postingDate));
-        }
-        else{
-            filtered.sort((a, b) => new Date(b.postingDate) - new Date(a.postingDate));
+                && filters.contractType.includes(job.contractType)
+                && filters.employmentRegime.includes(job.employmentRegime)
+                && filters.workMode.includes(job.workMode)
+                && filters.experience.includes(job.experience)
+                && filters.status.includes(job.status)
+                && (filters.industry.includes(job.industry) || filters.industry === defaultIndustry)
+                && filters.cityName.includes(job.cityName)
+                && filters.regionName.includes(job.regionName)
+                && filters.countryName.includes(job.countryName)
+                && filterByDate(filters.postingDate, job.postingDate)
+            })
+        if(employer && employer.employerId !== ""){
+            if(orderByPostDate === 1) {
+                filtered.sort((a, b) => new Date(a.postingDate) - new Date(b.postingDate));
+            }
+            else{
+                filtered.sort((a, b) => new Date(b.postingDate) - new Date(a.postingDate));
+            }
         }
         setFilteredJobs(filtered);
         paginate(filtered, 1);
-    }, [jobs, filters, searchTerm, orderByPostDate]);
+    }, [jobs, filters, searchTerm, orderByPostDate, showBasedOnRecommendation]);
 
 
     /**
@@ -300,6 +317,14 @@ const JobsPage = () => {
     }
 
     /**
+     * Choose how to sort the jobs by date
+     */
+    const toggleSort = () => {
+        let newOrder = orderByPostDate === 1 ? 0 : 1
+        setOrderByPostDate(newOrder)
+    }
+
+    /**
      * Handle contract type change
      * @param {string} newValue
      */
@@ -316,6 +341,26 @@ const JobsPage = () => {
             filterContractType.splice(index, 1);
         }
         allFilters.contractType = filterContractType
+        setFilters(allFilters);
+    };
+
+    /**
+     * Handle status change
+     * @param {string} newValue
+     */
+    const handleStatusChange = (newValue) => {
+        let allFilters = {...filters}
+        let filter = [...allFilters.status]
+        let index = filter.findIndex(ct => ct === newValue)
+        if(index === -1){
+            // A regime type filter is added
+            filter.push(newValue)
+        }
+        else{
+            // A regime filter is deleted
+            filter.splice(index, 1);
+        }
+        allFilters.status = filter
         setFilters(allFilters);
     };
 
@@ -458,12 +503,8 @@ const JobsPage = () => {
         setSearchTerm(newValue.toLowerCase())
     }
 
-    /**
-     * Choose how to sort the jobs by date
-     */
-    const toggleSort = () => {
-        let newOrder = orderByPostDate === 1 ? 0 : 1
-        setOrderByPostDate(newOrder)
+    const toogleShowRecommendation = () =>{
+        setShowBasedOnRecommendation(!showBasedOnRecommendation);
     }
 
     /**
@@ -572,6 +613,21 @@ const JobsPage = () => {
                                     fill={true}/>
                         </Select>
                     </FormGroup>
+                    {employer && employer.employerId !== "" &&
+                        <FormGroup label={t('status')}
+                                   className={`jobs-contractType-filter ${Classes.FIXED}`}>
+                            <div className="job-checkbox-container">
+                                {status.map((obj, index) =>
+                                    <Checkbox
+                                        className="job-checkbox-item"
+                                        label={obj}
+                                        checked={filters.status.includes(possibleStatus[index])}
+                                        onChange={() => handleStatusChange(possibleStatus[index])}
+                                    />
+                                )}
+                            </div>
+                        </FormGroup>
+                    }
                     <FormGroup label={t('contract_type')} className={`jobs-contractType-filter ${Classes.FIXED}`}>
                         <div className="job-checkbox-container">
                             {contracts.map((contractType, index) =>
@@ -697,15 +753,33 @@ const JobsPage = () => {
                                 type="search"
                                 onChange={(e)=> handleSearchChange(e.target.value)}
                             />
+                            <ButtonGroup minimal={true} vertical={false}>
                                 <Button
                                     className="sort-jobs-button"
-                                    onClick={toggleSort}
+                                    onClick={employer && employer.employerId !=="" ? toggleSort : toogleShowRecommendation}
                                     small
                                     minimal
-                                    rightIcon={orderByPostDate === 0 ? <Icon size={14} icon="sort-asc" color="black"/> : <Icon size={14} icon="sort-desc" color="black"/>}
+                                    rightIcon={employer && employer.employerId !=="" ? (orderByPostDate === 0 ? <Icon size={14} icon="sort-asc" color="black"/> :
+                                        <Icon size={14} icon="sort-desc" color="black"/>) :
+                                        <Icon size={14} icon="timeline-events" color="black"/>}
                                 >
                                     {t('sort_by_post_date')}
                                 </Button>
+                                {candidate && candidate.candidateId !== "" &&
+                                    <>
+                                    <Divider/>
+                                    <Button
+                                        className="sort-jobs-button"
+                                        onClick={toogleShowRecommendation}
+                                        small
+                                        minimal
+                                        rightIcon={<Icon size={14} icon="aimpoints-target" color="black"/>}
+                                    >
+                                        {t('sort_by_relevance')}
+                                    </Button>
+                                </>
+                                }
+                            </ButtonGroup>
                         </div>
                     </div>
                     <div className={currentJobs.length > 0 ? "jobs-list" : "jobs-non-ideal"}>
@@ -733,7 +807,7 @@ const JobsPage = () => {
                                                     <div className="jobs-detail">
                                                         <div className="job-text-title" onClick={() => {
                                                             viewJob(job)
-                                                        }}>{job.title}</div>
+                                                        }}>{job.title} {employer && employer.employerId !== "" && job.status === CLOSED ? t('closed_job') : "" }</div>
                                                     </div>
                                                     {candidate && candidate.candidateId !=='' && <div className="jobs-detail">
                                                         <div className="job-text-company" >{t('company_name')}: {job.employer.companyName}</div>

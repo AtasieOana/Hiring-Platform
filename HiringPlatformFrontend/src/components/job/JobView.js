@@ -31,6 +31,7 @@ import ReactQuillStatic from "../common/reactQuill/ReactQuillStatic";
 import ReactQuillDynamic from "../common/reactQuill/ReactQuillDinamic";
 import CandidateService from "../../services/candidate.service";
 import AppService from "../../services/app.service";
+import {OPENED} from "../../util/constants";
 
 const JobView = () => {
 
@@ -198,8 +199,8 @@ const JobView = () => {
     /**
      * Handle the removal of a job
      */
-    const deleteJob = () => {
-        JobService.deleteJob(openedJob.jobId)
+    const closeJob = () => {
+        JobService.closeJob(openedJob.jobId)
             .then(() => {
                 AppToaster.show({
                     message: t('delete_job_success'),
@@ -268,9 +269,9 @@ const JobView = () => {
     };
 
     /**
-     * Render modal for job removal
+     * Render modal for job closing
      */
-    const renderDeleteJobDialog = () => {
+    const renderCloseJobDialog = () => {
         return <Dialog
                 isOpen={isDeleteDialogOpen}
                 onClose={() => setIsDeleteDialogOpen(false)}
@@ -279,7 +280,7 @@ const JobView = () => {
                     <DialogBody useOverflowScrollContainer={false}>
                         <p>{t('message_job_delete')}</p>
                         <DialogFooter minimal={true} actions={<div>
-                            <Button intent="danger" onClick={deleteJob}>{t('delete')}</Button>
+                            <Button intent="danger" onClick={closeJob}>{t('close')}</Button>
                             <Button onClick={() => setIsDeleteDialogOpen(false)}>{t('cancel')}</Button>
                         </div>}/>
                     </DialogBody>
@@ -538,8 +539,8 @@ const JobView = () => {
                             <Button onClick={handleViewApplicants} icon="people"
                                     intent={Intent.PRIMARY} text={employer && employer.employerId !== "" ? t('view_applicants') : t('see_application') }
                             />
-                            {employer && employer.employerId !== "" && <Button onClick={handleDeleteJob} icon="eraser"
-                                    intent={Intent.DANGER} text={t('remove_job')}/>}
+                            {employer && employer.employerId !== "" && openedJob.status === OPENED && <Button onClick={handleDeleteJob} icon="eraser"
+                                    intent={Intent.WARNING} text={t('close_job')}/>}
                             {candidate && candidate.candidateId !== "" && <Button onClick={handleJobApplication} icon="briefcase"
                                                                                   disabled={applied}
                                                                                   intent={Intent.SUCCESS}
@@ -597,7 +598,7 @@ const JobView = () => {
                     </Card>
                 }
             </div>
-            {renderDeleteJobDialog()}
+            {renderCloseJobDialog()}
             {renderChooseCVDialog()}
             {renderQuestionDialog()}
         </div>

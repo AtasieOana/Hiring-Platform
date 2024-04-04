@@ -83,7 +83,6 @@
 
 @media (max-width: 700px) {
     .company-name {
-        animation: none;
         font-size: 14px;
     }
 

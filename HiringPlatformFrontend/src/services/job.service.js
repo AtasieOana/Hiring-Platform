@@ -1,6 +1,5 @@
 import apiCandidate from "../util/apiCandidate";
 import apiEmployer from "../util/apiEmployer";
-import apiCommon from "../util/apiCommon";
 
 class JobService {
 
@@ -20,8 +19,8 @@ class JobService {
         return apiEmployer.post("/addJob", request);
     }
 
-    async deleteJob(jobId) {
-        return apiEmployer.post("/deleteJob/" + jobId);
+    async closeJob(jobId) {
+        return apiEmployer.post("/closeJob/" + jobId);
     }
 
     async getAllJobsForEmployer(employerId) {
@@ -37,7 +36,7 @@ class JobService {
     }
 
     async getRecommendedJobs(candidateId) {
-        return apiCommon.get("/getRecommendedJobs/" + candidateId);
+        return apiCandidate.get("/getRecommendedJobs/" + candidateId);
     }
 }
 

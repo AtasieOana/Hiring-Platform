@@ -29,6 +29,9 @@ public class Job {
     @Column(name = "descriere")
     private String description;
 
+    @Column(name = "status")
+    private String status;
+
     @Column(name = "tip_contract")
     private String contractType;
 

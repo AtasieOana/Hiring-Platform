@@ -49,7 +49,7 @@ public class SecurityConfig   {
                 .antMatchers("/getProfile/{email}").hasAnyAuthority("ROLE_EMPLOYER")
                 .antMatchers("/updateAccount").hasAnyAuthority("ROLE_EMPLOYER")
                 .antMatchers("/getAllJobsForEmployer/{employerId}").hasAnyAuthority("ROLE_EMPLOYER")
-                .antMatchers("/deleteJob/{jobId}").hasAnyAuthority("ROLE_EMPLOYER")
+                .antMatchers("/closeJob/{jobId}").hasAnyAuthority("ROLE_EMPLOYER")
                 .antMatchers("/addJob").hasAnyAuthority("ROLE_EMPLOYER")
                 .antMatchers("/getAllStages").permitAll()
                 .antMatchers("/getNrJobsForEmployer/{employerId}").hasAnyAuthority("ROLE_EMPLOYER", "ROLE_CANDIDATE")
