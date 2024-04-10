@@ -37,9 +37,9 @@ const HeaderPage = () => {
                             <Menu>
                                 <MenuItem icon="home" color="white" text={t('about')}
                                           onClick={() => navigate('/')}/>
-                                <MenuItem icon="helper-management" color="white"
+                                <MenuItem icon="chat" color="white"
                                           text={t('contact')} onClick={() => navigate('/contacts')}/>
-                                <MenuItem icon="user" color="white" text={t('login')}
+                                <MenuItem icon="mugshot" color="white" text={t('login')}
                                           onClick={() => navigate('/login')}/>
                                 <MenuItem icon="new-person"
                                           color="white"
@@ -49,8 +49,8 @@ const HeaderPage = () => {
                         }
                         placement="bottom-end"
                     >
-                        <Link className="nav-item" to="#" isActive={false}>
-                            <Icon size={13} icon="chevron-down" color="white" className="nav-icon"/>
+                        <Link className="nav-item-auth" to="#" isActive={false}>
+                            <Icon size={13} icon="chevron-down" color="white" className="nav-icon"/> {t('actions')}
                         </Link>
                     </Popover>
                 </> : <>
@@ -58,12 +58,12 @@ const HeaderPage = () => {
                         <Icon size={13} icon="home" color="white" className="nav-icon-auth"/> {t('about')}
                     </Link>
                     <Link to="/contacts" className="nav-item-auth">
-                        <Icon size={13} icon="helper-management" color="white" className="nav-icon-auth"/> {t('contact')}
+                        <Icon size={13} icon="chat" color="white" className="nav-icon-auth"/> {t('contact')}
                     </Link>
                     <Link to="/login" className="nav-item-auth">
-                        <Icon size={13} icon="user" color="white" className="nav-icon-auth"/> {t('login')}
+                        <Icon size={13} icon="mugshot" color="white" className="nav-icon-auth"/> {t('login')}
                     </Link>
-                    <Link to="/register" className="nav-item-auth">
+                    <Link to="/register" activeClassName="active" className="nav-item-auth">
                         <Icon size={13} icon="new-person" color="white" className="nav-icon-auth"/> {t('register')}
                     </Link>
                 </>

@@ -1,90 +1,215 @@
-.container {
+.about-container {
+    margin: 0 auto;
+    padding: 20px 5vw;
+}
+
+.about-main-section {
+    padding: 40px 0;
+}
+
+.about-text {
     display: flex;
     align-items: center;
-    width: 85%;
-    margin: auto;
-    gap: 10px;
-    min-height: 90vh;
+    gap: 8%;
 }
 
-.left-side {
-    flex: 1;
-    text-align: center;
-    border-right: #ffb04f 2px solid;
-    width: 50%;
-    padding-right: 20px;
+.about-us-title {
+    font-family: 'Arial', sans-serif;
+    font-size: 0.8rem;
+    line-height: 2rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: #5b627d;
+    position: relative;
+    z-index: 1;
+    margin-bottom: 5px;
 }
 
-.left-side img {
-    width: 400px;
-    height: 400px;
-}
-
-.right-side {
-    flex: 2;
-    text-align: left;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-}
-
-.title {
-    font-size: 26px;
-    font-weight: bold;
-    margin-bottom: 10px;
-    color: #e09c73;
-}
-
-.description {
-    text-align: justify;
-    font-size: 15px;
+.about-motto {
+    font-family: 'Arial', sans-serif;
+    font-size: 2rem;
+    font-weight: 500;
+    color: #232938;
     margin-bottom: 20px;
-    line-height: 1.6;
 }
 
-.description-imp {
-    color: #e09c73;
-    font-weight: 750;
-}
-
-.cta {
+.about-description {
+    font-family: "LL Circular",sans-serif;
     font-size: 16px;
+    line-height: 1.5;
+    text-align: justify;
+    color: #232938;
+}
+
+.about-image {
+    position: relative;
+}
+
+.about-image img {
+    width: 350px;
+    height: 350px;
+    filter: drop-shadow(0 0 1px rgb(224, 156, 115));
+    background-image: url("../../resources-photo/AboutShadowImg.png"); /* Path to shadow image */
+}
+
+.image::after {
+    content: '';
+    background: linear-gradient(to bottom, #333, rgb(224, 156, 115));
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    bottom: -10px;
+    right: -10px;
+    z-index: -1;
+}
+
+.about-register-button {
+    margin-top: 20px;
+    color: #fff;
+    background-color: #685369;
+    position: relative;
+    display: inline-block;
+    max-width: 100%;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 42px;
+    text-decoration: none;
+    text-align: center;
+    border: 1px solid #543f56;
+    border-radius: 4px;
+    padding: 0 24px;
+    white-space: nowrap;
+    touch-action: manipulation;
     cursor: pointer;
+}
+
+.about-register-button:hover{
+    background-color: #4c3c4d !important;
+    border-color: #372838 !important;
+    text-decoration: none;
+    color: white !important;
+}
+
+.about-register-button:focus{
+    outline: none !important;
+}
+
+.about-secondary-section {
+    background-color: rgba(224, 156, 115, 0.2);
     display: flex;
     align-items: center;
 }
 
-.cta a {
-    color: #2c56b9 !important;
+.about-secondary-text {
+    flex: 1;
 }
 
-@media (max-width: 900px) {
-    .left-side img {
-        width: 300px;
-        height: 300px;
-    }
+.about-us-subtitle {
+    padding-top: 5px;
+    font-family: 'Arial', sans-serif;
+    font-size: 1rem;
+    line-height: 1rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: #5b627d;
+    position: relative;
+    margin-bottom: 15px;
 }
 
-@media (max-width: 700px) {
-    .container {
-        flex-direction: column;
-    }
+.about-secondary-short {
+    font-family: 'Arial', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: #232938;
+    margin-bottom: 20px;
+}
 
-    .description {
-        text-align: justify;
-        font-size: 14px;
-        margin-bottom: 20px;
-        line-height: 1.4;
-    }
+.about-secondary-description{
+    display: flex;
+    flex-direction: row;
+    gap: 40px;
+}
 
-    .left-side {
-        border-bottom: #ffb04f 2px solid;
-        border-right: none;
-    }
+.about-secondary-description div {
+    margin-bottom: 20px;
+    text-align: justify;
+    font-family: 'Arial', sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    color: #333;
+}
 
-    .left-side img {
+.about-secondary-description div:first-child {
+    margin-bottom: 20px;
+}
+
+@media (max-width: 800px) {
+    .about-image img{
         width: 200px;
         height: 200px;
+    }
+
+    .about-us-title {
+        font-family: 'Arial', sans-serif;
+        font-size: 0.8rem;
+        line-height: 1rem;
+        letter-spacing: 2px;
+        margin-bottom: 5px;
+    }
+
+    .about-motto {
+        font-size: 17px;
+        margin-bottom: 10px;
+    }
+
+    .about-description {
+        font-size: 15px;
+        line-height: 1.3;
+    }
+
+    .about-register-button {
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 40px;
+        padding: 0 20px;
+    }
+
+    .about-secondary-description div {
+        font-size: 14px;
+        line-height: 1.5;
+    }
+
+}
+
+@media (max-width: 550px) {
+    .about-image img{
+        width: 150px;
+        height: 150px;
+    }
+
+    .about-us-title {
+        font-family: 'Arial', sans-serif;
+        font-size: 0.6rem;
+        line-height: 1rem;
+        letter-spacing: 2px;
+        margin-bottom: 5px;
+    }
+
+    .about-motto {
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+
+    .about-description {
+        font-size: 14px;
+        line-height: 1.3;
+    }
+
+    .about-secondary-description div {
+        font-size: 14px;
+        line-height: 1.4;
     }
 }
 

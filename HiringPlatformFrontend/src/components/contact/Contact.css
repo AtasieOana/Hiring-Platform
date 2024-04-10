@@ -1,82 +1,233 @@
-.contact-page {
+.contact-container {
+    display: flex;
+    flex-direction: row;
+    gap: 3%;
+    height: 100%;
+    position: fixed;
+}
+
+.contact-container-left{
+    width: 40%;
+    background-color: rgba(224, 156, 115, 0.2) !important;
+    padding: 10px 30px 10px 30px;
+}
+
+.contact-container-right{
+    width: 55%;
+    padding: 10px;
+}
+
+.contact-title {
+    margin-top: 10vh;
+    font-weight: bolder;
+    font-size: 20px;
+    line-height: 1em;
+    font-family: 'Brandon Grotesque', sans-serif;
+    margin-bottom: 20px;
+}
+
+.contact-title-additional{
+    margin-top: 5vh;
+    font-weight: bolder;
+    font-size: 20px;
+    line-height: 1em;
+    font-family: 'Brandon Grotesque', sans-serif;
+    margin-bottom: 20px;
+}
+
+.contact-description {
+    text-align: justify;
+    font-family: 'Brandon Grotesque', sans-serif;
+    font-size: 15px;
+    line-height: 1.3rem;
+    margin-bottom: 30px;
+}
+
+.contact-cards {
+    display: flex;
+    justify-content: space-between;
+}
+
+.contact-card {
+    margin: 0 20px !important;
+    background-color: #6f5370 !important;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 10px;
+    width: 40%;
+    font-family: 'Brandon Grotesque', sans-serif;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 1.5;
+    letter-spacing: 2px;
+}
+
+.contact-imp{
+    letter-spacing: 1px;
+    line-height: 1;
+    font-weight: 500;
+    color: white !important;
+    font-size: 16px;
+}
+
+.contact-imp a{
+    color: white !important;
+    text-decoration: underline;
+}
+
+.contact-imp a:focus{
+    outline: none !important;
+}
+
+.contact-icon{
+    margin-bottom: 10px;
+}
+
+.additional-contacts {
+    text-align: left;
+}
+
+.admin-item {
     display: flex;
     align-items: center;
-    width: 85%;
-    margin: auto;
-    min-height: 90vh;
-    gap: 10px;
-}
-
-.contact-info {
-    flex: 1;
-    text-align: center;
-    border-right: #ffb04f 2px solid;
-    width: 50%;
-    padding-right: 20px;
-}
-
-.contact-info img {
-    width: 400px;
-    height: 400px;
-}
-
-.admin-list-container {
-    flex: 2;
-    text-align: left;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-}
-
-.admin-text {
-    text-align: justify;
-    font-size: 15px;
-    margin-bottom: 20px;
-    line-height: 1.6;
-}
-
-.admin-item{
     margin-bottom: 10px;
-    list-style-type: disc;
-    font-weight: 600;
+}
+
+.admin-username {
+    font-weight: bold;
+}
+
+.admin-contact-additional{
+    margin-left: 15px;
+}
+
+.admin-contact-list {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.admin-contact-list > li {
+    flex: 50%;
+    margin-bottom: 10px;
+}
+
+.admin-email{
+    color: black !important;
+    text-decoration: underline;
+}
+
+.admin-email a{
+    color: black !important;
+    text-decoration: underline;
+}
+
+.admin-email a:hover{
+    color: black !important;
+    text-decoration: underline;
+}
+
+.admin-email a:focus{
+    outline: none !important;
+}
+
+.contact-us-title{
+    margin-top: 10vh;
+    font-weight: bolder;
+    font-size: 20px;
+    line-height: 1em;
+    font-family: 'Brandon Grotesque', sans-serif;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+}
+
+.contact-us-desc{
+    text-align: justify;
+    font-family: 'Brandon Grotesque', sans-serif;
     font-size: 15px;
+    line-height: 1.5rem;
+    margin-bottom: 30px;
+    color: #5c5856;
 }
 
-.admin-imp{
-    color: #e09c73;
-    font-weight: 750;
+.contact-us-program{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
-@media (max-width: 900px) {
-    .contact-info img {
-        width: 300px;
-        height: 300px;
+.contact-us-program-title{
+    font-weight: bolder;
+    font-size: 20px;
+    line-height: 1em;
+    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    letter-spacing: 3px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    color: #6f5370;
+}
+
+.contact-us-program-hours {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1rem;
+    font-family: urw-din, sans-serif;
+    margin-bottom: 15px;
+}
+
+.contact-us-program-hours:nth-of-type(3){
+    margin-bottom: 30px;
+}
+
+@media (max-width: 1100px) {
+    .contact-container {
+        display: flex;
+        flex-direction: column;
+        gap: 3%;
+        position: relative;
+    }
+
+    .contact-container-left{
+        width: 100%;
+    }
+
+    .contact-container-right{
+        width: 100%;
+        padding: 10px 30px 10px 30px;
+    }
+
+    .contact-title {
+        margin-top: 5vh;
+    }
+
+    .contact-title-additional{
+        margin-top: 5vh;
+    }
+
+    .contact-us-title{
+        margin-top: 5vh;
     }
 }
 
 @media (max-width: 700px) {
-    .contact-page {
-        flex-direction: column;
-    }
-
-    .admin-text {
-        text-align: justify;
+    .contact-card {
+        margin: 0 0 !important;
+        width: 47%;
+        font-family: 'Brandon Grotesque', sans-serif;
+        font-weight: 400;
         font-size: 14px;
-        margin-bottom: 20px;
-        line-height: 1.4;
+        line-height: 1.3;
+        letter-spacing: 2px;
     }
 
-    .contact-info {
-        border-bottom: #ffb04f 2px solid;
-        border-right: none;
-        height: 200px;
-        flex: none !important;
-    }
-
-    .contact-info img {
-        width: 200px;
-        height: 200px;
+    .contact-imp{
+        letter-spacing: 1px;
+        line-height: 1;
+        font-weight: 400;
+        color: white !important;
+        font-size: 14px;
     }
 }
-
-

@@ -1,40 +1,64 @@
 import React from 'react';
-import '../styles/About.css';
-import Image from "../../resources-photo/HomeImg.svg";
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { Icon } from "@blueprintjs/core";
 import HeaderAuth from "../header/HeaderAuth";
-import {PRINCIPAL_ADMIN_EMAIL} from "../../util/constants";
-import {Icon} from "@blueprintjs/core";
+import Image from "../../resources-photo/AboutPageImg.png";
+import '../styles/About.css';
 
 const AboutPage = () => {
-
-    const { t } = useTranslation()
+    const { t } = useTranslation();
 
     return (
         <div>
-            <HeaderAuth/>
-            <div className="container">
-                <div className="left-side">
-                    <img src={Image} alt="CV" />
-                </div>
-                <div className="right-side">
-                    <div className="title">{t('home_title')}</div>
-                    <div className="description">
-                        <p> {t('home_desc_introduction')} <span
-                            className="description-imp">Joblistic</span> {t('home_desc_next')}</p>
-                        <p><span className="description-imp">{t('home_emps')}</span>, {t('home_desc_emp')}</p>
-                        <p>
-                            <span className="description-imp">{t('home_candidates')}</span>, {t('home_desc_candidate')}
-                        </p>
+            <HeaderAuth />
+            <section className="about-main-section">
+                <div className="about-container">
+                    <div className="about-text">
+                        <div>
+                            <div className="about-us-title">{t('about_us_title')}</div>
+                            <div className="about-motto">{t('about_us_motto')}</div>
+                            <div className="about-description">
+                                {t('about_us_desc')}
+                            </div>
+                            <div className="about-cta">
+                                <Link to="register" className="about-register-button">
+                                    {t('home_go_to_register')} <Icon icon="arrow-right"/>
+                                </Link>
+                            </div>
+                        </div>
+                        <div className="about-image">
+                            <img src={Image} alt="CV"/>
+                        </div>
                     </div>
-                    <div className="cta">
-                        <Link to="register">
-                            {t('home_go_to_register')} &#8594;
-                        </Link>
+                </div>
+            </section>
+            <section className="about-secondary-section">
+                <div className="about-container">
+                    <div className="about-secondary-text">
+                        <div className="about-us-subtitle">What We Offer</div>
+                        <div className="about-secondary-short">Connecting talent with opportunity</div>
+                    </div>
+                    <div className="about-secondary-description">
+                        <div>
+                            <div>
+                                {t('about_us_point_one')}
+                            </div>
+                            <div>
+                                {t('about_us_point_two')}
+                            </div>
+                        </div>
+                        <div>
+                            <div>
+                                {t('about_us_point_three')}
+                            </div>
+                            <div>
+                                {t('about_us_point_four')}
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </section>
         </div>
     );
 };
