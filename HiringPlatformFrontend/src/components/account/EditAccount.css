@@ -1,100 +1,171 @@
-.card-container {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    margin: 20px 15vw;
+.edit-account-container{
+    width: 100%;
+    height: 100%;
 }
 
-.card-title {
-    font-size: 1.4rem;
-    color: #698576;
+.edit-account-background{
+    background-color: rgba(224, 156, 115, 0.2);
+    height: 50vh;
+    background-position: 0 0;
+    background-size: 100% 100%;
+    width: 100%;
+}
+
+.edit-account-introduction{
+    padding-right: 39px !important;
+    padding-left: 39px !important;
+    max-width: 60%;
+}
+
+.edit-account-hello{
+    padding-top: 5vh;
+    font-size: 30px;
     font-weight: 600;
-    text-decoration: underline;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.card-form-group {
-    font-size: 14px;
-    color: #333;
-}
-
-.card-form-group .bp4-label {
-    font-weight: 500;
-    font-size: 15px;
-}
-
-.card-form-group-read {
-    font-size: 14px;
-    color: #333;
-    align-items: center !important;
-}
-
-.card-form-group-read .bp4-label {
-    font-weight: 500;
-    font-size: 15px;
-}
-
-.card-title-container {
-    display: flex;
-    justify-content: space-between;
-    padding: 0 10px;
-    align-items: center;
+    line-height: 1.5;
+    letter-spacing: 2px;
+    font-family: Open Sans, sans-serif;
     margin-bottom: 10px;
+    color: #6f5370 !important;
 }
 
-.card-button {
-    background-color: #fca773 !important;
-    border: none;
-    border-radius: 4px;
-    padding: 10px 20px;
-    cursor: pointer;
-    font-weight: 500;
-    font-size: 0.9rem;
+.edit-account-desc{
+    margin-bottom: 1.5rem !important;
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 1.7;
+    font-family: Open Sans, sans-serif;
+    text-align: justify;
 }
 
-.card-button:hover {
-    background-color: #ff9d62 !important;
+.edit-profile-button{
+    font-size: 14px !important;
+    transition: all .15s ease !important;
+    letter-spacing: .05em !important;
+    text-transform: none !important;
+    will-change: transform !important;
+    color: #fff !important;
+    border: 1px solid #59245b !important;
+    background-color: #623865 !important;
+    padding: .625rem 1.25rem !important;
+    border-radius: 5px !important;
+    margin-bottom: 2rem !important;
 }
 
-.card-button:focus {
+.edit-profile-button:focus{
     outline: none !important;
 }
 
-.card-content {
-    margin-top: 15px;
-    margin-left: 15px;
+.edit-profile-button:disabled{
+    border: 1px solid #544654 !important;
+    background-color: #655965 !important;
 }
 
-.edit-account-subtitle {
-    margin: 20px 15vw;
-    text-align: justify;
-    text-justify: inter-word;
-    font-size: 15px;
-    line-height: 2.0;
+.edit-profile-button:disabled:hover{
+    border: 1px solid #544654 !important;
+    background-color: #655965 !important;
 }
 
-.password-fields{
+.edit-profile-button:hover{
+    border: 1px solid #4b0e52 !important;
+    background-color: #651c6e !important;
+}
+
+.edit-profile-card{
+    position: relative;
+    width: 100%;
+    min-height: 1px;
+    padding-right: 10vw;
+    padding-left: 10vw;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    border-radius: .375rem;
+}
+
+.edit-profile-card-container{
+    background-color: rgb(250, 243, 239) !important;
+    padding: 0 !important;
+    margin-bottom: 20px;
+}
+
+.edit-profile-card-title-container{
+    border-radius: calc(.375rem - 1px) calc(.375rem - 1px) 0 0;
+    margin: 0;
+    background-color: white !important;
+}
+
+.edit-profile-card-title{
+    font-size: 16px;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: #6c7d8c !important;
+    margin-bottom: 1rem !important;
+    font-weight: 600;
+    line-height: 1.5;
+    padding: 0.8rem 1.5rem;
+}
+
+.edit-profile-card-content{
+    padding: 0.5rem 1rem 1rem;
+}
+
+.profile-fields-group{
     display: flex;
     flex-direction: row;
-    gap: 10px;
     justify-content: space-between;
+    align-items: flex-start;
 }
 
-.password-fields .card-form-group{
-    width: 100%;
+.profile-field{
+    width: 48%;
 }
 
-.password-fields .card-form-group-read{
-    width: 100%;
+.profile-field .bp4-input:focus {
+    box-shadow: inset 0 0 0 1px rgba(224, 156, 115), 0 0 0 2px rgba(224, 156, 115, 0.3), inset 0 1px 1px rgba(17, 20, 24, 0.2);
 }
 
-.change-password-section-title{
-    font-size: 16px;
+.profile-field .bp4-form-helper-text {
+    text-align: center;
+    font-weight: 550;
+}
+
+.profile-field label{
+    font-size: .875rem;
     font-weight: 600;
-    margin-bottom: 8px;
-    text-decoration: underline;
+}
+
+.profile-field input{
+    height: calc(2.25rem + 2px);
+    padding: .625rem .75rem;
+    border-radius: .375rem;
+}
+
+.edit-profile-actions{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.edit-profile-submit{
+    background-color: #ffaf84 !important;
+    width: 15%;
+    text-align: center !important;
+    color: black !important;
+    font-weight: 600;
+    letter-spacing: 1px;
+    border-radius: 3px;
+}
+
+.edit-profile-discard{
+    width: 20%;
+    text-align: center !important;
+    color: black !important;
+    font-weight: 600;
+    letter-spacing: 1px;
+    border-radius: 3px;
 }
 
 .change-password-section-subtitle{
@@ -103,44 +174,117 @@
     color: #252f2a;
 }
 
-.card-info-content{
-    margin: 0 !important;
-    font-size: 14px;
+.profile-field .password-button{
+    margin-top: 8px !important;
 }
 
-@media (max-width: 700px) {
-    .card-container {
-        padding: 15px;
-        margin: 20px 8vw;
+.edit-profile-submit:focus, .edit-profile-discard:focus{
+    outline: none !important;
+}
+
+.edit-profile-charts{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.8rem 1.5rem;
+    gap: 3px;
+}
+
+.profile-chart-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+.profile-chart-container-long{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+.profile-chart-title{
+    margin-bottom: 5px;
+    font-size: .875rem;
+    font-weight: 600;
+}
+
+@media (max-width: 1260px) {
+    .edit-profile-charts {
+        display: flex;
+        flex-wrap: wrap; /* Permiterea elementelor să se așeze pe mai multe rânduri */
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.8rem 1.5rem;
+        gap: 3px;
+        max-width: 100%; /* Asigurarea că containerul nu depășește lățimea disponibilă */
     }
 
-    .card-title {
-        font-size: 1.1rem;
-        color: #698576;
-        gap: 8px;
+    .edit-profile-charts > * {
+        flex: 0 1 calc(50% - 3px); /* Setarea flexibilității pentru fiecare element să ocupe 50% din lățimea containerului cu o mică decalare pentru spațiere */
+        margin-bottom: 3px; /* Adăugarea unui spațiu mic între elementele de pe același rând */
+    }
+}
+
+@media (max-width: 900px) {
+    .edit-account-introduction{
+        max-width: 70%;
     }
 
-    .card-button {
-        padding: 5px 10px;
-        font-weight: 500;
-        font-size: 0.8rem;
-    }
-
-    .card-form-group {
-        font-size: 0.8rem;
-    }
-
-    .card-form-group-read {
-        font-size: 0.8rem;
-    }
-
-    .edit-account-subtitle {
-        margin: 20px 8vw;
-    }
-
-    .password-fields{
+    .edit-profile-charts{
         display: flex;
         flex-direction: column;
-        gap: 5px;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.8rem 1.5rem;
+        gap: 3px;
+    }
+}
+
+@media (max-width: 650px) {
+    .edit-account-introduction{
+        max-width: 90%;
+    }
+
+    .edit-profile-card{
+        padding-right: 3vw;
+        padding-left: 3vw;
+    }
+
+    .edit-profile-submit{
+        width: 20%;
+    }
+
+    .edit-profile-discard{
+        width: 40%;
+    }
+
+    .edit-profile-charts{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.8rem 1.5rem;
+        gap: 3px;
+    }
+}
+
+@media (max-height: 550px) {
+    .edit-account-background{
+        height: 70vh;
+    }
+}
+
+@media (max-height: 500px) {
+    .edit-account-background{
+        height: 90vh;
     }
 }

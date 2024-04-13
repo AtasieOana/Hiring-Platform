@@ -54,6 +54,9 @@ public class SecurityConfig   {
                 .antMatchers("/addAnswersForQuestions").hasAnyAuthority("ROLE_CANDIDATE")
                 .antMatchers("/deleteCv/{cvId}").hasAnyAuthority("ROLE_CANDIDATE")
                 .antMatchers("/getRecommendedJobs/{candidateId}").hasAnyAuthority("ROLE_CANDIDATE")
+                .antMatchers("/getJobsPublishedPerDay").hasAnyAuthority("ROLE_CANDIDATE")
+                .antMatchers("/getApplicationStatusNumbers/{candidateId}").hasAnyAuthority("ROLE_CANDIDATE")
+                .antMatchers("/getApplicationViewedNumbers/{candidateId}").hasAnyAuthority("ROLE_CANDIDATE")
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(accessDeniedHandler())
@@ -82,8 +85,6 @@ public class SecurityConfig   {
 
     @Bean
     public AuthenticationEntryPoint accessDeniedHandler() {
-        return (request, response, authException) -> {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, HttpStatus.UNAUTHORIZED.getReasonPhrase());
-        };
+        return (request, response, authException) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED, HttpStatus.UNAUTHORIZED.getReasonPhrase());
     }
 }

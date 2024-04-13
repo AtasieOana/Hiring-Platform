@@ -91,9 +91,14 @@ public class UserService {
         if(optionalUser.isPresent()){
             // Save edited user in db
             User userToBeSaved = optionalUser.get();
-            BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-            String encodedPassword = bCryptPasswordEncoder.encode(newPassword);
-            userToBeSaved.setPassword(encodedPassword);
+            if(!newPassword.isEmpty()) {
+                BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+                String encodedPassword = bCryptPasswordEncoder.encode(newPassword);
+                userToBeSaved.setPassword(encodedPassword);
+            }
+            else {
+                userToBeSaved.setPassword(userToBeSaved.getPassword());
+            }
             userRepository.save(userToBeSaved);
             // Save edited admin in db
             Admin admin = adminService.editAdmin(adminId, newUsername);

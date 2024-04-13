@@ -84,95 +84,102 @@ const ResetPassword = () => {
         <div>
             <HeaderAuth/>
             <div className="resPass-container">
-                <div className="resPass-title">{t('change_pass')}</div>
-                <div className="password-subtitle">
-                    <p>{t('reset_helper')}</p>
-                    <p>{t('reset_helper2')}</p>
-                </div>
                 <div className="resPass-container-form">
-                    <form className="resPass-forms">
-                        <FormGroup
-                            label={t('email_address')}
-                            className="resPass-form-group"
-                            labelInfo={t('autocompleted')}
+                    <div className="login-title ">{t('change_pass')}</div>
+                    <div className="password-subtitle">
+                        <span className="password-subtitle-imp">{t('reset_helper') + " "}</span>
+                        <span>{t('reset_helper2')}</span>
+                    </div>
+                    <form onSubmit={e => {
+                        e.preventDefault();
+                        handleTokenCheck()
+                    }}>
+                        <div className="resPass-forms">
+                            <FormGroup
+                                label={t('email_address')}
+                                className="resPass-form-group"
+                                labelInfo={t('autocompleted')}
+                            >
+                                <InputGroup
+                                    value={emailParam}
+                                    readOnly={true}
+                                    asyncControl={true}
+                                    autoComplete="new-email"
+                                />
+                            </FormGroup>
+                            <FormGroup
+                                label={t('password')}
+                                intent={passwordInvalid ? Intent.DANGER : Intent.NONE}
+                                helperText={passwordInvalid ? invalidPasswordMessage : ""}
+                                className="resPass-form-group"
+                                labelInfo={"*"}
+                            >
+                                <InputGroup
+                                    type={showPassword ? 'text' : 'password'}
+                                    value={newPassword}
+                                    autoComplete="new-password"
+                                    placeholder={t('password_placeholder')}
+                                    onChange={(e: any) => setNewPassword(e.target.value)}
+                                    rightElement={
+                                        <Button
+                                            className="password-button"
+                                            icon={showPassword ? 'eye-off' : 'eye-open'}
+                                            minimal={true}
+                                            onClick={togglePasswordVisibility}
+                                            small={true}
+                                            fill
+                                        />
+                                    }
+                                />
+                            </FormGroup>
+                            <FormGroup
+                                label={t('confirm_password')}
+                                intent={confirmPasswordInvalid ? Intent.DANGER : Intent.NONE}
+                                helperText={confirmPasswordInvalid ? invalidConfirmMessage : ""}
+                                className="resPass-form-group"
+                                labelInfo={"*"}
+                            >
+                                <InputGroup
+                                    type={showConfPassword ? 'text' : 'password'}
+                                    value={confirmPassword}
+                                    placeholder={t('password_confirm_placeholder')}
+                                    autoComplete="new-password"
+                                    onChange={(e: any) => setConfirmPassword(e.target.value)}
+                                    rightElement={
+                                        <Button
+                                            className="password-button"
+                                            icon={showConfPassword ? 'eye-off' : 'eye-open'}
+                                            minimal={true}
+                                            onClick={toggleConfPasswordVisibility}
+                                            small={true}
+                                            fill
+                                        />
+                                    }
+                                />
+                            </FormGroup>
+                            <FormGroup
+                                label="Token"
+                                intent={tokenInvalid ? Intent.DANGER : Intent.NONE}
+                                helperText={tokenInvalid ? invalidTokenMessage : ""}
+                                className="resPass-form-group"
+                                labelInfo={"*"}
+                            >
+                                <InputGroup
+                                    type="text"
+                                    value={token}
+                                    autoComplete="token"
+                                    onChange={(e: any) => setToken(e.target.value)}
+                                />
+                            </FormGroup>
+                        </div>
+                        <Button onClick={handleTokenCheck}
+                                small={true}
+                                className="resPass-button"
+                                type="submit"
                         >
-                            <InputGroup
-                                value={emailParam}
-                                readOnly={true}
-                                asyncControl={true}
-                                autoComplete="new-email"
-                            />
-                        </FormGroup>
-                        <FormGroup
-                            label={t('password')}
-                            intent={passwordInvalid ? Intent.DANGER : Intent.NONE}
-                            helperText={passwordInvalid ? invalidPasswordMessage : ""}
-                            className="register-form-group"
-                            labelInfo={t('required')}
-                        >
-                            <InputGroup
-                                type={showPassword ? 'text' : 'password'}
-                                value={newPassword}
-                                autoComplete="new-password"
-                                placeholder={t('password_placeholder')}
-                                onChange={(e: any) => setNewPassword(e.target.value)}
-                                rightElement={
-                                    <Button
-                                        className="password-button"
-                                        icon={showPassword ? 'eye-off' : 'eye-open'}
-                                        minimal={true}
-                                        onClick={togglePasswordVisibility}
-                                        small={true}
-                                        fill
-                                    />
-                                }
-                            />
-                        </FormGroup>
-                        <FormGroup
-                            label={t('confirm_password')}
-                            intent={confirmPasswordInvalid ? Intent.DANGER : Intent.NONE}
-                            helperText={confirmPasswordInvalid ? invalidConfirmMessage : ""}
-                            className="register-form-group"
-                            labelInfo={t('required')}
-                        >
-                            <InputGroup
-                                type={showConfPassword ? 'text' : 'password'}
-                                value={confirmPassword}
-                                placeholder={t('password_confirm_placeholder')}
-                                autoComplete="new-password"
-                                onChange={(e: any) => setConfirmPassword(e.target.value)}
-                                rightElement={
-                                    <Button
-                                        className="password-button"
-                                        icon={showConfPassword ? 'eye-off' : 'eye-open'}
-                                        minimal={true}
-                                        onClick={toggleConfPasswordVisibility}
-                                        small={true}
-                                        fill
-                                    />
-                                }
-                            />
-                        </FormGroup>
-                        <FormGroup
-                            label="Token"
-                            intent={tokenInvalid ? Intent.DANGER : Intent.NONE}
-                            helperText={tokenInvalid ? invalidTokenMessage : ""}
-                            className="register-form-group"
-                        >
-                            <InputGroup
-                                type="text"
-                                value={token}
-                                autoComplete="token"
-                                onChange={(e: any) => setToken(e.target.value)}
-                            />
-                        </FormGroup>
+                            {t('verify_button')}
+                        </Button>
                     </form>
-                    <Button onClick={handleTokenCheck}
-                            small={true}
-                            className="resPass-button"
-                    >
-                        {t('verify_button')}
-                    </Button>
                 </div>
             </div>
         </div>

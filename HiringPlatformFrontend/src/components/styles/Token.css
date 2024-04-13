@@ -1,13 +1,20 @@
 .token-container {
-    margin-top: 20px;
-    margin-bottom: 10px;
+    background-color: rgba(224, 156, 115, 0.2);
+    background-image: url("../../resources-photo/BackgroundAuth.png");
+    background-size: cover;
+    background-position: center;
+    position: fixed;
+    width: 100%;
+    height: 100%;
 }
 
 .token-container-form {
-    background-color: rgba(224, 156, 115, 0.2);
-    padding: 20px 20px;
+    background-color: white;
     width: 45vw;
-    margin: 20px auto 10px;
+    margin: 17vh auto 17vh;
+    border-radius: 5px;
+    height: 55vh;
+    padding: 20px 3%;
 }
 
 .token-title {
@@ -20,13 +27,8 @@
     padding-top: 15px;
 }
 
-.token-forms {
-    margin-left: 8%;
-    margin-right: 8%;
-}
-
 .token-form-group input {
-    height: 25px;
+    height: 30px;
 }
 
 .token-forms .bp4-form-helper-text {
@@ -43,10 +45,11 @@
     color: black !important;
     font-weight: 600;
     letter-spacing: 1px;
+    height: 30px;
 }
 
 .token-button:focus {
-    outline: #e56c06 solid 1px !important;
+    outline: none !important;
 }
 
 
@@ -57,7 +60,7 @@
 
 @media (max-width: 1000px) {
     .token-container-form {
-        width: 75vw;
+        width: 80vw;
     }
 
     .token-forms {
@@ -65,3 +68,41 @@
         margin-right: 3%;
     }
 }
+
+
+@media (max-width: 750px) {
+    .password {
+        width: 85vw;
+    }
+
+    .token-container-form{
+        width: 85vw;
+    }
+}
+
+@media (max-width: 600px) {
+    .token-button{
+        width: 70%;
+    }
+
+    .token-container-form{
+        width: 85vw;
+    }
+}
+
+@media (max-height: 650px) {
+    .token-container-form {
+        overflow: auto;
+    }
+}
+
+@media (max-height: 650px) {
+    .token-container-form {
+        overflow: auto;
+        margin: 10vh auto 10vh;
+        border-radius: 5px;
+        height: 70vh;
+    }
+}
+
+

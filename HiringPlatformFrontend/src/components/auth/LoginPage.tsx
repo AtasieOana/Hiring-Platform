@@ -15,6 +15,7 @@ import {setProfileActionData} from "../../redux/actions/profileActions";
 import CandidateService from "../../services/candidate.service";
 import HeaderAuth from "../header/HeaderAuth";
 import {setCvActionData} from "../../redux/actions/cvActions";
+import GoogleLogo from "../../resources-photo/GoogleLogo.png";
 
 const LoginPage = () => {
 
@@ -157,76 +158,90 @@ const LoginPage = () => {
         <div>
             <HeaderAuth/>
             <div className="login-container">
-            <div className="login-title">{t('login_to')} Joblistic!</div>
-            <div className="login-container-form">
-                <form className="login-forms">
-                    <FormGroup
-                        label={t('email_address')}
-                        className="login-form-group"
-                        labelInfo={t('required')}
-                    >
-                        <InputGroup
-                            value={email}
-                            placeholder="mail@gmail.com"
-                            autoComplete="new-email"
-                            onChange={(e: any) => setEmail(e.target.value)}
-                            asyncControl={true}
-                        />
-                    </FormGroup>
-                    <FormGroup
-                        label={t('password')}
-                        intent={loginInvalid ? Intent.DANGER : Intent.NONE}
-                        helperText={loginInvalid ? invalidLoginMessage : ""}
-                        className="login-form-group"
-                        labelInfo={t('required')}
-                    >
-                        <InputGroup
-                            type={showPassword ? 'text' : 'password'}
-                            value={password}
-                            autoComplete="new-password"
-                            placeholder={t('password_placeholder')}
-                            onChange={(e: any) => setPassword(e.target.value)}
-                            rightElement={
-                                <Button
-                                    className="password-button"
-                                    icon={showPassword ? 'eye-off' : 'eye-open'}
-                                    minimal={true}
-                                    onClick={togglePasswordVisibility}
-                                    small={true}
-                                    fill
-                                />
-                            }
-                        />
-                    </FormGroup>
-                    <div className="forgot-password">
-                        <Text onClick={goToForgetPassword}>
-                            {t('password_title')}
-                        </Text>
+                <div className="login-container-form">
+                    <div className="login-title">{t('login_to')}!</div>
+                    <div className="login-go-to-register">
+                        {t('login_go_to_register1')}
+                        <Link to="/register">
+                            {t('login_go_to_register2')}
+                        </Link>
                     </div>
-                </form>
-                {isLoading ? <Spinner className="central-spinner"
-                                      size={20}/> :
-                                <div><Button onClick={handleLogin}
-                                    small={true}
-                                    className="login-button"
+                    <form
+                        onSubmit={e => {
+                            e.preventDefault();
+                            handleLogin()
+                        }}>
+                        <div className="login-forms">
+                            <FormGroup
+                                label={t('email_address')}
+                                className="login-form-group"
+                                labelInfo={"*"}
+                            >
+                                <InputGroup
+                                    value={email}
+                                    placeholder={t('email_placeholder')}
+                                    autoComplete="new-email"
+                                    onChange={(e: any) => setEmail(e.target.value)}
+                                    asyncControl={true}
+                                />
+                            </FormGroup>
+                            <FormGroup
+                                label={t('password')}
+                                intent={loginInvalid ? Intent.DANGER : Intent.NONE}
+                                helperText={loginInvalid ? invalidLoginMessage : ""}
+                                className="login-form-group"
+                                labelInfo={"*"}
+                            >
+                                <InputGroup
+                                    type={showPassword ? 'text' : 'password'}
+                                    value={password}
+                                    autoComplete="new-password"
+                                    placeholder={t('password_placeholder')}
+                                    onChange={(e: any) => setPassword(e.target.value)}
+                                    rightElement={
+                                        <Button
+                                            className="password-button"
+                                            icon={showPassword ? 'eye-off' : 'eye-open'}
+                                            minimal={true}
+                                            onClick={togglePasswordVisibility}
+                                            small={true}
+                                            fill
+                                        />
+                                    }
+                                />
+                            </FormGroup>
+                            <div className="forgot-password">
+                                <Text onClick={goToForgetPassword}>
+                                    {t('password_title')}
+                                </Text>
+                            </div>
+                        </div>
+                        {isLoading ? <Spinner className="central-spinner"
+                                              size={40}/> :
+                            <div><Button onClick={handleLogin}
+                                         small={true}
+                                         className="login-button"
+                                         type="submit"
                             >
                                 {t('login_button')}
                             </Button>
-                            <div className="text-or">
-                                OR
+                                <div className="text-or-separator">
+                                    <span className="text-or">
+                                        OR
+                                    </span>
+                                </div>
+                                <Button className="google-button"
+                                        small={true}
+                                        onClick={() => logGoogleUser(EMPLOYER_ACCOUNT)}>
+                                    <img className="google-button-img" src={GoogleLogo} alt="Google Logo"/>
+
+                                    {t('sign_google')}
+                                </Button>
                             </div>
-                            <Button className="register-button"
-                                    small={true}
-                                    onClick={() => logGoogleUser(EMPLOYER_ACCOUNT)}>
-                                {t('sign_google')}
-                            </Button>
-                    </div>}
-            </div>
-            <div className="login-go-to-register">
-                <Link to="/register">
-                    {t('login_go_to_register')} &#8594;
-                </Link>
-            </div>
+                        }
+                    </form>
+                </div>
+
             </div>
         </div>
     );

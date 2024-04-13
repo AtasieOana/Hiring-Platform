@@ -58,41 +58,53 @@ const TokenPage = () => {
         <div>
             <HeaderAuth/>
             <div className="token-container">
-                <div className="token-title">{t('verify_account')}</div>
                 <div className="token-container-form">
-                    <form className="token-forms">
-                        <FormGroup
-                            label={t('email_address')}
-                            className="token-form-group"
-                            labelInfo={t('autocompleted')}
+                    <div className="login-title">{t('verify_account')}</div>
+                    <div className="password-subtitle">
+                        <span>{t('verify_helper1') + " "}</span>
+                        <span className="password-subtitle-imp">{t('verify_helper2')}</span>
+                    </div>
+                    <form
+                        onSubmit={e => {
+                            e.preventDefault();
+                            handleTokenCheck()
+                        }}>
+                        <div className="token-forms">
+                            <FormGroup
+                                label={t('email_address')}
+                                className="resPass-form-group"
+                                labelInfo={t('autocompleted')}
+                            >
+                                <InputGroup
+                                    value={emailParam}
+                                    readOnly={true}
+                                    asyncControl={true}
+                                    autoComplete="new-email"
+                                />
+                            </FormGroup>
+                            <FormGroup
+                                label="Token"
+                                intent={tokenInvalid ? Intent.DANGER : Intent.NONE}
+                                helperText={tokenInvalid ? invalidTokenMessage : ""}
+                                className="resPass-form-group"
+                                labelInfo={"*"}
+                            >
+                                <InputGroup
+                                    type="text"
+                                    value={token}
+                                    autoComplete="token"
+                                    onChange={(e) => setToken(e.target.value)}
+                                />
+                            </FormGroup>
+                        </div>
+                        <Button onClick={handleTokenCheck}
+                                small={true}
+                                className="token-button"
+                                type="submit"
                         >
-                            <InputGroup
-                                value={emailParam}
-                                readOnly={true}
-                                asyncControl={true}
-                                autoComplete="new-email"
-                            />
-                        </FormGroup>
-                        <FormGroup
-                            label="Token"
-                            intent={tokenInvalid ? Intent.DANGER : Intent.NONE}
-                            helperText={tokenInvalid ? invalidTokenMessage : ""}
-                            className="register-form-group"
-                        >
-                            <InputGroup
-                                type="text"
-                                value={token}
-                                autoComplete="token"
-                                onChange={(e) => setToken(e.target.value)}
-                            />
-                        </FormGroup>
+                            {t('verify_button')}
+                        </Button>
                     </form>
-                    <Button onClick={handleTokenCheck}
-                            small={true}
-                            className="token-button"
-                    >
-                        {t('verify_button')}
-                    </Button>
                 </div>
             </div>
         </div>

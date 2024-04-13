@@ -62,60 +62,73 @@ const LoginAdminPage = () => {
         <div>
             <HeaderAdminAuthPage/>
             <div className="login-container">
-            <div className="login-title">{t('as_admin')}</div>
-            <div className="login-container-form">
-                <form className="login-forms">
-                    <FormGroup
-                        label={t('email_address')}
-                        className="login-form-group"
-                        labelInfo={t('required')}
-                    >
-                        <InputGroup
-                            value={email}
-                            placeholder="mail@gmail.com"
-                            autoComplete="new-email"
-                            onChange={(e: any) => setEmail(e.target.value)}
-                            asyncControl={true}
-                        />
-                    </FormGroup>
-                    <FormGroup
-                        label={t('password')}
-                        intent={loginInvalid ? Intent.DANGER : Intent.NONE}
-                        helperText={loginInvalid ? invalidLoginMessage : ""}
-                        className="login-form-group"
-                        labelInfo={t('required')}
-                    >
-                        <InputGroup
-                            type={showPassword ? 'text' : 'password'}
-                            value={password}
-                            autoComplete="new-password"
-                            placeholder={t('password_placeholder')}
-                            onChange={(e: any) => setPassword(e.target.value)}
-                            rightElement={
-                                <Button
-                                    className="password-button"
-                                    icon={showPassword ? 'eye-off' : 'eye-open'}
-                                    minimal={true}
-                                    onClick={togglePasswordVisibility}
-                                    small={true}
-                                    fill
+                <div className="login-container-form login-admin">
+                    <div className="login-title">{t('as_admin')}</div>
+                    <div className="login-go-to-register">
+                        {t('login_admin_go_to_simple_login1')}
+                        <Link to="/login">
+                            {t('login_admin_go_to_simple_login2')}
+                        </Link>
+                    </div>
+                    <form
+                        onSubmit={e => {
+                            e.preventDefault();
+                            handleLogin()
+                        }}>
+                        <div className="login-forms">
+                            <FormGroup
+                                label={t('email_address')}
+                                className="login-form-group"
+                                labelInfo={"*"}
+                            >
+                                <InputGroup
+                                    value={email}
+                                    placeholder={t('email_placeholder')}
+                                    autoComplete="new-email"
+                                    onChange={(e: any) => setEmail(e.target.value)}
+                                    asyncControl={true}
                                 />
-                            }
-                        />
-                    </FormGroup>
-                </form>
-                {isLoading ? <Spinner className="central-spinner"
-                                      size={20}/> :
-                <Button onClick={handleLogin}
-                        small={true}
-                        className="login-button-admin"
-                >
-                    {t('login_button')}
-                </Button>}
-            </div>
+                            </FormGroup>
+                            <FormGroup
+                                label={t('password')}
+                                intent={loginInvalid ? Intent.DANGER : Intent.NONE}
+                                helperText={loginInvalid ? invalidLoginMessage : ""}
+                                className="login-form-group"
+                                labelInfo={"*"}
+                            >
+                                <InputGroup
+                                    type={showPassword ? 'text' : 'password'}
+                                    value={password}
+                                    autoComplete="new-password"
+                                    placeholder={t('password_placeholder')}
+                                    onChange={(e: any) => setPassword(e.target.value)}
+                                    rightElement={
+                                        <Button
+                                            className="password-button"
+                                            icon={showPassword ? 'eye-off' : 'eye-open'}
+                                            minimal={true}
+                                            onClick={togglePasswordVisibility}
+                                            small={true}
+                                            fill
+                                        />
+                                    }
+                                />
+                            </FormGroup>
+                        </div>
+                        {isLoading ? <Spinner className="central-spinner"
+                                              size={40}/> :
+                            <Button onClick={handleLogin}
+                                    small={true}
+                                    className="login-button-admin"
+                                    type={"submit"}
+                            >
+                                {t('login_button')}
+                            </Button>}
+                    </form>
+                </div>
             </div>
         </div>
-    );
+);
 };
 
 export default LoginAdminPage;

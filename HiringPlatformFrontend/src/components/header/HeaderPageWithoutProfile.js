@@ -8,6 +8,7 @@ import {AppToaster} from "../common/AppToaster";
 import AuthenticationService from "../../services/authentication.service";
 import {useDispatch, useSelector} from "react-redux";
 import {setAuthData} from "../../redux/actions/authActions";
+import {GBFlag, ROFlag} from "../common/CommonMethods";
 
 const HeaderWithoutProfile = () => {
 
@@ -54,9 +55,26 @@ const HeaderWithoutProfile = () => {
             <div className="company-name">JOBLISTIC</div>
 
             <div className="navigation">
-                <Link className="nav-item" to="#" isActive={false} onClick={changeLanguage}>
-                    <Icon size={13} icon="translate" color="white" className="nav-icon"/> En/Ro
-                </Link>
+                <Popover
+                    interactionKind="hover"
+                    usePortal={false}
+                    content={
+                        <Menu className={"menu-language"}>
+                            <MenuItem text="English" selected={i18n.language === 'en'}
+                                      icon={GBFlag()}
+                                      disabled={i18n.language === 'en'} onClick={() => changeLanguage()} />
+                            <MenuItem text="Română" selected={i18n.language === 'ro'}
+                                      icon={ROFlag()}
+                                      disabled={i18n.language === 'ro'} onClick={() => changeLanguage()} />
+                        </Menu>
+                    }
+                    position="bottom"
+                >
+                    <div className="nav-item-language">
+                        <Icon size={13} icon={i18n.language === 'en' ? GBFlag() : ROFlag()} color="white" className="nav-icon"/> {i18n.language === 'en' ? 'English' : 'Română'}
+                        <Icon size={13} icon="chevron-down" color="white" className="nav-icon"/>
+                    </div>
+                </Popover>
                 <Link to="/contacts" className="nav-item-auth">
                     <Icon size={13} icon="helper-management" color="white" className="nav-icon-auth"/> {t('contact')}
                 </Link>
@@ -73,7 +91,7 @@ const HeaderWithoutProfile = () => {
                     }
                     position="bottom-right"
                 >
-                    <Link className="nav-item" to="#" isActive={false}>
+                    <Link className="nav-item nav-item-chevron" to="#" isActive={false}>
                         <Icon size={13} icon="mugshot" color="white" className="nav-icon"/> {employer?.companyName}
                         <Icon size={13} icon="chevron-down" color="white" className="nav-icon"/>
                     </Link>

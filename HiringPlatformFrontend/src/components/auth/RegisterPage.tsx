@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
-import {Button, FormGroup, InputGroup, Intent, Spinner} from '@blueprintjs/core';
+import {Button, FormGroup, Icon, InputGroup, Intent, Spinner} from '@blueprintjs/core';
 import "../styles/Register.css"
 import {useTranslation} from "react-i18next";
 import {CANDIDATE_ACCOUNT, EMPLOYER_ACCOUNT} from '../../util/constants';
@@ -19,7 +19,7 @@ import {setProfileActionData} from "../../redux/actions/profileActions";
 import CandidateService from "../../services/candidate.service";
 import {useDispatch} from "react-redux";
 import HeaderAuth from "../header/HeaderAuth";
-
+import GoogleLogo from "../../resources-photo/GoogleLogo.png";
 
 interface FormErrors {
     emailRequired?: boolean;
@@ -284,57 +284,71 @@ const RegisterPage = () => {
         }
     }
 
+    let errorActive = false
     let mailError = "";
     if (errors.emailRequired) {
         mailError = t('email_address_req');
+        errorActive = true
     } else if (errors.emailInvalid) {
         mailError = t('email_address_in');
+        errorActive = true
     }
     let lastnameError = "";
     if (errors.lastnameRequired) {
         lastnameError = t('lastname_req');
+        errorActive = true
     } else if (errors.lastnameLen) {
         lastnameError = t('lastname_len');
+        errorActive = true
     } else if (errors.lastnameInvalid) {
         lastnameError = t('lastname_content');
+        errorActive = true
     }
     let firstnameError = "";
     if (errors.firstnameRequired) {
         firstnameError = t('firstname_req');
+        errorActive = true
     } else if (errors.firstnameLen) {
         firstnameError = t('firstname_len');
+        errorActive = true
     } else if (errors.lastnameInvalid) {
         firstnameError = t('firstname_content');
+        errorActive = true
     }
     let companyError = "";
     if (errors.companyRequired) {
         companyError = t('company_req');
+        errorActive = true
     } else if (errors.companyLen) {
         companyError = t('company_len');
+        errorActive = true
     } else if (errors.companyInvalid) {
         companyError = t('company_content');
+        errorActive = true
     }
     let passwordError = "";
     if (errors.passwordRequired) {
         passwordError = t('password_req');
+        errorActive = true
     } else if (errors.passwordLen) {
         passwordError = t('password_len');
+        errorActive = true
     }
     let confirmError = "";
     if (errors.confirmPassword) {
         confirmError = t('password_confirm');
+        errorActive = true
     }
-
 
     const generatePasswordFields = () => {
         return (
-            <div className="password-fields">
+            <div className="register-password-fields">
                 <FormGroup
                     label={t('password')}
                     intent={passwordError ? Intent.DANGER : Intent.NONE}
                     helperText={passwordError ? passwordError : ""}
                     className="register-form-group"
-                    labelInfo={t('required')}
+                    labelInfo={"*"}
                 >
                     <InputGroup
                         type={showPassword ? 'text' : 'password'}
@@ -359,7 +373,7 @@ const RegisterPage = () => {
                     intent={confirmError ? Intent.DANGER : Intent.NONE}
                     helperText={confirmError ? confirmError : ""}
                     className="register-form-group"
-                    labelInfo={t('required')}
+                    labelInfo={"*"}
                 >
                     <InputGroup
                         type={showConfPassword ? 'text' : 'password'}
@@ -386,56 +400,59 @@ const RegisterPage = () => {
     const candidatePanel = () => {
         return (
             <div>
-                <div className="register-container-form">
+                <div className={errorActive ? "register-error-active register-container-form" : "register-container-form"}>
                     <form className="register-forms">
+                        {renderCommonPart()}
                         <FormGroup
                             label={t('email_address')}
                             intent={mailError ? Intent.DANGER : Intent.NONE}
                             helperText={mailError ? mailError : ""}
                             className="register-form-group"
-                            labelInfo={t('required')}
+                            labelInfo={"*"}
                         >
                             <InputGroup
                                 value={email}
-                                placeholder="mail@gmail.com"
+                                placeholder={t('email_placeholder')}
                                 onChange={(e: any) => setEmail(e.target.value)}
                                 asyncControl={true}
                             />
                         </FormGroup>
-                        <FormGroup
-                            label={t('lastname')}
-                            intent={lastnameError ? Intent.DANGER : Intent.NONE}
-                            helperText={lastnameError ? lastnameError : ""}
-                            className="register-form-group"
-                            labelInfo={t('required')}
-                        >
-                            <InputGroup
-                                type="text"
-                                value={lastName}
-                                placeholder="Popescu"
-                                asyncControl={true}
-                                onChange={(e: any) => setLastName(e.target.value)}
-                            />
-                        </FormGroup>
-                        <FormGroup
-                            label={t('firstname')}
-                            intent={firstnameError ? Intent.DANGER : Intent.NONE}
-                            helperText={firstnameError ? firstnameError : ""}
-                            className="register-form-group"
-                            labelInfo={t('required')}
-                        >
-                            <InputGroup
-                                type="text"
-                                value={firstName}
-                                placeholder="Maria"
-                                autoComplete="new-user"
-                                onChange={(e: any) => setFirstName(e.target.value)}
-                            />
-                        </FormGroup>
+                        <div className="name-fields">
+                            <FormGroup
+                                label={t('lastname')}
+                                intent={lastnameError ? Intent.DANGER : Intent.NONE}
+                                helperText={lastnameError ? lastnameError : ""}
+                                className="register-form-group"
+                                labelInfo={"*"}
+                            >
+                                <InputGroup
+                                    type="text"
+                                    value={lastName}
+                                    placeholder="Popescu"
+                                    asyncControl={true}
+                                    onChange={(e: any) => setLastName(e.target.value)}
+                                />
+                            </FormGroup>
+                            <FormGroup
+                                label={t('firstname')}
+                                intent={firstnameError ? Intent.DANGER : Intent.NONE}
+                                helperText={firstnameError ? firstnameError : ""}
+                                className="register-form-group"
+                                labelInfo={"*"}
+                            >
+                                <InputGroup
+                                    type="text"
+                                    value={firstName}
+                                    placeholder="Maria"
+                                    autoComplete="new-user"
+                                    onChange={(e: any) => setFirstName(e.target.value)}
+                                />
+                            </FormGroup>
+                        </div>
                         {generatePasswordFields()}
                     </form>
                     {isLoading ? <Spinner className="central-spinner"
-                                          size={20}/> :
+                                          size={40}/> :
                         <div>
                             <Button onClick={handleRegisterCandidate}
                                     small={true}
@@ -443,20 +460,18 @@ const RegisterPage = () => {
                             >
                                 {t('register_button')}
                             </Button>
-                            <div className="text-or">
-                                OR
+                            <div className="text-or-separator">
+                                    <span className="text-or">
+                                        OR
+                                    </span>
                             </div>
-                            <Button className="register-button"
+                            <Button className="google-button"
                                     small={true}
                                     onClick={() => logGoogleUser(CANDIDATE_ACCOUNT)}>
+                            <img className="google-button-img" src={GoogleLogo} alt="Google Logo"/>
                                 {t('sign_google')}
                             </Button>
                         </div>}
-                </div>
-                <div className="register-go-to-login">
-                    <Link to="/login">
-                        {t('register_go_to_login')} &#8594;
-                    </Link>
                 </div>
             </div>
         );
@@ -466,18 +481,20 @@ const RegisterPage = () => {
     const employerPanel = () => {
         return (
             <div>
-                <div className="register-container-form">
+                <div
+                    className={errorActive ? "register-error-active register-container-form" : "register-container-form"}>
                     <form className="register-forms">
+                        {renderCommonPart()}
                         <FormGroup
                             label={t('email_address')}
                             intent={mailError ? Intent.DANGER : Intent.NONE}
                             helperText={mailError ? mailError : ""}
                             className="register-form-group"
-                            labelInfo={t('required')}
+                            labelInfo={"*"}
                         >
                             <InputGroup
                                 value={email}
-                                placeholder="mail@gmail.com"
+                                placeholder={t('email_placeholder')}
                                 onChange={(e: any) => setEmail(e.target.value)}
                                 asyncControl={true}
                             />
@@ -487,7 +504,7 @@ const RegisterPage = () => {
                             intent={companyError ? Intent.DANGER : Intent.NONE}
                             helperText={companyError ? companyError : ""}
                             className="register-form-group"
-                            labelInfo={t('required')}
+                            labelInfo={"*"}
                         >
                             <InputGroup
                                 type="text"
@@ -500,7 +517,7 @@ const RegisterPage = () => {
                         {generatePasswordFields()}
                     </form>
                     {isLoading ? <Spinner className="central-spinner"
-                                          size={20}/> :
+                                          size={40}/> :
                         <div>
                             <Button onClick={handleRegisterEmployer}
                                     small={true}
@@ -508,24 +525,65 @@ const RegisterPage = () => {
                             >
                                 {t('register_button')}
                             </Button>
-                            <div className="text-or">
-                                OR
+                            <div className="text-or-separator">
+                                    <span className="text-or">
+                                        OR
+                                    </span>
                             </div>
-                            <Button className="register-button"
+                            <Button className="google-button"
                                     small={true}
                                     onClick={() => logGoogleUser(EMPLOYER_ACCOUNT)}>
+                            <img className="google-button-img" src={GoogleLogo} alt="Google Logo"/>
                                 {t('sign_google')}
                             </Button>
                         </div>}
                 </div>
-                <div className="register-go-to-login">
-                    <Link to="/login">
-                        {t('register_go_to_login')} &#8594;
-                    </Link>
-                </div>
             </div>
         );
     };
+
+    const renderCommonPart = () => {
+        return <>
+
+            <div
+                className={errorActive ? "register-title-error-active register-title" : "register-title"}>
+                {t('register_to')}!</div>
+            <div className="register-go-to-login">
+                {t('register_go_to_login1')}
+                <Link to="/login">
+                    {t('register_go_to_login2')}
+                </Link>
+            </div>
+            <FormGroup className="user-type-selection">
+                <div className="tabs">
+                    <div
+                        className={`tab ${userType === CANDIDATE_ACCOUNT && 'active'}`}
+                        onClick={() => {
+                            resetState();
+                            setUserType(CANDIDATE_ACCOUNT)
+                        }}
+                    >
+                        <Icon className="contact-icon" icon="person" size={40}/>
+                        <div>
+                            {t('candidate_account_type')}
+                        </div>
+                    </div>
+                    <div
+                        className={`tab ${userType === EMPLOYER_ACCOUNT && 'active'}`}
+                        onClick={() => {
+                            resetState();
+                            setUserType(EMPLOYER_ACCOUNT)
+                        }}
+                    >
+                        <Icon className="contact-icon" icon="office" size={40}/>
+                        <div>
+                            {t('employer_account_type')}
+                        </div>
+                    </div>
+                </div>
+            </FormGroup>
+        </>
+    }
 
     const resetState = () => {
         setEmail('');
@@ -543,28 +601,7 @@ const RegisterPage = () => {
         <div>
             <HeaderAuth/>
             <div className="register-container">
-                <div className="register-title">{t('register_to')} Joblistic!</div>
-                <div className="tabs">
-                    <div
-                        className={`tab ${userType === CANDIDATE_ACCOUNT && 'active'}`}
-                        onClick={() => {
-                            resetState();
-                            setUserType(CANDIDATE_ACCOUNT)
-                        }}
-                    >
-                        {t('candidate_label')}
-                    </div>
-                    <div
-                        className={`tab ${userType === EMPLOYER_ACCOUNT && 'active'}`}
-                        onClick={() => {
-                            resetState();
-                            setUserType(EMPLOYER_ACCOUNT)
-                        }}
-                    >
-                        {t('employer_label')}
-                    </div>
-                </div>
-                <div>
+                <div className="register-content">
                     {userType === CANDIDATE_ACCOUNT ? candidatePanel() : employerPanel()}
                 </div>
             </div>

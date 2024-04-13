@@ -1,9 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {useTranslation} from "react-i18next";
-import {Button, Card, Divider, FormGroup, Icon, InputGroup, Intent} from "@blueprintjs/core";
+import {Button, Card, FormGroup, InputGroup, Intent} from "@blueprintjs/core";
 import './EditAccount.css';
-import HeaderPageEmployer from "../header/HeaderPageEmployer";
 import {AppToaster} from "../common/AppToaster";
 import AdminService from "../../services/admin.service";
 import {setAdminData} from "../../redux/actions/adminActions";
@@ -80,7 +79,7 @@ const EditAccountPageAdmin = () => {
         return valid;
     }
 
-    const submitNewAccount = (e) => {
+    const submitNewAccount = () => {
         if (validateAccount()) {
             let request = {
                 userId: admin.adminId,
@@ -108,86 +107,87 @@ const EditAccountPageAdmin = () => {
     }
 
     const returnEditableAccountCard = () => {
-        return <Card className="card-container">
-            <div className="card-title-container">
-                <div className="card-title">
-                    <Icon size={16} icon="heatmap" color="#698576" className="nav-icon"/>
-                    {t('edit_account_information')}
-                    <Icon size={16} icon="heatmap" color="#698576" className="nav-icon"/>
+        return <Card className="edit-profile-card-container">
+            <div className="edit-profile-card-title-container">
+                <div className="edit-profile-card-title">
+                    {t('admin_info')}
                 </div>
-                <Button className="card-button" onClick={submitNewAccount}>
-                    {t('submit')}
-                </Button>
             </div>
-            <Divider/>
-            <div className="card-content">
+            <div className="edit-profile-card-content">
                 <form>
-                    <FormGroup
-                        label={t('email_address')}
-                        className="card-form-group"
-                        labelInfo={t('autocompleted')}
-                    >
-                        <InputGroup
-                            value={admin.userDetails.email}
-                            placeholder="mail@gmail.com"
-                            autoComplete="new-mail"
-                            asyncControl={true}
-                            readOnly={true}
-                        />
-                    </FormGroup>
-                    <FormGroup
-                        label={t('username')}
-                        className="card-form-group"
-                        intent={errorsAccount.username ? Intent.DANGER : Intent.NONE}
-                        helperText={errorsAccount.username ? t('username_in') : ""}
-                        labelInfo={t('required')}
-                    >
-                        <InputGroup
-                            type="text"
-                            autoComplete="new-name"
-                            value={accountInfo.username}
-                            placeholder="Joblistic"
-                            asyncControl={true}
-                            name="username"
-                            onChange={handleAccountChange}
-                        />
-                    </FormGroup>
-                    <div className="change-password-section-title">{t('change_pass')}</div>
-                    <div className="change-password-section-subtitle">* {t('change_pass_condition')}
-                    </div>
-                    <div className="password-fields">
+                    <div className="profile-fields-group">
                         <FormGroup
-                            label={t('password')}
+                            label={t('email_address')}
+                            className="profile-field"
+                            labelInfo={isAccountEdited ? t('read_only') : ""}
+                        >
+                            <InputGroup
+                                value={admin.userDetails.email}
+                                placeholder="mail@gmail.com"
+                                autoComplete="new-mail"
+                                asyncControl={true}
+                                readOnly={true}
+                            />
+                        </FormGroup>
+                        <FormGroup
+                            label={t('username')}
+                            className="profile-field"
+                            intent={errorsAccount.username ? Intent.DANGER : Intent.NONE}
+                            helperText={errorsAccount.username ? t('username_in') : ""}
+                            labelInfo={isAccountEdited ? "*" : ""}
+                        >
+                            <InputGroup
+                                type="text"
+                                autoComplete="new-name"
+                                value={accountInfo.username}
+                                placeholder="Admin"
+                                asyncControl={true}
+                                name="username"
+                                onChange={handleAccountChange}
+                                readOnly={!isAccountEdited}
+                            />
+                        </FormGroup>
+                    </div>
+                    {
+                        isAccountEdited && <div>
+                            <div className="change-password-section-subtitle">
+                                * {t('change_pass_condition')}
+                            </div>
+                        </div>
+                    }
+                    <div className="profile-fields-group">
+                        <FormGroup
+                            label={!isAccountEdited ? t('password') : t('new_password')}
                             intent={errorsAccount.password ? Intent.DANGER : Intent.NONE}
                             helperText={errorsAccount.password ? t('password_err') : ""}
-                            className="card-form-group"
-                            labelInfo={t('required')}
+                            className="profile-field"
                         >
                             <InputGroup
                                 type={showPassword ? 'text' : 'password'}
-                                value={accountInfo.password}
+                                value={isAccountEdited ? accountInfo.password : "*********************"}
                                 name="password"
                                 autoComplete="new-password"
                                 placeholder={t('password_placeholder')}
                                 onChange={handleAccountChange}
                                 rightElement={
-                                    <Button
+                                    isAccountEdited && <Button
                                         className="password-button"
                                         icon={showPassword ? 'eye-off' : 'eye-open'}
                                         minimal={true}
                                         onClick={togglePasswordVisibility}
                                         small={true}
                                         fill
+                                        readOnly={!isAccountEdited}
                                     />
                                 }
+                                readOnly={!isAccountEdited}
                             />
                         </FormGroup>
-                        <FormGroup
+                        {isAccountEdited && <FormGroup
                             label={t('confirm_password')}
                             intent={errorsAccount.confirmPassword ? Intent.DANGER : Intent.NONE}
                             helperText={errorsAccount.confirmPassword ? t('confirm_password_err') : ""}
-                            className="card-form-group"
-                            labelInfo={t('required')}
+                            className="profile-field"
                         >
                             <InputGroup
                                 name="confirmPassword"
@@ -197,72 +197,41 @@ const EditAccountPageAdmin = () => {
                                 autoComplete="new-password"
                                 onChange={handleAccountChange}
                                 rightElement={
-                                    <Button
-                                        className="password-button"
-                                        icon={showConfPassword ? 'eye-off' : 'eye-open'}
-                                        minimal={true}
-                                        onClick={toggleConfPasswordVisibility}
-                                        small={true}
-                                        fill
-                                    />
-                                }
+                                <Button
+                                    className="password-button"
+                                    icon={showConfPassword ? 'eye-off' : 'eye-open'}
+                                    minimal={true}
+                                    onClick={toggleConfPasswordVisibility}
+                                    small={true}
+                                    fill
+                                />
+                            }
                             />
                         </FormGroup>
+                        }
                     </div>
+                    {isAccountEdited && <div className="edit-profile-actions">
+                        <Button className="edit-profile-discard" onClick={()=>{
+                            setAccountInfo({
+                                username: admin.username,
+                                password: "",
+                                confirmPassword: "",
+                            })
+                            setErrorsAccount({
+                                username: false,
+                                password: false,
+                                confirmPassword: false,
+                            })
+                            setIsAccountEdited(false)
+                        }}>
+                            {t('discard_changes')}
+                        </Button>
+                        <Button className="edit-profile-submit" onClick={()=> submitNewAccount()}>
+                            {t('submit')}
+                        </Button>
+                    </div>
+                    }
                 </form>
-            </div>
-        </Card>
-    }
-
-    const returnReadOnlyAccountCard = () => {
-        return <Card className="card-container">
-            <div className="card-title-container">
-                <div className="card-title">
-                    <Icon size={16} icon="heatmap" color="#698576" className="nav-icon"/>
-                    {t('account_information')}
-                    <Icon size={16} icon="heatmap" color="#698576" className="nav-icon"/>
-                </div>
-                <Button className="card-button" onClick={() => {
-                    setIsAccountEdited(true);
-                    setShowPassword(false)
-                    setShowConfPassword(false)
-                    setAccountInfo({
-                        username: admin.username,
-                        password: "",
-                        confirmPassword: "",
-                    })
-                    setErrorsAccount({
-                        username: false,
-                        password: false,
-                        confirmPassword: false,
-                    })
-                }}>
-                    {t('edit_information')}
-                </Button>
-            </div>
-            <Divider/>
-            <div className="card-content">
-                <FormGroup
-                    label={t('email_address') + ":"}
-                    className="card-form-group-read"
-                    inline={true}
-                >
-                    <p className="card-info-content">{admin.userDetails.email}</p>
-                </FormGroup>
-                <FormGroup
-                    label={t('username') + ":"}
-                    className="card-form-group-read"
-                    inline={true}
-                >
-                    <p className="card-info-content">{admin.username}</p>
-                </FormGroup>
-                <FormGroup
-                    label={t('password') + ":"}
-                    className="card-form-group-read"
-                    inline={true}
-                >
-                    <p className="card-info-content">******</p>
-                </FormGroup>
             </div>
         </Card>
     }
@@ -270,11 +239,40 @@ const EditAccountPageAdmin = () => {
     return (
         <div>
             <HeaderAdmin/>
-            <div className="edit-account-subtitle">
-                {t('edit_account_subtitle_admin')}
-            </div>
-            <div className="edit-card">
-                {isAccountEdited ? returnEditableAccountCard() : returnReadOnlyAccountCard()}
+            <div className="edit-account-container">
+                <div className="edit-account-background">
+                    <div className="edit-account-introduction">
+                        <div className="edit-account-hello">
+                            {t('hello')} {admin?.username}
+                        </div>
+                        <div className="edit-account-desc">
+                            {t('account_desc_admin')}
+                        </div>
+                        <Button className="edit-profile-button"
+                                onClick={() => {
+                                    setIsAccountEdited(true);
+                                    setShowPassword(false)
+                                    setShowConfPassword(false)
+                                    setAccountInfo({
+                                        username: admin.username,
+                                        password: "",
+                                        confirmPassword: "",
+                                    })
+                                    setErrorsAccount({
+                                        username: false,
+                                        password: false,
+                                        confirmPassword: false,
+                                    })
+                                }}
+                                disabled={isAccountEdited}
+                        >
+                            {t('edit_profile')}
+                        </Button>
+                    </div>
+                    <div className="edit-profile-card">
+                        {returnEditableAccountCard()}
+                    </div>
+                </div>
             </div>
         </div>
     );

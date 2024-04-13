@@ -3,6 +3,7 @@ import jsPDF from "jspdf";
 import {getDownloadURL, getStorage, ref} from "firebase/storage";
 import firebase from "../../util/firebase";
 import {FIREBASE_PATH} from "../../util/constants";
+import { FlagIcon } from "react-flag-kit";
 
 export function useMediaQuery(query) {
     const [matches, setMatches] = useState(false);
@@ -272,3 +273,6 @@ export const base64ToImage = (base64String) => {
     }
     return new Blob([ab], {type: 'image/jpeg'});
 }
+
+export const GBFlag = () => <FlagIcon code="GB" size={12} />;
+export const ROFlag = () => <FlagIcon code="RO" size={12} />;

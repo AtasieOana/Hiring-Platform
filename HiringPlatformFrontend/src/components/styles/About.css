@@ -50,7 +50,7 @@
     width: 350px;
     height: 350px;
     filter: drop-shadow(0 0 1px rgb(224, 156, 115));
-    background-image: url("../../resources-photo/AboutShadowImg.png"); /* Path to shadow image */
+    background-image: url("../../resources-photo/AboutShadowImg.png");
 }
 
 .image::after {

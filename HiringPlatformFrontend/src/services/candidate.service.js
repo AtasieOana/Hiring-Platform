@@ -23,6 +23,18 @@ class CandidateService {
         return apiCandidate.post("/deleteCv/" + cvId)
     }
 
+    async getJobsPublishedPerDay() {
+        return apiCandidate.get("/getJobsPublishedPerDay")
+    }
+
+    async getApplicationStatusNumbers(candidateId) {
+        return apiCandidate.get("/getApplicationStatusNumbers/" + candidateId)
+    }
+
+    async getApplicationViewedNumbers(candidateId) {
+        return apiCandidate.get("/getApplicationViewedNumbers/" + candidateId)
+    }
+
 }
 
 export default new CandidateService();

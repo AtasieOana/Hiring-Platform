@@ -15,7 +15,6 @@ const ForgotPasswordPage = () => {
     const [email, setEmail] = useState('');
     const [emailInvalid, setEmailInvalid] = useState(false);
 
-
     const handleEmailCheck = () => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
@@ -40,35 +39,41 @@ const ForgotPasswordPage = () => {
         <div>
             <HeaderAuth/>
             <div className="password-container">
-                <div className="password-title">{t('password_title')}</div>
-                <div className="password-subtitle">
-                    <p>{t('password_helper')}</p>
-                    <p>{t('password_helper2')}</p>
-                </div>
                 <div className="password-container-form">
-                    <form className="password-forms">
-                        <FormGroup
-                            label={t('email_address')}
-                            intent={emailInvalid ? Intent.DANGER : Intent.NONE}
-                            helperText={emailInvalid ? invalidEmailMessage : ""}
-                            className="register-form-group"
-                            labelInfo={t('required')}
+                    <div className="login-title">{t('password_title')}</div>
+                    <div className="password-subtitle">
+                        <p>{t('password_helper')}</p>
+                        <p> {t('password_helper2')}</p>
+                    </div>
+                    <form onSubmit={e => {
+                        e.preventDefault();
+                        handleEmailCheck()
+                    }}>
+                        <div className="password-forms">
+                            <FormGroup
+                                label={t('email_address')}
+                                intent={emailInvalid ? Intent.DANGER : Intent.NONE}
+                                helperText={emailInvalid ? invalidEmailMessage : ""}
+                                className="login-form-group"
+                                labelInfo={"*"}
+                            >
+                                <InputGroup
+                                    value={email}
+                                    placeholder={t('email_placeholder')}
+                                    autoComplete="new-email"
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    asyncControl={true}
+                                />
+                            </FormGroup>
+                        </div>
+                        <Button onClick={handleEmailCheck}
+                                small={true}
+                                className="reset-button"
+                                type="submit"
                         >
-                            <InputGroup
-                                value={email}
-                                placeholder="mail@gmail.com"
-                                autoComplete="new-email"
-                                onChange={(e) => setEmail(e.target.value)}
-                                asyncControl={true}
-                            />
-                        </FormGroup>
+                            {t('password_reset')}
+                        </Button>
                     </form>
-                    <Button onClick={handleEmailCheck}
-                            small={true}
-                            className="reset-button"
-                    >
-                        {t('password_reset')}
-                    </Button>
                 </div>
             </div>
         </div>

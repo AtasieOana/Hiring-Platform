@@ -1,13 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {useTranslation} from "react-i18next";
-import {Button, Card, Divider,
-    FormGroup, Icon, InputGroup, Intent} from "@blueprintjs/core";
+import {Button, Card, FormGroup, InputGroup, Intent} from "@blueprintjs/core";
 import './EditAccount.css';
 import CandidateService from "../../services/candidate.service";
 import {AppToaster} from "../common/AppToaster";
 import {setAuthData} from "../../redux/actions/authActions";
 import HeaderPageCandidate from "../header/HeaderPageCandidate";
+import CandidateJobsTimelineChart from "./chart/CandidateJobsTimelineChart";
+import CandidateApplicationsTimelineChart from "./chart/CandidateApplicationsTimelineChart";
+import CandidateViewApplicationsChart from "./chart/CandidateViewApplicationsChart";
 
 const EditAccountPageCandidate = () => {
 
@@ -88,7 +90,7 @@ const EditAccountPageCandidate = () => {
         return valid;
     }
 
-    const submitNewAccount = (e) => {
+    const submitNewAccount = () => {
         if (validateAccount()) {
             let request = {
                 email: candidate.userDetails.email,
@@ -117,24 +119,18 @@ const EditAccountPageCandidate = () => {
     }
 
     const returnEditableAccountCard = () => {
-        return <Card className="card-container">
-            <div className="card-title-container">
-                <div className="card-title">
-                    <Icon size={16} icon="heatmap" color="#698576" className="nav-icon"/>
-                    {t('edit_account_information')}
-                    <Icon size={16} icon="heatmap" color="#698576" className="nav-icon"/>
+        return <Card className="edit-profile-card-container">
+            <div className="edit-profile-card-title-container">
+                <div className="edit-profile-card-title">
+                    {t('candidate_info_acc')}
                 </div>
-                <Button className="card-button" onClick={submitNewAccount}>
-                    {t('submit')}
-                </Button>
             </div>
-            <Divider/>
-            <div className="card-content">
+            <div className="edit-profile-card-content">
                 <form>
                     <FormGroup
                         label={t('email_address')}
-                        className="card-form-group"
-                        labelInfo={t('autocompleted')}
+                        className="profile-field"
+                        labelInfo={isAccountEdited ? t('read_only') : ""}
                     >
                         <InputGroup
                             value={candidate.userDetails.email}
@@ -144,56 +140,65 @@ const EditAccountPageCandidate = () => {
                             readOnly={true}
                         />
                     </FormGroup>
-                    <FormGroup
-                        label={t('firstname')}
-                        intent={errorsAccount.firstname ? Intent.DANGER : Intent.NONE}
-                        helperText={errorsAccount.firstname ? t('firstname_err') : ""}
-                        className="card-form-group"
-                        labelInfo={t('required')}
-                    >
-                        <InputGroup
-                            type="text"
-                            name="firstname"
-                            value={accountInfo.firstname}
-                            placeholder="Maria"
-                            autoComplete="new-user"
-                            onChange={handleAccountChange}
-                        />
-                    </FormGroup>
-                    <FormGroup
-                        label={t('lastname')}
-                        intent={errorsAccount.lastname ? Intent.DANGER : Intent.NONE}
-                        helperText={errorsAccount.lastname ? t('lastname_err') : ""}
-                        className="card-form-group"
-                        labelInfo={t('required')}
-                    >
-                        <InputGroup
-                            type="text"
-                            name="lastname"
-                            value={accountInfo.lastname}
-                            placeholder="Popescu"
-                            asyncControl={true}
-                            onChange={handleAccountChange}
-                        />
-                    </FormGroup>
-                    <div className="change-password-section-title">{t('change_pass')}</div>
-                    <div className="change-password-section-subtitle">* {t('change_pass_condition')}
-                    </div>
-                    <div className="password-fields">
+                    <div className="profile-fields-group">
+
                         <FormGroup
-                            label={t('new_password')}
+                            label={t('firstname')}
+                            intent={errorsAccount.firstname ? Intent.DANGER : Intent.NONE}
+                            helperText={errorsAccount.firstname ? t('firstname_err') : ""}
+                            className="profile-field"
+                            labelInfo={isAccountEdited ? "*" : ""}
+                        >
+                            <InputGroup
+                                type="text"
+                                name="firstname"
+                                value={accountInfo.firstname}
+                                placeholder="Maria"
+                                autoComplete="new-user"
+                                onChange={handleAccountChange}
+                                readOnly={!isAccountEdited}
+                            />
+                        </FormGroup>
+                        <FormGroup
+                            label={t('lastname')}
+                            intent={errorsAccount.lastname ? Intent.DANGER : Intent.NONE}
+                            helperText={errorsAccount.lastname ? t('lastname_err') : ""}
+                            className="profile-field"
+                            labelInfo={isAccountEdited ? "*" : ""}
+                        >
+                            <InputGroup
+                                type="text"
+                                name="lastname"
+                                value={accountInfo.lastname}
+                                placeholder="Popescu"
+                                asyncControl={true}
+                                onChange={handleAccountChange}
+                                readOnly={!isAccountEdited}
+                            />
+                        </FormGroup>
+                    </div>
+                    {
+                        isAccountEdited && <div>
+                            <div className="change-password-section-subtitle">
+                                * {t('change_pass_condition')}
+                            </div>
+                        </div>
+                    }
+                    <div className="profile-fields-group">
+                        <FormGroup
+                            label={!isAccountEdited ? t('password') : t('new_password')}
                             intent={errorsAccount.password ? Intent.DANGER : Intent.NONE}
                             helperText={errorsAccount.password ? t('password_err') : ""}
-                            className="card-form-group"
+                            className="profile-field"
                         >
                             <InputGroup
                                 type={showPassword ? 'text' : 'password'}
-                                value={accountInfo.password}
+                                value={isAccountEdited ? accountInfo.password : "*********************"}
                                 name="password"
                                 autoComplete="new-password"
                                 placeholder={t('password_placeholder')}
                                 onChange={handleAccountChange}
-                                rightElement={
+                                rightElement={isAccountEdited &&
                                     <Button
                                         className="password-button"
                                         icon={showPassword ? 'eye-off' : 'eye-open'}
@@ -203,22 +208,24 @@ const EditAccountPageCandidate = () => {
                                         fill
                                     />
                                 }
+                                readOnly={!isAccountEdited}
+
                             />
                         </FormGroup>
-                        <FormGroup
-                            label={t('confirm_password')}
-                            intent={errorsAccount.confirmPassword ? Intent.DANGER : Intent.NONE}
-                            helperText={errorsAccount.confirmPassword ? t('confirm_password_err') : ""}
-                            className="card-form-group"
-                        >
-                            <InputGroup
-                                name="confirmPassword"
-                                type={showConfPassword ? 'text' : 'password'}
-                                value={accountInfo.confirmPassword}
-                                placeholder={t('password_confirm_placeholder')}
-                                autoComplete="new-password"
-                                onChange={handleAccountChange}
-                                rightElement={
+                        {isAccountEdited && <FormGroup
+                                label={t('confirm_password')}
+                                intent={errorsAccount.confirmPassword ? Intent.DANGER : Intent.NONE}
+                                helperText={errorsAccount.confirmPassword ? t('confirm_password_err') : ""}
+                                className="profile-field"
+                            >
+                                <InputGroup
+                                    name="confirmPassword"
+                                    type={showConfPassword ? 'text' : 'password'}
+                                    value={accountInfo.confirmPassword}
+                                    placeholder={t('password_confirm_placeholder')}
+                                    autoComplete="new-password"
+                                    onChange={handleAccountChange}
+                                    rightElement={
                                     <Button
                                         className="password-button"
                                         icon={showConfPassword ? 'eye-off' : 'eye-open'}
@@ -228,72 +235,50 @@ const EditAccountPageCandidate = () => {
                                         fill
                                     />
                                 }
-                            />
-                        </FormGroup>
+                                />
+                            </FormGroup>
+                        }
                     </div>
+                    {isAccountEdited && <div className="edit-profile-actions">
+                        <Button className="edit-profile-discard" onClick={()=>{
+                            setAccountInfo({
+                                lastname: candidate.lastname,
+                                firstname: candidate.firstname,
+                                password: "",
+                                confirmPassword: "",
+                            })
+                            setErrorsAccount({
+                                lastname: false,
+                                firstname: false,
+                                password: false,
+                                confirmPassword: false,
+                            })
+                            setIsAccountEdited(false)
+                        }}>
+                            {t('discard_changes')}
+                        </Button>
+                        <Button className="edit-profile-submit"
+                                onClick={()=> submitNewAccount()}>
+                            {t('submit')}
+                        </Button>
+                    </div>
+                    }
                 </form>
             </div>
         </Card>
     }
 
-    const returnReadOnlyAccountCard = () => {
-        return <Card className="card-container">
-            <div className="card-title-container">
-                <div className="card-title">
-                    <Icon size={16} icon="heatmap" color="#698576" className="nav-icon"/>
-                    {t('account_information')}
-                    <Icon size={16} icon="heatmap" color="#698576" className="nav-icon"/>
+    const returnChartAccountCard = () => {
+        return <Card className="edit-profile-card-container">
+            <div className="edit-profile-card-title-container">
+                <div className="edit-profile-card-title">
+                    {t('chart_info_acc')}
                 </div>
-                <Button className="card-button" onClick={() => {
-                    setIsAccountEdited(true);
-                    setShowPassword(false)
-                    setShowConfPassword(false)
-                    setAccountInfo({
-                        lastname: candidate.lastname,
-                        firstname: candidate.firstname,
-                        password: "",
-                        confirmPassword: "",
-                    })
-                    setErrorsAccount({
-                        lastname: false,
-                        firstname: false,
-                        password: false,
-                        confirmPassword: false,
-                    })
-                }}>
-                    {t('edit_information')}
-                </Button>
             </div>
-            <Divider/>
-            <div className="card-content">
-                <FormGroup
-                    label={t('email_address') + ":"}
-                    className="card-form-group-read"
-                    inline={true}
-                >
-                    <p className="card-info-content">{candidate.userDetails.email}</p>
-                </FormGroup>
-                <FormGroup
-                    label={t('firstname') + ":"}
-                    className="card-form-group-read"
-                    inline={true}
-                >
-                    <p className="card-info-content">{candidate.firstname}</p>
-                </FormGroup>
-                <FormGroup
-                    label={t('lastname') + ":"}
-                    className="card-form-group-read"
-                    inline={true}
-                >
-                    <p className="card-info-content">{candidate.lastname}</p>
-                </FormGroup>
-                <FormGroup
-                    label={t('password') + ":"}
-                    className="card-form-group-read"
-                    inline={true}
-                >
-                    <p className="card-info-content">******</p>
-                </FormGroup>
+            <div className="edit-profile-charts">
+                <CandidateApplicationsTimelineChart candidateId={candidate.candidateId}/>
+                <CandidateJobsTimelineChart/>
+                <CandidateViewApplicationsChart candidateId={candidate.candidateId}/>
             </div>
         </Card>
     }
@@ -301,11 +286,45 @@ const EditAccountPageCandidate = () => {
     return (
         <div>
             <HeaderPageCandidate/>
-            <div className="edit-account-subtitle">
-                {t('edit_account_subtitle_can')}
-            </div>
-            <div className="edit-card">
-                {isAccountEdited ? returnEditableAccountCard() : returnReadOnlyAccountCard()}
+            <div className="edit-account-container">
+                <div className="edit-account-background">
+                    <div className="edit-account-introduction">
+                        <div className="edit-account-hello">
+                            {t('hello')} {candidate?.firstname}
+                        </div>
+                        <div className="edit-account-desc">
+                            {t('account_desc_candidate')}
+                        </div>
+                        <Button className="edit-profile-button"
+                                onClick={() => {
+                                    setIsAccountEdited(true);
+                                    setShowPassword(false)
+                                    setShowConfPassword(false)
+                                    setAccountInfo({
+                                        lastname: candidate.lastname,
+                                        firstname: candidate.firstname,
+                                        password: "",
+                                        confirmPassword: "",
+                                    })
+                                    setErrorsAccount({
+                                        lastname: false,
+                                        firstname: false,
+                                        password: false,
+                                        confirmPassword: false,
+                                    })
+                                }}
+                                disabled={isAccountEdited}
+                        >
+                            {t('edit_profile')}
+                        </Button>
+                    </div>
+                    <div className="edit-profile-card">
+                        {returnEditableAccountCard()}
+                    </div>
+                    <div className="edit-profile-card">
+                        {returnChartAccountCard()}
+                    </div>
+                </div>
             </div>
         </div>
     );

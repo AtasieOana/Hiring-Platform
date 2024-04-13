@@ -83,6 +83,41 @@
     background-color: white;
 }
 
+.nav-item-language{
+    border-right: 2px solid #fff !important;
+    padding-right: 15px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 5px;
+    color: #fff !important;
+    text-decoration: none !important;
+    font-family: 'Georgia', serif !important;
+    background: none !important;
+    cursor: pointer !important;
+    outline: inherit !important;
+    margin-top: 3px;
+}
+
+.nav-item-admin{
+    border-right: none !important;
+}
+
+.nav-item-chevron{
+    margin-top: 3px;
+}
+
+.bp4-popover-wrapper:focus, .bp4-popover-target:focus, .bp4-overlay-start-focus-trap:focus, .bp4-menu-item:focus{
+    outline: none !important;
+}
+
+.bp4-popover-open:focus, .bp4-overlay:focus .bp4-overlay-open:focus .bp4-overlay-inline:focus{
+    outline: none !important;
+}
+
+.bp4-menu{
+    min-width: 50px !important;
+}
+
 @media (max-width: 700px) {
     .company-name {
         animation: none;

@@ -7,7 +7,7 @@ import {useTranslation} from 'react-i18next';
 import {AppToaster} from "../common/AppToaster";
 import AuthenticationService from "../../services/authentication.service";
 import {useDispatch, useSelector} from "react-redux";
-import {useMediaQuery} from "../common/CommonMethods";
+import {GBFlag, ROFlag, useMediaQuery} from "../common/CommonMethods";
 import {removeJobData} from "../../redux/actions/jobActions";
 import {setAuthData} from "../../redux/actions/authActions";
 
@@ -103,9 +103,26 @@ const HeaderPageCandidate = () => {
             <div className="company-name">JOBLISTIC</div>
 
             <div className="navigation">
-                <Link className="nav-item" to="#" isActive={false} onClick={changeLanguage}>
-                    <Icon size={13} icon="translate" color="white" className="nav-icon"/> En/Ro
-                </Link>
+                <Popover
+                    interactionKind="hover"
+                    usePortal={false}
+                    content={
+                        <Menu className={"menu-language"}>
+                            <MenuItem text="English" selected={i18n.language === 'en'}
+                                      icon={GBFlag()}
+                                      disabled={i18n.language === 'en'} onClick={() => changeLanguage()} />
+                            <MenuItem text="Română" selected={i18n.language === 'ro'}
+                                      icon={ROFlag()}
+                                      disabled={i18n.language === 'ro'} onClick={() => changeLanguage()} />
+                        </Menu>
+                    }
+                    position="bottom"
+                >
+                    <div className="nav-item-language">
+                        <Icon size={13} icon={i18n.language === 'en' ? GBFlag() : ROFlag()} color="white" className="nav-icon"/> {i18n.language === 'en' ? 'English' : 'Română'}
+                        <Icon size={13} icon="chevron-down" color="white" className="nav-icon"/>
+                    </div>
+                </Popover>
                 {isSmallScreen ? <>
                     <Popover
                         interactionKind="hover"
@@ -131,7 +148,7 @@ const HeaderPageCandidate = () => {
                         }
                         placement="bottom-end"
                     >
-                        <Link className="nav-item" to="#" isActive={false}>
+                        <Link className="nav-item nav-item-chevron" to="#" isActive={false}>
                             <Icon size={13} icon="mugshot" color="white" className="nav-icon"/> {candidate?.lastname + " " + candidate?.firstname}
                             <Icon size={13} icon="chevron-down" color="white" className="nav-icon"/>
                         </Link>
