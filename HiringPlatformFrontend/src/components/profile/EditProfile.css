@@ -1,52 +1,85 @@
-.form-container-profile {
-    display: flex;
-    padding: 5px;
-    background-color: #fef5f2;
-    margin: 15px 50px;
+.create-profile{
+    width: 100%;
+    height: 100%;
 }
 
-.create-profile-subtitle {
-    margin-left: 8%;
-    color: black;
-    text-align: justify;
-    line-height: 1.5;
-    margin-top: 15px;
-    font-size: 13px;
-    font-weight: 600;
-    margin-right: 8%;
+.create-profile-background{
+    background-color: rgba(224, 156, 115, 0.2);
+    height: 30vh;
+    background-position: 0 0;
+    background-size: 100% 100%;
+    width: 100%;
+}
+
+.form-container-profile {
+    display: flex;
+    background-color: white;
+    margin: 15px 39px;
+    border: 1px solid #b5a3c0;
+    box-shadow: 0 0 5px 0 rgba(132, 116, 147, 0.5);
 }
 
 .left-column,
 .right-column {
     flex: 1;
-    padding: 10px 20px;
-}
-
-.left-column {
-    border-right: 2px solid #698576;
 }
 
 .right-column .quill{
     background-color: white;
+    height: 84.2% !important;
+}
+
+.right-column .ql-editor {
+    overflow: auto;
+    margin: auto;
+    height: 60vh;
 }
 
 .right-column .ql-editor:focus{
     outline: none !important;
 }
 
-.form-column .bp3-form-group {
-    margin-bottom: 20px;
+.profile-column-content-fields{
+    background-color: #dfdce3;
+    padding: 15px 25px;
+    border-right: 1px solid #b5a3c0;
+    height: 92.6%;
 }
 
-.custom-file-container {
+.profile-column-title{
+    font-size: 15px;
+    letter-spacing: .03em;
+    text-transform: uppercase;
+    color: black;
+    font-weight: 600;
+    line-height: 1.3;
+    padding: 0.5rem 25px;
+}
+
+.profile-column-title-desc{
+    font-size: 15px;
+    letter-spacing: .03em;
+    text-transform: uppercase;
+    font-weight: 600;
+    line-height: 1.3;
+    padding: 0.5rem 25px;
+    background-color: #dfdce3;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.left-column .custom-file-container {
     display: flex;
     flex-direction: row;
     align-items: flex-start;
     justify-content: flex-end;
     gap: 10px;
+    margin-bottom: 0;
 }
 
-.custom-image-wrapper{
+.left-column .custom-image-wrapper{
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -54,25 +87,25 @@
     gap: 2px;
 }
 
-.file-input-container-hole{
+.left-column .file-input-container-hole{
     flex: none;
     width: 100%;
     margin-top: 5px;
 }
 
-.file-input-container{
+.left-column .file-input-container{
     flex: none;
-    width: 76%;
+    width: 70%;
     margin-top: 5px;
     margin-left: 2%;
 }
 
-.file-input-container .bp4-file-input,
-.file-input-container-hole .bp4-file-input{
+.left-column .file-input-container .bp4-file-input,
+.left-column .file-input-container-hole .bp4-file-input{
     width: 100%;
 }
 
-.file-input-content{
+.left-column .file-input-content{
     margin-top: 10px;
     display: flex;
     flex-direction: column;
@@ -80,7 +113,7 @@
     gap: 2px
 }
 
-.custom-image {
+.left-column .custom-image {
     border: 1px solid #ffc8b2;
     border-radius: 4px;
     width: 100px;
@@ -88,27 +121,20 @@
     margin-top: 5px;
 }
 
-.custom-image-container{
-    width: 23%;
+.left-column .custom-image-container{
+    width: 30%;
     padding-left: 2%;
 }
 
-.file-input-label-title{
+.left-column .file-input-label-title{
     text-align: center;
     margin-bottom: 5px;
     font-weight: 600;
     font-size: 14px;
 }
 
-.file-input-label{
+.left-column .file-input-label{
     text-align: center;
-}
-
-.right-column .ql-editor {
-    overflow: auto;
-    max-width: 70ch;
-    margin: auto;
-    height: 51vh;
 }
 
 .right-column .ql-editor:focus{
@@ -119,29 +145,75 @@
     margin: 0 !important;
 }
 
+.create-profile-button-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
+    margin-bottom: 1rem !important;
+    margin-right: 39px !important;
+    margin-left: 39px !important;
+    padding-top: 1.5rem !important;
+}
+
 .create-profile-button {
-    display: block !important;
-    background-color: #ffaf84 !important;
-    width: 20%;
-    text-align: center !important;
+    font-size: 14px !important;
+    letter-spacing: .03em !important;
+    text-transform: none !important;
+    will-change: transform !important;
     color: black !important;
-    font-weight: 600;
-    letter-spacing: 1px;
-    margin: 0 auto 10px auto !important;
+    border: 1px solid #d5825a !important;
+    background-color: #ffaf84 !important;
+    padding: .5rem 0.7rem !important;
+}
+
+.create-profile-button:focus{
+    outline: none !important;
+}
+
+.create-profile-button:hover{
+    border: 1px solid #b75725 !important;
+    background-color: #ec9261 !important;
 }
 
 .remove-image-button{
     text-align: center !important;
 }
 
-@media (max-width: 800px) {
-    .create-profile-subtitle {
-        font-size: 12px;
-        line-height: 1;
+.edit-profile-field .bp4-form-helper-text {
+    text-align: center;
+    font-weight: 550;
+}
+
+.edit-profile-field .bp4-input:focus {
+    box-shadow: inset 0 0 0 1px rgba(224, 156, 115), 0 0 0 2px rgba(224, 156, 115, 0.3), inset 0 1px 1px rgba(17, 20, 24, 0.2);
+}
+
+.profile-column-desc-error{
+    color: #ac2f33;
+    font-weight: 550;
+    text-transform: none;
+    letter-spacing: .02em;
+    line-height: 1;
+    font-size: 13px;
+}
+
+@media (max-width: 1250px) {
+    .right-column .quill{
+        height: 79% !important;
     }
 
+    .right-column .ql-editor {
+        height: 57vh;
+    }
+}
+
+@media (max-width: 840px) {
     .form-container-profile {
         display: block;
+        padding-bottom: 20px !important;
+        border: none !important;
+        box-shadow: none !important;
     }
 
     .left-column {
@@ -153,24 +225,23 @@
         width: 80%;
     }
 
+    .right-column{
+    }
+
+    .right-column .quill{
+        height: 79% !important;
+    }
+
     .right-column .ql-editor {
-        overflow: auto;
-        max-width: 80ch;
-        margin: auto;
-        height: 51vh;
+        height: 57vh;
     }
 
 }
 
 @media (max-width: 750px) {
-    .create-profile-subtitle {
-        font-size: 10px;
-        line-height: 1.2;
-        margin-right: 52px;
-    }
-
-    .create-profile-button {
-        width: 50%;
+    .create-profile-button-container {
+        margin-right: 20px !important;
+        margin-left: 20px !important;
     }
 
     .form-container-profile{

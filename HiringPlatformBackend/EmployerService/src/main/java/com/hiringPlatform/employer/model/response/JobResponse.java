@@ -25,7 +25,6 @@ public class JobResponse {
     private Date postingDate;
     private String cityName;
     private String regionName;
-    private String countryName;
     private String employerId;
     private String status;
     List<QuestionHelperRequest> questions;

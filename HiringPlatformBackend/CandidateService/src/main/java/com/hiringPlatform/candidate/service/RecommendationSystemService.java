@@ -1,6 +1,5 @@
 package com.hiringPlatform.candidate.service;
 
-
 import com.hiringPlatform.candidate.model.Application;
 import com.hiringPlatform.candidate.model.Employer;
 import com.hiringPlatform.candidate.model.Job;
@@ -10,8 +9,15 @@ import com.hiringPlatform.candidate.repository.ApplicationRepository;
 import com.hiringPlatform.candidate.repository.EmployerRepository;
 import com.hiringPlatform.candidate.repository.JobRepository;
 import com.hiringPlatform.candidate.repository.ReviewRepository;
+import org.apache.commons.exec.DefaultExecutor;
+import org.apache.commons.exec.ExecuteException;
+import org.apache.commons.exec.Executor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
+import org.apache.commons.exec.CommandLine;
+
+import java.io.*;
 
 import java.util.*;
 
@@ -48,6 +54,7 @@ public class RecommendationSystemService {
         User user = userService.getUser(userId);
         List<Job> recommendedJobs;
 
+        runRecommendationPythonScript();
         // If the user doesn't have applications then initial recommendation are used
         if (!checkIfUserHasApplications(userId)) {
             // Calculates the similarity between the user and other users based on applications
@@ -277,5 +284,26 @@ public class RecommendationSystemService {
     private boolean checkIfUserHasApplications(String userId){
         List<Application> applications = applicationRepository.findApplicationsForCandidate(userId);
         return applications.isEmpty();
+    }
+
+    private void runRecommendationPythonScript(){
+        try {
+            // Calea către scriptul Python în resources
+            String pythonScriptPath = new ClassPathResource("recommendation_script.py").getFile().getAbsolutePath();
+
+            // Comanda pentru a rula scriptul Python
+            CommandLine commandLine = CommandLine.parse("python " + pythonScriptPath);
+
+            // Executor pentru a rula comanda
+            Executor executor = new DefaultExecutor();
+            executor.execute(commandLine);
+
+        } catch (ExecuteException e) {
+            System.err.println("Execution failed.");
+            e.printStackTrace();
+        } catch (IOException e) {
+            System.err.println("IOException: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 }

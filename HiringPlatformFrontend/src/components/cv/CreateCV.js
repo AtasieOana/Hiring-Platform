@@ -23,7 +23,7 @@ import ImageUpload from "../common/ImageUpload";
 import "./CreateCv.css"
 import EducationIcon from '../../resources-photo/No_education_image.png';
 import ExperienceIcon from '../../resources-photo/No_experience_image.png';
-import {fileToBase64, generatePDF} from "../common/CommonMethods";
+import {generatePDF} from "../common/CommonMethods";
 import CandidateService from "../../services/candidate.service";
 import {AppToaster} from "../common/AppToaster";
 import {setCvActionData} from "../../redux/actions/cvActions";

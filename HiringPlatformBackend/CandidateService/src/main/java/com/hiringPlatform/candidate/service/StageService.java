@@ -34,11 +34,6 @@ public class StageService {
                 .collect(Collectors.toList());
     }
 
-    public List<Stage> getAllStages(){
-        return stageRepository.findAll().stream().sorted(Comparator.comparing(Stage::getStageName))
-                .collect(Collectors.toList());
-    }
-
     public Stage getStageBasedOnJobIdAndStageNumber(String jobId, Number stageNr){
         Optional<Contains> optionalStage = containsRepository.findByJobIdAndStageNumber(jobId, stageNr);
         return optionalStage.map(Contains::getStage).orElse(null);

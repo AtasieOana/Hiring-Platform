@@ -28,6 +28,7 @@ import HeaderPageEmployer from "../header/HeaderPageEmployer";
 import ProfileService from "../../services/profile.service";
 import AddJobDialog from "./AddJobDialog";
 import {CLOSED, OPENED} from "../../util/constants";
+import OraseComponent from "../common/CititesRegionsSelector";
 
 export const industriesRo = [
     "Toate industriile", "Administrație", "Agricultură", "Arhitectură/Design interior", "Audit",
@@ -104,14 +105,12 @@ const JobsPage = () => {
         workMode: possibleWorkMode,
         cityName: [],
         regionName: [],
-        countryName: [],
         postingDate: possibleDates[0],
         status: [possibleStatus[1]]
     });
     const [searchTerm, setSearchTerm] = useState('');
     const [cities, setCities] = useState([])
     const [regions, setRegions] = useState([])
-    const [countries, setCountries] = useState([])
     const [profilePhoto, setProfilePhoto] = useState([]);
 
     // Paginating
@@ -138,7 +137,7 @@ const JobsPage = () => {
      */
     useEffect(() => {
         setCurrentPage(1)
-        let allJobs = []
+        let allJobs
         if(showBasedOnRecommendation){
             allJobs = [...recommendedJobs];
         } else{
@@ -156,7 +155,6 @@ const JobsPage = () => {
                 && (filters.industry.includes(job.industry) || filters.industry === defaultIndustry)
                 && filters.cityName.includes(job.cityName)
                 && filters.regionName.includes(job.regionName)
-                && filters.countryName.includes(job.countryName)
                 && filterByDate(filters.postingDate, job.postingDate)
             })
         if(employer && employer.employerId !== ""){
@@ -181,16 +179,13 @@ const JobsPage = () => {
                 let jobsResponse = [...response.data]
                 let citiesResponse = [...new Set(jobsResponse.map(j => j.cityName))];
                 let regionsResponse = [...new Set(jobsResponse.map(j => j.regionName))];
-                let countriesResponse = [...new Set(jobsResponse.map(j => j.countryName))];
                 let filtersJobs = {...filters}
                 filtersJobs.cityName = citiesResponse;
-                filtersJobs.countryName = countriesResponse;
                 filtersJobs.regionName = regionsResponse;
                 setFilters(filtersJobs)
                 setJobs(jobsResponse)
                 setCities(citiesResponse)
                 setRegions(regionsResponse)
-                setCountries(countriesResponse)
                 setFilteredJobs(jobsResponse)
             })
             .catch(error => {
@@ -211,16 +206,13 @@ const JobsPage = () => {
                 let jobsResponse = [...response.data]
                 let citiesResponse = [...new Set(jobsResponse.map(j => j.cityName))];
                 let regionsResponse = [...new Set(jobsResponse.map(j => j.regionName))];
-                let countriesResponse = [...new Set(jobsResponse.map(j => j.countryName))];
                 let filtersJobs = {...filters}
                 filtersJobs.cityName = citiesResponse;
-                filtersJobs.countryName = countriesResponse;
                 filtersJobs.regionName = regionsResponse;
                 setFilters(filtersJobs)
                 setJobs(jobsResponse)
                 setCities(citiesResponse)
                 setRegions(regionsResponse)
-                setCountries(countriesResponse)
                 setFilteredJobs(jobsResponse)
                 JobService.getRecommendedJobs(candidate.candidateId)
                     .then((responseRecommended) => {
@@ -302,7 +294,6 @@ const JobsPage = () => {
     const handleFilterReset = () => {
         let citiesResponse = [...new Set(jobs.map(j => j.cityName))];
         let regionsResponse = [...new Set(jobs.map(j => j.regionName))];
-        let countriesResponse = [...new Set(jobs.map(j => j.countryName))];
         setFilters({
             contractType: possibleContractType,
             employmentRegime: possibleRegimeEmp,
@@ -311,7 +302,6 @@ const JobsPage = () => {
             workMode: possibleWorkMode,
             cityName: citiesResponse,
             regionName: regionsResponse,
-            countryName: countriesResponse,
             postingDate: possibleDates[0],
         })
     }
@@ -463,24 +453,6 @@ const JobsPage = () => {
             filter.splice(index, 1);
         }
         allFilters.regionName = filter
-        setFilters(allFilters);
-    };
-
-    /**
-     * Handle country change
-     * @param {string} newValue
-     */
-    const handleCountryChange = (newValue) => {
-        let allFilters = {...filters}
-        let filter = [...allFilters.countryName]
-        let index = filter.findIndex(ct => ct === newValue)
-        if(index === -1){
-            filter.push(newValue)
-        }
-        else{
-            filter.splice(index, 1);
-        }
-        allFilters.countryName = filter
         setFilters(allFilters);
     };
 
@@ -721,21 +693,6 @@ const JobsPage = () => {
                             <div className="no-job-filter">{t('no_job_region')}</div>
                         }
                     </FormGroup>
-                    <FormGroup label={t('country')} className={`jobs-contractType-filter ${Classes.FIXED}`}>
-                        {regions.length > 0 ?
-                            <div className="job-checkbox-container">
-                                {countries.map((obj, index) =>
-                                    <Checkbox
-                                        className="job-checkbox-item"
-                                        label={obj}
-                                        checked={filters.countryName.includes(countries[index])}
-                                        onChange={() => handleCountryChange(countries[index])}
-                                    />
-                                )}
-                            </div> :
-                            <div className="no-job-filter">{t('no_job_country')}</div>
-                        }
-                    </FormGroup>
                 </div>
                 <div className={"right-section"}>
                     <div className={"job-page-buttons"}>
@@ -815,7 +772,7 @@ const JobsPage = () => {
                                                     <div className="jobs-detail">
                                                         <Icon icon="route" className="icon"/>
                                                         <div
-                                                            className="job-text">{job.cityName}, {job.regionName}, {job.countryName}</div>
+                                                            className="job-text">{job.cityName}, {job.regionName}</div>
                                                     </div>
                                                     <div className="jobs-detail">
                                                         <Icon icon="application" className="icon"/>
@@ -867,6 +824,7 @@ const JobsPage = () => {
                             />
                         )}
                     </div>
+                    <OraseComponent/>
                     <AddJobDialog isDialogOpen={isDialogOpen} handleDialogAction={handleDialogAction} handleJobAddition={getJobsAsEmployer}/>
                 </div>
             </div>

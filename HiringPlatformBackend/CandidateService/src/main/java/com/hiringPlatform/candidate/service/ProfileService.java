@@ -1,15 +1,11 @@
 package com.hiringPlatform.candidate.service;
 
-import com.hiringPlatform.candidate.model.Address;
-import com.hiringPlatform.candidate.model.Employer;
 import com.hiringPlatform.candidate.model.Profile;
 import com.hiringPlatform.candidate.model.response.GetProfileResponse;
-import com.hiringPlatform.candidate.repository.EmployerRepository;
 import com.hiringPlatform.candidate.repository.ProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.Base64;
 import java.util.Optional;
 
@@ -45,7 +41,6 @@ public class ProfileService {
             getProfileResponse.setZipCode(profile.getAddress().getZipCode());
             getProfileResponse.setCityName(profile.getAddress().getCity().getCityName());
             getProfileResponse.setRegionName(profile.getAddress().getCity().getRegion().getRegionName());
-            getProfileResponse.setCountryName(profile.getAddress().getCity().getRegion().getCountry().getCountryName());
             return getProfileResponse;
         }
         else{

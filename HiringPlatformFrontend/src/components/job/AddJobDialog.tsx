@@ -101,7 +101,6 @@ const AddJobDialog = ({isDialogOpen, handleDialogAction, handleJobAddition}: any
     const [experience, setExperience] = useState('Entry-Level');
     const [cityName, setCityName] = useState('');
     const [regionName, setRegionName] = useState('');
-    const [countryName, setCountryName] = useState('');
     // Job Stages
     const [stages, setStages] = useState<any>([]); // All the stages
     const [selectedStages, setSelectedStages] = useState<any>([]); // The selected stage and their type
@@ -155,7 +154,6 @@ const AddJobDialog = ({isDialogOpen, handleDialogAction, handleJobAddition}: any
         setWorkMode(works[0]);
         setExperience('Entry-Level');
         setCityName("");
-        setCountryName("")
         setRegionName("")
         setStages([]);
         setSelectedStages([]);
@@ -594,7 +592,6 @@ const AddJobDialog = ({isDialogOpen, handleDialogAction, handleJobAddition}: any
                 industry: industry,
                 cityName: cityName,
                 regionName: regionName,
-                countryName: countryName,
                 questions: questions.map((q: any) => {
                     return {
                         questionText: q.questionText,
@@ -697,8 +694,7 @@ const AddJobDialog = ({isDialogOpen, handleDialogAction, handleJobAddition}: any
             <DialogStep
                 id="step2"
                 nextButtonProps={{
-                    disabled: (!countryName || (countryName && !/^[A-Za-zăâîșțĂÂÎȘȚ\s\-]*$/u.test(countryName)))
-                        || (!cityName || (cityName && !/^[A-Za-zăâîșțĂÂÎȘȚ\s\-]*$/u.test(cityName))) || (
+                    disabled: (!cityName || (cityName && !/^[A-Za-zăâîșțĂÂÎȘȚ\s\-]*$/u.test(cityName))) || (
                             !regionName || (regionName && !/^[A-Za-zăâîșțĂÂÎȘȚ\s\-]*$/u.test(regionName))
                         ) || false,
                     intent: "success",
@@ -741,19 +737,6 @@ const AddJobDialog = ({isDialogOpen, handleDialogAction, handleJobAddition}: any
                                         name="region"
                                         value={regionName}
                                         onChange={(e) => setRegionName(e.target.value)}
-                                    />
-                                </FormGroup>
-                                <FormGroup
-                                    label={t('country')}
-                                    intent={!countryName || (countryName && !/^[A-Za-zăâîșțĂÂÎȘȚ\s\-]*$/.test(countryName)) ? Intent.DANGER : Intent.NONE}
-                                    helperText={!countryName || (countryName && !/^[A-Za-zăâîșțĂÂÎȘȚ\s\-]*$/.test(countryName)) ? t('city_err_job') : ""}
-                                    labelInfo={t('required')}
-                                >
-                                    <InputGroup
-                                        type="text"
-                                        name="country"
-                                        value={countryName}
-                                        onChange={(e) => setCountryName(e.target.value)}
                                     />
                                 </FormGroup>
                             </div>

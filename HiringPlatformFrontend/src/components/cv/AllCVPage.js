@@ -1,14 +1,22 @@
 import React, {useEffect, useState} from 'react';
 import {
     AnchorButton,
-    Button, Card, Checkbox, Classes,
+    Button,
+    Card,
+    Checkbox,
+    Classes,
     Dialog,
     DialogBody,
-    DialogFooter, Divider, Drawer,
+    DialogFooter,
+    Divider,
+    Drawer,
     FileInput,
     FormGroup,
-    Icon, InputGroup,
-    Intent, NonIdealState, TextArea,
+    Icon,
+    InputGroup,
+    Intent,
+    NonIdealState,
+    TextArea,
     Tooltip
 } from "@blueprintjs/core";
 import {useTranslation} from "react-i18next";
@@ -22,9 +30,7 @@ import {FIREBASE_PATH} from "../../util/constants";
 import ImageUpload from "../common/ImageUpload";
 import EducationIcon from "../../resources-photo/No_education_image.png";
 import ExperienceIcon from "../../resources-photo/No_experience_image.png";
-import {addressRegex, defaultEd,
-    defaultEx, phoneRegex,
-    usernameRegex, emailRegex} from "./CreateCV";
+import {addressRegex, defaultEd, defaultEx, emailRegex, phoneRegex, usernameRegex} from "./CreateCV";
 import {generatePDF, handleOpenCV, useMediaQuery} from "../common/CommonMethods";
 import HeaderPageCandidate from "../header/HeaderPageCandidate";
 
@@ -165,7 +171,7 @@ const AllCvPage = () => {
             // Upload file to Firebase Storage
             const storage = getStorage(firebase);
             const storageRef = ref(storage, FIREBASE_PATH + fileName);
-            uploadBytes(storageRef, file).then(r => {
+            uploadBytes(storageRef, file).then(() => {
                 let dataCV = response.data.map(cv => {
                     let shortName = cv.cvName.split("_").slice(1).join("_");
                     return {
@@ -344,9 +350,7 @@ const AllCvPage = () => {
      */
     const editExperienceField = () => {
         let cvDataEx = [...cvData.experience]
-        let editedEx = cvDataEx[currentExIndex]
-        editedEx = {...currentEx}
-        cvDataEx[currentExIndex] = editedEx
+        cvDataEx[currentExIndex] = {...currentEx}
         setCVData({
             ...cvData,
             experience: cvDataEx
@@ -354,7 +358,7 @@ const AllCvPage = () => {
         setExperienceDialogOpen(false)
         setCurrentEdIndex(0)
         setCurrentEx(defaultEx)
-    };
+    }
 
     /**
      * Handle experience field change
@@ -385,9 +389,7 @@ const AllCvPage = () => {
      */
     const editEducationField = () => {
         let cvDataEducation = [...cvData.education]
-        let editedEd = cvDataEducation[currentEdIndex]
-        editedEd = {...currentEd}
-        cvDataEducation[currentEdIndex] = editedEd
+        cvDataEducation[currentEdIndex] = {...currentEd}
         setCVData({
             ...cvData,
             education: cvDataEducation
@@ -576,7 +578,7 @@ const AllCvPage = () => {
                     />
                 </FormGroup>
                 <Checkbox checked={currentPresentEx} label={t('work_present')}
-                          onChange={inline => setCurrentPresentEx(!currentPresentEx)} />
+                          onChange={() => setCurrentPresentEx(!currentPresentEx)} />
                 <div className="cv-years">
                     <FormGroup label={t('startYear')}
                                intent={helperText !== ""
@@ -866,7 +868,7 @@ const AllCvPage = () => {
             </div>
             <div className={Classes.DRAWER_FOOTER + " cv-drawer"}>
                 <Button onClick={()=>generatePDF(cvData, addCV)}
-                        intent={Intent.PRIMARY}
+                        className="add-cv-button-in-multiple"
                         disabled={!emailRegex.test(cvData.email) ||
                             !usernameRegex.test(cvData.firstname) ||
                             !usernameRegex.test(cvData.lastname) ||
@@ -875,7 +877,7 @@ const AllCvPage = () => {
                             !addressRegex.test(cvData.address) ||
                             cvData.education.length === 0}
                 >
-                    {t('create_cv')}
+                    {t('submit')}
                 </Button>
             </div>
         </Drawer>
@@ -884,7 +886,10 @@ const AllCvPage = () => {
     return (
         <div>
             <HeaderPageCandidate/>
-            <div>
+            <div className="multiple-cv-background">
+                <div className="multiple-cv-title">
+                    {t('multiple_cv_title')}
+                </div>
                 <div className="multiple-cv-motivation">
                     {t('multiple_cv_motivation')}
                 </div>
@@ -894,7 +899,7 @@ const AllCvPage = () => {
                         <Button minimal
                                 small
                                 className={"add-cv-option"}
-                                icon={<Icon icon="arrow-right" size={13} color="black"/>}
+                                icon={<Icon icon="folder-open" size={13} color="white"/>}
                                 onClick={() => {
                                     setIsDialogOpen(true)
                                 }}>
@@ -903,7 +908,7 @@ const AllCvPage = () => {
                         <Button minimal
                                 small
                                 className={"add-cv-option"}
-                                icon={<Icon icon="arrow-right" size={13} color="black"/>}
+                                icon={<Icon icon="application" size={13} color="white"/>}
                                 onClick={() => {
                                     toggleDrawer()
                                 }}>
@@ -918,15 +923,25 @@ const AllCvPage = () => {
                         <thead>
                         <tr>
                             <th>
-                                <Tooltip content={sortTypeCvName === 'asc' ? t('sort_cv_name_asc') : t('sort_cv_name_desc') }>
-                                    <AnchorButton minimal={true}  className="cv-sort-button" rightIcon={sortTypeCvName === 'asc' ? <Icon size={16} icon="sort-asc" color="black"/> : <Icon size={16} icon="sort-desc" color="black"/>} onClick={sortByCvName}>
+                                <Tooltip
+                                    content={sortTypeCvName === 'asc' ? t('sort_cv_name_asc') : t('sort_cv_name_desc')}>
+                                    <AnchorButton minimal={true} className="cv-sort-button"
+                                                  rightIcon={sortTypeCvName === 'asc' ?
+                                                      <Icon size={16} icon="sort-asc" color="black"/> :
+                                                      <Icon size={16} icon="sort-desc" color="black"/>}
+                                                  onClick={sortByCvName}>
                                         {t('cv_name')}
                                     </AnchorButton>
                                 </Tooltip>
                             </th>
                             <th>
-                                <Tooltip content={sortTypeDate === 'asc' ? t('sort_cv_date_asc') : t('sort_cv_date_desc')}>
-                                    <AnchorButton className="cv-sort-button" minimal={true} rightIcon={sortTypeDate === 'asc' ? <Icon size={16} icon="sort-asc" color="black"/> : <Icon size={16} icon="sort-desc" color="black"/>} onClick={sortByUploadDate}>
+                                <Tooltip
+                                    content={sortTypeDate === 'asc' ? t('sort_cv_date_asc') : t('sort_cv_date_desc')}>
+                                    <AnchorButton className="cv-sort-button" minimal={true}
+                                                  rightIcon={sortTypeDate === 'asc' ?
+                                                      <Icon size={16} icon="sort-asc" color="black"/> :
+                                                      <Icon size={16} icon="sort-desc" color="black"/>}
+                                                  onClick={sortByUploadDate}>
                                         {t('cv_upload_date')}
                                     </AnchorButton>
                                 </Tooltip>
@@ -945,12 +960,15 @@ const AllCvPage = () => {
                                 <td>{item.uploadDate}</td>
                                 <td className="cv-actions">
                                     <Tooltip content={t('view_cv')}>
-                                        <Icon icon="list-detail-view" intent={Intent.PRIMARY} style={{marginRight: '10px'}}
-                                        onClick={()=>{handleOpenCV(item)}}/>
+                                        <Icon icon="list-detail-view" intent={Intent.PRIMARY}
+                                              style={{marginRight: '10px'}}
+                                              onClick={() => {
+                                                  handleOpenCV(item)
+                                              }}/>
                                     </Tooltip>
                                     <Tooltip content={t('delete_cv')}>
                                         <Icon icon="eraser" intent={Intent.DANGER}
-                                              onClick={()=>{
+                                              onClick={() => {
                                                   setCvToDelete(item);
                                                   setIsDeleteDialogOpen(true)
                                               }}/>

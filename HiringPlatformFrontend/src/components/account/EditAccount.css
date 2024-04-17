@@ -220,17 +220,17 @@
 @media (max-width: 1260px) {
     .edit-profile-charts {
         display: flex;
-        flex-wrap: wrap; /* Permiterea elementelor să se așeze pe mai multe rânduri */
+        flex-wrap: wrap;
         align-items: center;
         justify-content: space-between;
         padding: 0.8rem 1.5rem;
         gap: 3px;
-        max-width: 100%; /* Asigurarea că containerul nu depășește lățimea disponibilă */
+        max-width: 100%;
     }
 
     .edit-profile-charts > * {
-        flex: 0 1 calc(50% - 3px); /* Setarea flexibilității pentru fiecare element să ocupe 50% din lățimea containerului cu o mică decalare pentru spațiere */
-        margin-bottom: 3px; /* Adăugarea unui spațiu mic între elementele de pe același rând */
+        flex: 0 1 calc(50% - 3px);
+        margin-bottom: 3px;
     }
 }
 

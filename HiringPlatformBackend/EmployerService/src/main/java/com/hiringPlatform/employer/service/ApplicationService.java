@@ -168,7 +168,6 @@ public class ApplicationService {
         jobResponse.setEmploymentRegime(savedJob.getEmploymentRegime());
         jobResponse.setCityName(savedJob.getCity().getCityName());
         jobResponse.setRegionName(savedJob.getCity().getRegion().getRegionName());
-        jobResponse.setCountryName(savedJob.getCity().getRegion().getCountry().getCountryName());
         jobResponse.setEmployerId(savedJob.getEmployer().getEmployerId());
         jobResponse.setQuestions(questionService.getAllQuestionsForJob(savedJob.getJobId()));
         jobResponse.setStages(stageService.getAllStagesForJob(savedJob.getJobId()));

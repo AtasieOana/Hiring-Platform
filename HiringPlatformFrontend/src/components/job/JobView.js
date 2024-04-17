@@ -68,7 +68,6 @@ const JobView = () => {
         zipCode: "",
         cityName: "",
         regionName: "",
-        countryName: "",
     })
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
     const [isEditDesc, setIsEditDesc] = useState(false);
@@ -529,7 +528,7 @@ const JobView = () => {
                                 </p>
                                 <p>{t('city')}:
                                     <span
-                                        className="show-job-profile-span"> {openedJob.cityName}, {openedJob.regionName}, {openedJob.countryName}</span>
+                                        className="show-job-profile-span"> {openedJob.cityName}, {openedJob.regionName}</span>
                                 </p>
                             </div>
                         </Card>

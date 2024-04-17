@@ -52,7 +52,7 @@ public class JobService {
             // First create the job entry
             Job job = new Job();
             job.setEmployer(employerOptional.get());
-            City city = addressService.saveCityIfNotExist(addJobRequest.getCityName(), addJobRequest.getRegionName(), addJobRequest.getCountryName());
+            City city = addressService.getCity(addJobRequest.getCityName(), addJobRequest.getRegionName());
             job.setCity(city);
             job.setDescription(addJobRequest.getDescription());
             job.setContractType(addJobRequest.getContractType());
@@ -136,11 +136,6 @@ public class JobService {
         }
     }
 
-    public JobResponse getJobResponse(String jobId){
-        Optional<Job> job = jobRepository.findById(jobId);
-        return job.map(this::buildJobResponse).orElse(null);
-    }
-
     private JobResponse buildJobResponse(Job savedJob) {
         JobResponse jobResponse = new JobResponse();
         jobResponse.setJobId(savedJob.getJobId());
@@ -150,7 +145,6 @@ public class JobService {
         jobResponse.setEmploymentRegime(savedJob.getEmploymentRegime());
         jobResponse.setCityName(savedJob.getCity().getCityName());
         jobResponse.setRegionName(savedJob.getCity().getRegion().getRegionName());
-        jobResponse.setCountryName(savedJob.getCity().getRegion().getCountry().getCountryName());
         jobResponse.setEmployerId(savedJob.getEmployer().getEmployerId());
         jobResponse.setQuestions(questionService.getAllQuestionsForJob(savedJob.getJobId()));
         jobResponse.setStages(stageService.getAllStagesForJob(savedJob.getJobId()));

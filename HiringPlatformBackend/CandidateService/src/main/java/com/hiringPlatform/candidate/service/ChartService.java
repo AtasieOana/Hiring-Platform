@@ -79,9 +79,10 @@ public class ChartService {
      * A graph showing the numbers of applications that have been viewed or not
      * for a candidate
      */
-    public Map<String, Integer> getApplicationViewedNumbers(String candidateId) {
-        Map<String, Integer> percentageMap = new HashMap<>();
+    public Map<String, Double> getApplicationViewedNumbers(String candidateId) {
+        Map<String, Double> percentageMap = new HashMap<>();
         List<Application> applications = applicationRepository.findApplicationsForCandidate(candidateId);
+        int totalApplications = applications.size();
         int seenCount = 0, notSeenCount = 0;
         for (Application application : applications) {
             Contains contains = stageService.getCurrentStageForApplication(application.getStage().getStageId(), application.getJob().getJobId());
@@ -92,8 +93,8 @@ public class ChartService {
                 seenCount++;
             }
         }
-        percentageMap.put("vazut", seenCount);
-        percentageMap.put("nevazut", notSeenCount);
+        percentageMap.put("vazut", ((double) seenCount / totalApplications) * 100);
+        percentageMap.put("nevazut", ((double) notSeenCount / totalApplications) * 100);
         return percentageMap;
     }
 

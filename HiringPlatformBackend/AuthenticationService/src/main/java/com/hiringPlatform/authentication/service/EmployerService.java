@@ -16,11 +16,11 @@ public class EmployerService {
         this.employerRepository = employerRepository;
     }
 
-    public Employer saveEmployer(User user, String companyName){
+    public void saveEmployer(User user, String companyName){
         Employer employer = new Employer();
         employer.setUserDetails(user);
         employer.setEmployerId(user.getUserId());
         employer.setCompanyName(companyName);
-        return employerRepository.save(employer);
+        employerRepository.save(employer);
     }
 }

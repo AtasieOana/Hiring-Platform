@@ -7,5 +7,4 @@ export interface GetProfileResponse {
     zipCode: string;
     cityName: string;
     regionName: string;
-    countryName: string;
 }

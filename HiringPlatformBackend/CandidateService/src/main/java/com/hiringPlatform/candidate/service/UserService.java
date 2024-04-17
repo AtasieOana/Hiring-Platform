@@ -1,13 +1,11 @@
 package com.hiringPlatform.candidate.service;
 
 import com.hiringPlatform.candidate.model.Candidate;
-import com.hiringPlatform.candidate.model.Employer;
 import com.hiringPlatform.candidate.model.User;
 import com.hiringPlatform.candidate.model.request.UpdateCandidateAccount;
 import com.hiringPlatform.candidate.model.response.CandidateResponse;
 import com.hiringPlatform.candidate.model.response.GetLoggedUserResponse;
 import com.hiringPlatform.candidate.repository.CandidateRepository;
-import com.hiringPlatform.candidate.repository.EmployerRepository;
 import com.hiringPlatform.candidate.repository.UserRepository;
 import com.hiringPlatform.candidate.security.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;

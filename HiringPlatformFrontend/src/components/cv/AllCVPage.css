@@ -1,17 +1,37 @@
+.multiple-cv-background{
+    background-color: rgba(224, 156, 115, 0.2);
+    height: 50vh;
+    background-position: 0 0;
+    background-size: 100% 100%;
+    width: 100%;
+}
+
+.multiple-cv-title{
+    padding: 6vh 60px 0;
+    font-size: 30px;
+    font-weight: 600;
+    line-height: 1.5;
+    letter-spacing: 2px;
+    font-family: Open Sans, sans-serif;
+    margin-bottom: 10px;
+    color: #6f5370 !important;
+}
+
 .multiple-cv-motivation{
-    margin: 40px 20px 20px;
-    padding: 0 60px;
-    text-align: justify;
+    margin-bottom: 1.5rem !important;
     font-size: 15px;
-    line-height: 1.6;
+    font-weight: 300;
+    line-height: 1.7;
+    font-family: Open Sans, sans-serif;
+    text-align: justify;
+    padding: 5px 60px 0;
 }
 
 .add-cv-options{
-    margin: 0 20px 20px;
+    padding: 5px 60px 0;
 }
 
 .add-cv-options-text{
-    padding: 0 60px;
     text-align: justify;
     font-size: 15px;
     line-height: 1.6;
@@ -20,39 +40,35 @@
 
 .add-cv-options-button{
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    margin-left: 100px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
     margin-top: 10px;
     gap: 10px;
 }
 
-.add-cv-option .bp4-button-text{
-    color: #184a90;
-    text-decoration: underline;
-    font-weight: 600;
-    font-size: 15px;
+.add-cv-option{
+    font-size: 14px !important;
+    transition: all .15s ease !important;
+    letter-spacing: .05em !important;
+    color: #fff !important;
+    border: 1px solid #59245b !important;
+    background-color: #623865 !important;
+    padding: .625rem 1.25rem !important;
+    border-radius: 5px !important;
 }
 
 .add-cv-option:hover {
     background: none !important;
 }
 
-.add-cv-option:hover .bp4-button-text{
-    color: #031531;
+.add-cv-option:hover{
+    border: 1px solid #4b0e52 !important;
+    background-color: #651c6e !important;
 }
 
 .add-cv-option:focus{
     outline: none !important;
-}
-
-.add-cv-option .bp4-icon svg{
-    fill: #184a90;
-}
-
-.add-cv-option:hover .bp4-icon svg{
-    fill: #031531;
 }
 
 .cv-form-drawer{
@@ -110,8 +126,8 @@ table tr th:nth-child(3){
     margin-right: auto !important;
     font-size: 0.9em;
     font-family: sans-serif;
-    width: 70%;
-    margin-top: 20px;
+    width: 80%;
+    margin-top: 30px;
     table-layout: fixed !important;
 }
 
@@ -156,8 +172,38 @@ table tr th:nth-child(3){
     text-overflow: ellipsis  !important;
 }
 
+.cv-form-drawer-container .bp4-drawer-header{
+    background-color: #698576 !important;
+}
+
+.cv-form-drawer-container .bp4-drawer-header button:focus{
+   outline: none !important;
+}
+
+.cv-form-drawer-container .bp4-drawer-header .bp4-icon{
+    color: white !important;
+}
+.add-cv-button-in-multiple{
+    font-size: 15px !important;
+    color: black !important;
+    border: 1px solid #af7554 !important;
+    background-color: #ffaf84 !important;
+    border-radius: 5px !important;
+    width: 15%;
+    letter-spacing: 1px;
+    font-weight: 500;
+}
+
+@media (max-width: 1100px) {
+    .multiple-cv-background{
+        height: 55vh;
+    }
+}
 
 @media (max-width: 900px) {
+    .multiple-cv-background{
+        height: 57vh;
+    }
 
     .img-drawer .custom-image{
         width: 50px;
@@ -173,20 +219,22 @@ table tr th:nth-child(3){
         width: 90%;
     }
 
+    .multiple-cv-title{
+        padding: 6vh 30px 0;
+    }
+
     .multiple-cv-motivation{
-        margin: 40px 20px 20px;
-        padding: 0 30px;
+        margin-bottom: 1.5rem !important;
+        font-weight: 300;
         font-size: 14px;
         line-height: 1.6;
+        font-family: Open Sans, sans-serif;
+        text-align: justify;
+        padding: 5px 30px 0;
     }
 
-    .add-cv-options-text{
-        font-size: 14px;
-        padding: 0 30px;
-    }
-
-    .add-cv-options-button{
-        margin-left: 70px;
+    .add-cv-options{
+        padding: 5px 30px 0;
     }
 
     .add-cv-option .bp4-button-text{
@@ -195,5 +243,32 @@ table tr th:nth-child(3){
 
     .cv-table-list {
         width: 100%;
+    }
+}
+
+@media (max-width: 600px) {
+    .multiple-cv-background{
+        height: 65vh;
+    }
+
+    .add-cv-options{
+        padding: 5px 30px 0;
+    }
+
+    .add-cv-button-in-multiple{
+        width: 20%;
+    }
+
+}
+
+@media (max-height: 550px) {
+    .multiple-cv-background{
+        height: 70vh;
+    }
+}
+
+@media (max-height: 500px) {
+    .multiple-cv-background{
+        height: 90vh;
     }
 }

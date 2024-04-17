@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Bar } from 'react-chartjs-2';
-import { Chart as ChartJS, registerables } from 'chart.js';
+import {Bar} from 'react-chartjs-2';
 import {AppToaster} from "../../common/AppToaster";
 import {Intent} from "@blueprintjs/core";
 import {useTranslation} from "react-i18next";
-import CandidateService from "../../../services/candidate.service";
+import { Chart as ChartJS, registerables } from 'chart.js';
+import EmployerService from "../../../services/employer.service";
 
 ChartJS.register(...registerables);
 
-const CandidateJobsTimelineChart = () => {
+const EmployerApplicationsPerJobChart = (employerId) => {
     const { t } = useTranslation();
 
     const [data, setData] = useState({
@@ -28,23 +28,23 @@ const CandidateJobsTimelineChart = () => {
     }, []);
 
     const fetchData = () => {
-        CandidateService.getJobsPublishedPerDay().then((response) => {
-            const applicationsByDate = response.data;
+        EmployerService.getAppsPerJobByEmployer(employerId.employerId).then((response) => {
+            const applicationsByJob = response.data;
             // Converts the data object to an array of objects for use by the line graph
             const chartData = {
-                labels: Object.keys(applicationsByDate),
+                labels: Object.keys(applicationsByJob),
                 datasets: [
                     {
-                        label: 'Număr de aplicații încărcate',
+                        label: 'Număr de aplicații per job',
                         borderWidth: 1,
-                        backgroundColor: ['#f9cbc1'],
+                        backgroundColor: ['#FF6384'],
                         borderColor: 'rgba(0,0,0,1)',
-                        data: Object.values(applicationsByDate),
+                        data: Object.values(applicationsByJob),
                     },
                 ],
             };
             setData(chartData);
-            setDataValues(Object.values(applicationsByDate).sort())
+            setDataValues(Object.values(applicationsByJob).sort())
         }).catch(error => {
             console.error('Error: ', error.message);
             AppToaster.show({
@@ -55,7 +55,7 @@ const CandidateJobsTimelineChart = () => {
     };
 
     let labelsTranslate = data?.labels
-    let datasetLabelTranslate = t('jobs_number')
+    let datasetLabelTranslate = t('app_number')
     const dataTranslate = {
         labels: labelsTranslate,
         datasets: [
@@ -71,7 +71,7 @@ const CandidateJobsTimelineChart = () => {
 
     return (
         <div className="profile-chart-container-long">
-            <div className="profile-chart-title">{t('number_of_jobs_daily_candidates')}</div>
+            <div className="profile-chart-title">{t('number_of_app_per_job_employers')}</div>
             <div className="profile-chart">
                 <div className="profile-chart-content">
                     {data && (
@@ -89,6 +89,10 @@ const CandidateJobsTimelineChart = () => {
                                         }
                                     }
                                 },
+                                tooltips: {
+                                    enabled: true,
+                                    mode: 'label',
+                                },
                                 scales: {
                                     y: {
                                         grid: {
@@ -101,8 +105,18 @@ const CandidateJobsTimelineChart = () => {
                                     x: {
                                         grid: {
                                             display: false // removing lines from the x-axis
-                                        }
-                                    }
+                                        },
+                                        ticks: {
+                                            callback: function (value) {
+                                                // truncate the labels only in this axis
+                                                const lbl = this.getLabelForValue(Number(value));
+                                                if (typeof lbl === 'string' && lbl.length > 13) {
+                                                    return `${lbl.substring(0, 13)}...`;
+                                                }
+                                                return lbl;
+                                            },
+                                        },
+                                    },
                                 }
                             }}
                         />
@@ -113,4 +127,4 @@ const CandidateJobsTimelineChart = () => {
     );
 };
 
-export default CandidateJobsTimelineChart;
+export default EmployerApplicationsPerJobChart;

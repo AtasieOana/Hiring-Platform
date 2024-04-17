@@ -22,7 +22,6 @@ public class AddJobRequest {
     private String workMode;
     private String cityName;
     private String regionName;
-    private String countryName;
     private String employerId;
     List<QuestionHelperRequest> questions;
     List<StageHelperRequest> stages;

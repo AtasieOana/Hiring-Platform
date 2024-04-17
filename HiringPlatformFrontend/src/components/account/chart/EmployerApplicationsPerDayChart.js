@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Bar } from 'react-chartjs-2';
-import { Chart as ChartJS, registerables } from 'chart.js';
+import {Bar} from 'react-chartjs-2';
 import {AppToaster} from "../../common/AppToaster";
 import {Intent} from "@blueprintjs/core";
 import {useTranslation} from "react-i18next";
-import CandidateService from "../../../services/candidate.service";
+import { Chart as ChartJS, registerables } from 'chart.js';
+import EmployerService from "../../../services/employer.service";
 
 ChartJS.register(...registerables);
 
-const CandidateJobsTimelineChart = () => {
+const EmployerApplicationsPerDayChart = (employerId) => {
     const { t } = useTranslation();
 
     const [data, setData] = useState({
@@ -28,16 +28,16 @@ const CandidateJobsTimelineChart = () => {
     }, []);
 
     const fetchData = () => {
-        CandidateService.getJobsPublishedPerDay().then((response) => {
+        EmployerService.getAppsPerDayByEmployer(employerId.employerId).then((response) => {
             const applicationsByDate = response.data;
             // Converts the data object to an array of objects for use by the line graph
             const chartData = {
                 labels: Object.keys(applicationsByDate),
                 datasets: [
                     {
-                        label: 'Număr de aplicații încărcate',
+                        label: 'Număr de aplicații per zi',
                         borderWidth: 1,
-                        backgroundColor: ['#f9cbc1'],
+                        backgroundColor: ['#FF6384'],
                         borderColor: 'rgba(0,0,0,1)',
                         data: Object.values(applicationsByDate),
                     },
@@ -55,14 +55,14 @@ const CandidateJobsTimelineChart = () => {
     };
 
     let labelsTranslate = data?.labels
-    let datasetLabelTranslate = t('jobs_number')
+    let datasetLabelTranslate = t('app_number')
     const dataTranslate = {
         labels: labelsTranslate,
         datasets: [
             {
                 label:  datasetLabelTranslate,
                 borderWidth: 1,
-                backgroundColor: ['#f9cbc1'],
+                backgroundColor: ['#a8ae87'],
                 borderColor: 'rgba(0,0,0,1)',
                 data: dataValues,
             },
@@ -71,7 +71,7 @@ const CandidateJobsTimelineChart = () => {
 
     return (
         <div className="profile-chart-container-long">
-            <div className="profile-chart-title">{t('number_of_jobs_daily_candidates')}</div>
+            <div className="profile-chart-title">{t('number_of_app_daily_employers')}</div>
             <div className="profile-chart">
                 <div className="profile-chart-content">
                     {data && (
@@ -113,4 +113,4 @@ const CandidateJobsTimelineChart = () => {
     );
 };
 
-export default CandidateJobsTimelineChart;
+export default EmployerApplicationsPerDayChart;

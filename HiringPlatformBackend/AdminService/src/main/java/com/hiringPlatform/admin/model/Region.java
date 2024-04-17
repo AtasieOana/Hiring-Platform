@@ -2,8 +2,6 @@ package com.hiringPlatform.admin.model;
 
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
@@ -25,8 +23,4 @@ public class Region {
     @Column(name = "nume")
     private String regionName;
 
-    @ManyToOne(cascade={CascadeType.MERGE}, fetch=FetchType.EAGER)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name ="id_tara")
-    private Country country;
 }

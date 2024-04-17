@@ -18,6 +18,5 @@ public class CreateProfileRequest {
     private String zipCode;
     private String cityName;
     private String regionName;
-    private String countryName;
     private String employerId;
 }

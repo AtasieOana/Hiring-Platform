@@ -27,6 +27,7 @@
 .profile-card {
     margin-bottom: 10px;
     text-align: justify;
+    border-radius: 5px !important;
 }
 
 .profile-info {
@@ -52,10 +53,12 @@
 }
 
 .profile-name {
-    margin-top: 10px;
+    margin-top: 5px;
     margin-bottom: 5px;
-    color: #fdaf7e;
-    font-size: 24px;
+    color: #698576;
+    font-size: 25px;
+    letter-spacing: 2px;
+    font-weight: 600;
 }
 
 .profile-jobs {

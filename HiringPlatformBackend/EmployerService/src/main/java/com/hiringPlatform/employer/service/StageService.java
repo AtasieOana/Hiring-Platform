@@ -3,7 +3,6 @@ package com.hiringPlatform.employer.service;
 import com.hiringPlatform.employer.model.Contains;
 import com.hiringPlatform.employer.model.Job;
 import com.hiringPlatform.employer.model.Stage;
-import com.hiringPlatform.employer.model.key.ContainsId;
 import com.hiringPlatform.employer.model.request.StageHelperRequest;
 import com.hiringPlatform.employer.repository.ContainsRepository;
 import com.hiringPlatform.employer.repository.StageRepository;

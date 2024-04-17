@@ -1,7 +1,6 @@
 package com.hiringPlatform.employer.service;
 
 import com.hiringPlatform.employer.model.Employer;
-import com.hiringPlatform.employer.model.Profile;
 import com.hiringPlatform.employer.model.User;
 import com.hiringPlatform.employer.model.request.UpdateEmployerAccount;
 import com.hiringPlatform.employer.model.response.EmployerResponse;

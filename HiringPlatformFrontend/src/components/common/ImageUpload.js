@@ -54,7 +54,7 @@ const ImageUpload = ({onImageUpload, initialImg}) => {
                 </div>
                 <div className="file-input-content">
                     <FileInput
-                        text={!selectedImage ? t('choose_file') : selectedImage.name}
+                        text={!selectedImage || !selectedImage.name ? t('choose_file') : selectedImage.name}
                         buttonText={t('choose')}
                         inputProps={{
                             accept: ".jpg,.png"

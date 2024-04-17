@@ -13,7 +13,6 @@ const EditProfilePage = () => {
         zipCode: '',
         city: '',
         region: '',
-        country: '',
         description: ''
     });
 

@@ -24,9 +24,4 @@ public class Region {
 
     @Column(name = "nume")
     private String regionName;
-
-    @ManyToOne(cascade={CascadeType.MERGE}, fetch=FetchType.EAGER)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name ="id_tara")
-    private Country country;
 }

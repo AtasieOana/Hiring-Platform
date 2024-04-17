@@ -34,8 +34,8 @@ public class ChartController {
     }
 
     @GetMapping("/getApplicationViewedNumbers/{candidateId}")
-    public ResponseEntity<Map<String, Integer>> getApplicationViewedNumbers(@PathVariable String candidateId) {
-        Map<String, Integer> response = chartService.getApplicationViewedNumbers(candidateId);
+    public ResponseEntity<Map<String, Double>> getApplicationViewedNumbers(@PathVariable String candidateId) {
+        Map<String, Double> response = chartService.getApplicationViewedNumbers(candidateId);
         return ResponseEntity.ok(response);
     }
 }

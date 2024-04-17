@@ -19,25 +19,20 @@ DROP TABLE utilizatori;
 DROP TABLE adrese;
 DROP TABLE orase;
 DROP TABLE regiuni;
-DROP TABLE tari;
 DROP TABLE roluri;
 
 -- Crearea tabelelor
-CREATE TABLE tari (
-    id_tara VARCHAR2(36) CONSTRAINT pk_tara PRIMARY KEY,
-    nume VARCHAR(255) NOT NULL
-);
-
 CREATE TABLE regiuni (
     id_regiune VARCHAR2(36) CONSTRAINT pk_regiune PRIMARY KEY,
     nume VARCHAR(255) NOT NULL,
-    id_tara VARCHAR2(36) CONSTRAINT fk_regiune_tara REFERENCES tari(id_tara)
+    CONSTRAINT regiune_nume_unic UNIQUE (nume)
 );
 
 CREATE TABLE orase (
     id_oras VARCHAR2(36) CONSTRAINT pk_oras PRIMARY KEY,
     nume VARCHAR(255) NOT NULL,
-    id_regiune VARCHAR2(36) CONSTRAINT fk_oras_regiune REFERENCES regiuni(id_regiune)
+    id_regiune VARCHAR2(36) CONSTRAINT fk_oras_regiune REFERENCES regiuni(id_regiune),
+    CONSTRAINT oras_per_regiune_unic UNIQUE (nume, id_regiune)
 );
 
 CREATE TABLE adrese (
@@ -197,7 +192,6 @@ SELECT * FROM utilizatori;
 SELECT * FROM administratori;
 SELECT * FROM candidati;
 SELECT * FROM angajatori;
-SELECT * FROM tari;
 SELECT * FROM adrese;
 SELECT * FROM token_autentificare;
 SELECT * FROM profiluri;

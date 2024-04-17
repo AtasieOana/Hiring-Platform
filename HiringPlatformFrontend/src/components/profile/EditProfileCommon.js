@@ -29,7 +29,6 @@ const EditProfileCommon = ({
         zipCode: false,
         city: false,
         region: false,
-        country: false,
         description: false
     });
 
@@ -70,8 +69,8 @@ const EditProfileCommon = ({
         } else {
             newErrors.zipCode = false;
         }
-        // City, region and country validation
-        const fieldsToValidate = ['city', 'region', 'country'];
+        // City and region validation
+        const fieldsToValidate = ['city', 'region'];
         fieldsToValidate.forEach(field => {
             if (!formData[field] || (formData[field] && !/^[A-Za-zăâîșțĂÂÎȘȚ\s\-]*$/u.test(formData[field]))) {
                 newErrors[field] = true;
@@ -122,7 +121,7 @@ const EditProfileCommon = ({
             request.imagine = base64ToImage(`data:image/jpeg;base64,${request.imagine}`)
         }
         ProfileService.updateEmployerProfile(request)
-            .then((response) => {
+            .then(() => {
                 AppToaster.show({
                     message: t('update_profile_success'),
                     intent: Intent.SUCCESS,
@@ -150,7 +149,6 @@ const EditProfileCommon = ({
                 zipCode: formData.zipCode,
                 cityName: formData.city,
                 regionName: formData.region,
-                countryName: formData.country,
                 employerId: employer.employerId,
             }
             if (isAddOperationProps) {
@@ -164,7 +162,7 @@ const EditProfileCommon = ({
     const modules = {
         toolbar: [
             [{'header': [1, 2, false]}],
-            ['bold', 'italic', 'underline', 'strike'],
+            ['bold', 'italic', 'underline'],
             [{'color': []}],
             [{'align': ''}, {'align': 'center'}, {'align': 'right'}, {'align': 'justify'}],
             [{'list': 'ordered'}, {'list': 'bullet'}],
@@ -173,136 +171,146 @@ const EditProfileCommon = ({
         ]
     };
 
-    return (
-        <div>
-            <div className="create-profile-subtitle">
-                *{t('create_profile_subtitle')}
+    const renderLeftModule = () => {
+        return <div className="left-column">
+            <div className="profile-column-title">
+                {t('general_details_dialog')}
             </div>
-            <div className="form-container-profile">
-                <div className="left-column">
-                    <ControlGroup fill>
-                        <FormGroup
-                            label={t('phone_number')}
-                            style={{flex: 1}}
-                            intent={errors.phoneNumber ? Intent.DANGER : Intent.NONE}
-                            helperText={errors.phoneNumber ? t('phone_number_err') : ""}
-                        >
-                            <InputGroup
-                                type="text"
-                                name="phoneNumber"
-                                value={formData.phoneNumber}
-                                onChange={handleChange}
-                            />
-                        </FormGroup>
-                        <FormGroup
-                            label={t('website')}
-                            style={{flex: 1}}
-                            intent={errors.website ? Intent.DANGER : Intent.NONE}
-                            helperText={errors.website ? t('website_err') : ""}
-                        >
-                            <InputGroup
-                                type="text"
-                                name="website"
-                                value={formData.website}
-                                onChange={handleChange}
-                            />
-                        </FormGroup>
-                    </ControlGroup>
+            <div className="profile-column-content-fields">
+                <ControlGroup fill>
                     <FormGroup
-                        label={t('street')}
-                        intent={errors.street ? Intent.DANGER : Intent.NONE}
-                        helperText={errors.street ? t('street_err') : ""}
-                        labelInfo={t('required')}
+                        label={t('phone_number')}
+                        style={{flex: 1}}
+                        intent={errors.phoneNumber ? Intent.DANGER : Intent.NONE}
+                        helperText={errors.phoneNumber ? t('phone_number_err') : ""}
+                        className={"edit-profile-field"}
                     >
                         <InputGroup
                             type="text"
-                            name="street"
-                            value={formData.street}
+                            name="phoneNumber"
+                            value={formData.phoneNumber}
                             onChange={handleChange}
                         />
                     </FormGroup>
-                    <ControlGroup fill>
-                        <FormGroup
-                            label={t('zip')}
-                            style={{flex: 1}}
-                            intent={errors.zipCode ? Intent.DANGER : Intent.NONE}
-                            helperText={errors.zipCode ? t('zip_req') : ""}
-                            labelInfo={t('required')}
-                        >
-                            <InputGroup
-                                type="text"
-                                name="zipCode"
-                                value={formData.zipCode}
-                                onChange={handleChange}
-                            />
-                        </FormGroup>
-                        <FormGroup
-                            label={t('city')}
-                            style={{flex: 1}}
-                            intent={errors.city ? Intent.DANGER : Intent.NONE}
-                            helperText={errors.city ? t('city_req') : ""}
-                            labelInfo={t('required')}
-                        >
-                            <InputGroup
-                                type="text"
-                                name="city"
-                                value={formData.city}
-                                onChange={handleChange}
-                            />
-                        </FormGroup>
-                    </ControlGroup>
-                    <ControlGroup fill>
-                        <FormGroup
-                            label={t('region')}
-                            style={{flex: 1}}
-                            intent={errors.region ? Intent.DANGER : Intent.NONE}
-                            helperText={errors.region ? t('region_req') : ""}
-                            labelInfo={t('required')}
-                        >
-                            <InputGroup
-                                type="text"
-                                name="region"
-                                value={formData.region}
-                                onChange={handleChange}
-                            />
-                        </FormGroup>
-                        <FormGroup
-                            label={t('country')}
-                            style={{flex: 1}}
-                            intent={errors.country ? Intent.DANGER : Intent.NONE}
-                            helperText={errors.country ? t('country_req') : ""}
-                            labelInfo={t('required')}
-                        >
-                            <InputGroup
-                                type="text"
-                                name="country"
-                                value={formData.country}
-                                onChange={handleChange}
-                            />
-                        </FormGroup>
-                    </ControlGroup>
-                    <Divider/>
-                    <ImageUpload onImageUpload={handleImageUpload} initialImg={imgProp}/>
-                </div>
-                <div className="right-column">
-                    <FormGroup label={t('description')}
-                               labelInfo={t('required')}
-                               intent={errors.description ? Intent.DANGER : Intent.NONE}
-                               helperText={errors.description ? t('description_req') : ""}>
-                        <ReactQuill
-                            theme="snow"
-                            value={formData.description}
-                            onChange={handleDescChange}
-                            modules={modules}
+                    <FormGroup
+                        label={t('website')}
+                        style={{flex: 1}}
+                        intent={errors.website ? Intent.DANGER : Intent.NONE}
+                        helperText={errors.website ? t('website_err') : ""}
+                        className={"edit-profile-field"}
+                    >
+                        <InputGroup
+                            type="text"
+                            name="website"
+                            value={formData.website}
+                            onChange={handleChange}
                         />
                     </FormGroup>
+                </ControlGroup>
+                <FormGroup
+                    label={t('street')}
+                    intent={errors.street ? Intent.DANGER : Intent.NONE}
+                    helperText={errors.street ? t('street_err') : ""}
+                    labelInfo={"*"}
+                    className={"edit-profile-field"}
+                >
+                    <InputGroup
+                        type="text"
+                        name="street"
+                        value={formData.street}
+                        onChange={handleChange}
+                    />
+                </FormGroup>
+                <ControlGroup fill>
+                    <FormGroup
+                        label={t('zip')}
+                        style={{flex: 1}}
+                        intent={errors.zipCode ? Intent.DANGER : Intent.NONE}
+                        helperText={errors.zipCode ? t('zip_req') : ""}
+                        labelInfo={"*"}
+                        className={"edit-profile-field"}
+                    >
+                        <InputGroup
+                            type="text"
+                            name="zipCode"
+                            value={formData.zipCode}
+                            onChange={handleChange}
+                        />
+                    </FormGroup>
+                    <FormGroup
+                        label={t('city')}
+                        style={{flex: 1}}
+                        intent={errors.city ? Intent.DANGER : Intent.NONE}
+                        helperText={errors.city ? t('city_req') : ""}
+                        labelInfo={"*"}
+                        className={"edit-profile-field"}
+                    >
+                        <InputGroup
+                            type="text"
+                            name="city"
+                            value={formData.city}
+                            onChange={handleChange}
+                        />
+                    </FormGroup>
+                </ControlGroup>
+                <ControlGroup fill>
+                    <FormGroup
+                        label={t('region')}
+                        style={{flex: 1}}
+                        intent={errors.region ? Intent.DANGER : Intent.NONE}
+                        helperText={errors.region ? t('region_req') : ""}
+                        labelInfo={"*"}
+                        className={"edit-profile-field"}
+                    >
+                        <InputGroup
+                            type="text"
+                            name="region"
+                            value={formData.region}
+                            onChange={handleChange}
+                        />
+                    </FormGroup>
+                </ControlGroup>
+                <Divider/>
+                <ImageUpload onImageUpload={handleImageUpload} initialImg={imgProp}/>
+
+            </div>
+        </div>
+    }
+
+    const renderRightModule = () => {
+        return <div className="right-column">
+            <div className="profile-column-title-desc">
+                <span>
+                    {t('the_description')}
+                </span>
+                {errors.description && <span className="profile-column-desc-error">
+                    {t('job_desc_error')}
+                </span>}
+            </div>
+            <ReactQuill
+                theme="snow"
+                value={formData.description}
+                onChange={handleDescChange}
+                modules={modules}
+            />
+        </div>
+    }
+
+    return (
+        <div className="create-profile">
+            <div className="create-profile-background">
+                <div className="create-profile-button-container">
+                    <Button className="create-profile-button"
+                            small={true}
+                            onClick={(e) => handleSubmit(e)}>
+                        {t('save_profile')}
+                    </Button>
+                </div>
+                <div className="form-container-profile">
+                    {renderLeftModule()}
+                    {renderRightModule()}
                 </div>
             </div>
-            <Button className="create-profile-button"
-                    small={true}
-                    onClick={(e) => handleSubmit(e)}>
-                {t('save_profile')}
-            </Button>
         </div>
     );
 

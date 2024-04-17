@@ -1,11 +1,12 @@
 .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    background-color: #698576;
-    color: #fff;
-    overflow: hidden;
+    height: 40px !important;
+    background-color: #698576 !important;
+    color: #fff !important;
+    overflow: hidden !important;
+}
+
+.header .bp4-navbar-group{
+    height: 40px !important;
 }
 
 .company-name {
@@ -47,25 +48,22 @@
     align-items: center;
 }
 
-.nav-item {
-    margin-left: 15px;
-    padding-right: 15px;
-    display: flex;
-    align-items: center;
-    color: #fff;
-    text-decoration: none;
-    font-family: 'Georgia', serif;
-    background: none !important;
-    cursor: pointer !important;
-    outline: inherit !important;
-}
-
-.nav-item:not(:last-child) {
+.navigation .bp4-navbar-divider{
     border-right: 2px solid #fff;
 }
 
-.nav-item:hover {
-    color: #b5eed3;
+.nav-button{
+    color: #fff !important;
+    font-family: 'Georgia', serif!important;
+    text-decoration: none!important;
+}
+
+.nav-button:hover{
+    background-color: rgba(27, 70, 48, 0.2) !important;
+}
+
+.nav-button:focus{
+    outline: none !important;
 }
 
 .nav-icon {
@@ -80,6 +78,19 @@
 .delete-menu-item:hover {
     background-color: #960606 !important;
 }
+
+.bp4-popover-wrapper:focus, .bp4-popover-target:focus, .bp4-overlay-start-focus-trap:focus, .bp4-menu-item:focus{
+    outline: none !important;
+}
+
+.bp4-popover-open:focus, .bp4-overlay:focus .bp4-overlay-open:focus .bp4-overlay-inline:focus{
+    outline: none !important;
+}
+
+.bp4-menu{
+    min-width: 50px !important;
+}
+
 
 @media (max-width: 700px) {
     .company-name {

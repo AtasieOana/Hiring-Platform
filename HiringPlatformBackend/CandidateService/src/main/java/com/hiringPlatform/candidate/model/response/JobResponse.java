@@ -26,7 +26,6 @@ public class JobResponse {
     private Date postingDate;
     private String cityName;
     private String regionName;
-    private String countryName;
     private String status;
     private Employer employer;
     private GetProfileResponse employerProfile;

@@ -76,7 +76,6 @@ public class JobService {
         jobResponse.setEmploymentRegime(savedJob.getEmploymentRegime());
         jobResponse.setCityName(savedJob.getCity().getCityName());
         jobResponse.setRegionName(savedJob.getCity().getRegion().getRegionName());
-        jobResponse.setCountryName(savedJob.getCity().getRegion().getCountry().getCountryName());
         jobResponse.setEmployer(savedJob.getEmployer());
         jobResponse.setEmployerProfile(profileService.getProfile(savedJob.getEmployer().getUserDetails().getEmail()));
         jobResponse.setQuestions(questionService.getAllQuestionsForJob(savedJob.getJobId()));

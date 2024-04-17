@@ -1,14 +1,25 @@
 import React, {useEffect} from 'react';
-import {Link, useNavigate} from 'react-router-dom';
+import { useNavigate} from 'react-router-dom';
 import './Header.css';
-import {Icon, Intent, Menu, MenuItem, Popover} from '@blueprintjs/core';
+import {
+    Alignment,
+    Button,
+    Icon,
+    Intent,
+    Menu,
+    MenuItem, Navbar,
+    NavbarDivider,
+    NavbarGroup,
+    NavbarHeading,
+    Popover
+} from '@blueprintjs/core';
 
 import {useTranslation} from 'react-i18next';
 import {AppToaster} from "../common/AppToaster";
 import AuthenticationService from "../../services/authentication.service";
 import {useDispatch, useSelector} from "react-redux";
 import {setAuthData} from "../../redux/actions/authActions";
-import {GBFlag, ROFlag} from "../common/CommonMethods";
+import {GBFlag, ROFlag, useMediaQuery} from "../common/CommonMethods";
 
 const HeaderWithoutCV = () => {
 
@@ -16,6 +27,7 @@ const HeaderWithoutCV = () => {
     const candidate = useSelector(state => state.auth.candidate);
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const isSmallScreen = useMediaQuery("(max-width: 700px)");
 
     useEffect(() => {
         if(!candidate || candidate.candidateId === ""){
@@ -52,52 +64,90 @@ const HeaderWithoutCV = () => {
 
     return (
         <div className="header">
-            <div className="company-name">JOBLISTIC</div>
+            <Navbar className="header">
+                <NavbarGroup align={Alignment.LEFT}>
+                    <NavbarHeading className="company-name">JOBLISTIC</NavbarHeading>
+                </NavbarGroup>
 
-            <div className="navigation">
-                <Popover
-                    interactionKind="hover"
-                    usePortal={false}
-                    content={
-                        <Menu className={"menu-language"}>
-                            <MenuItem text="English" selected={i18n.language === 'en'}
-                                      icon={GBFlag()}
-                                      disabled={i18n.language === 'en'} onClick={() => changeLanguage()} />
-                            <MenuItem text="Română" selected={i18n.language === 'ro'}
-                                      icon={ROFlag()}
-                                      disabled={i18n.language === 'ro'} onClick={() => changeLanguage()} />
-                        </Menu>
+                <NavbarGroup align={Alignment.RIGHT}  className="navigation">
+                    <Popover
+                        interactionKind="hover"
+                        content={
+                            <Menu className={"menu-language"}>
+                                <MenuItem text="English" selected={i18n.language === 'en'}
+                                          icon={GBFlag()}
+                                          disabled={i18n.language === 'en'} onClick={() => changeLanguage()} />
+                                <MenuItem text="Română" selected={i18n.language === 'ro'}
+                                          icon={ROFlag()}
+                                          disabled={i18n.language === 'ro'} onClick={() => changeLanguage()} />
+                            </Menu>
+                        }
+                        position="bottom"
+                    >
+                        <Button minimal
+                                icon={<Icon size={13} icon={i18n.language === 'en' ? GBFlag() : ROFlag()} color="white" className="nav-icon"/>}
+                                rightIcon={<Icon size={13} icon="chevron-down" color="white" className="nav-icon"/>}
+                                text={i18n.language === 'en' ? 'English' : 'Română'}
+                                className="nav-button"
+                        />
+                    </Popover>
+                    <NavbarDivider />
+                    {isSmallScreen ? <>
+                        <Popover
+                            interactionKind="hover"
+                            content={
+                                <Menu>
+                                    <MenuItem icon="chat" color="white"
+                                              text={t('contact')} onClick={() => navigate('/contacts')}/>
+                                    <MenuItem icon="document" color="white"
+                                              text={t('add_cv')} onClick={() => navigate('/addCv')}/>
+                                    <MenuItem icon="log-out" color="white" text={t('logout')} onClick={logout}/>
+                                </Menu>
+                            }
+                            placement="bottom-end"
+                        >
+                            <Button minimal
+                                    icon={<Icon size={13} icon="mugshot" color="white" className="nav-icon"/>}
+                                    rightIcon={<Icon size={13} icon="chevron-down" color="white" className="nav-icon"/>}
+                                    text={candidate?.lastname + " " + candidate?.firstname}
+                                    className="nav-button"
+                            />
+                        </Popover>
+                    </> : <>
+                        <Button minimal
+                                text={t('contact')}
+                                onClick={()=>navigate("/contacts")}
+                                className="nav-button"
+                                icon={<Icon size={13} icon="chat" color="white" className="nav-icon"/>}
+                        />
+                        <NavbarDivider/>
+                        <Button minimal
+                                text={t('add_cv')}
+                                onClick={()=>navigate("/addCv")}
+                                className="nav-button"
+                                icon={<Icon size={13} icon="document" color="white" className="nav-icon"/>}
+                        />
+                        <NavbarDivider/>
+                        <Popover
+                            interactionKind="hover"
+                            content={
+                                <Menu>
+                                    <MenuItem icon="log-out" color="white" text={t('logout')} onClick={logout}/>
+                                </Menu>
+                            }
+                            position="bottom-right"
+                        >
+                            <Button minimal
+                                    icon={<Icon size={13} icon="mugshot" color="white" className="nav-icon"/>}
+                                    rightIcon={<Icon size={13} icon="chevron-down" color="white" className="nav-icon"/>}
+                                    text={candidate?.lastname + " " + candidate?.firstname}
+                                    className="nav-button"
+                            />
+                        </Popover>
+                    </>
                     }
-                    position="bottom"
-                >
-                    <div className="nav-item-language">
-                        <Icon size={13} icon={i18n.language === 'en' ? GBFlag() : ROFlag()} color="white" className="nav-icon"/> {i18n.language === 'en' ? 'English' : 'Română'}
-                        <Icon size={13} icon="chevron-down" color="white" className="nav-icon"/>
-                    </div>
-                </Popover>
-                <Link to="/contacts" className="nav-item-auth">
-                    <Icon size={13} icon="helper-management" color="white" className="nav-icon-auth"/> {t('contact')}
-                </Link>
-                <Link to="/addCv" className="nav-item-auth">
-                    <Icon size={13} icon="document" color="white" className="nav-icon-auth"/> {t('add_cv')}
-                </Link>
-                <Popover
-                    interactionKind="hover"
-                    usePortal={false}
-                    content={
-                        <Menu>
-                            <MenuItem icon="log-out" color="white" text={t('logout')} onClick={logout}/>
-                        </Menu>
-                    }
-                    position="bottom-right"
-                >
-                    <Link className="nav-item nav-item-chevron" to="#" isActive={false}>
-                        <Icon size={13} icon="mugshot" color="white" className="nav-icon"/> {candidate?.lastname + " " + candidate?.firstname}
-                        <Icon size={13} icon="chevron-down" color="white" className="nav-icon"/>
-                    </Link>
-
-                </Popover>
-            </div>
+                </NavbarGroup>
+            </Navbar>
         </div>
     );
 };

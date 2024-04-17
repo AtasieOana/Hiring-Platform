@@ -1,7 +1,19 @@
 import React, {useEffect, useState} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import './Header.css';
-import {Button, Dialog, DialogBody, DialogFooter, Icon, Intent, Menu, MenuItem, Popover} from '@blueprintjs/core';
+import {
+    Alignment,
+    Button,
+    Dialog,
+    DialogBody,
+    DialogFooter,
+    Icon,
+    Intent,
+    Menu,
+    MenuItem, Navbar, NavbarDivider,
+    NavbarGroup, NavbarHeading,
+    Popover
+} from '@blueprintjs/core';
 
 import {useTranslation} from 'react-i18next';
 import {AppToaster} from "../common/AppToaster";
@@ -99,13 +111,14 @@ const HeaderPageEmployer = () => {
     }
 
     return (
-        <div className="header">
-            <div className="company-name">JOBLISTIC</div>
+        <Navbar className="header">
+            <NavbarGroup align={Alignment.LEFT}>
+                <NavbarHeading className="company-name">JOBLISTIC</NavbarHeading>
+            </NavbarGroup>
 
-            <div className="navigation">
+            <NavbarGroup align={Alignment.RIGHT}  className="navigation">
                 <Popover
                     interactionKind="hover"
-                    usePortal={false}
                     content={
                         <Menu className={"menu-language"}>
                             <MenuItem text="English" selected={i18n.language === 'en'}
@@ -118,27 +131,29 @@ const HeaderPageEmployer = () => {
                     }
                     position="bottom"
                 >
-                    <div className="nav-item-language">
-                        <Icon size={13} icon={i18n.language === 'en' ? GBFlag() : ROFlag()} color="white" className="nav-icon"/> {i18n.language === 'en' ? 'English' : 'Română'}
-                        <Icon size={13} icon="chevron-down" color="white" className="nav-icon"/>
-                    </div>
+                    <Button minimal
+                            icon={<Icon size={13} icon={i18n.language === 'en' ? GBFlag() : ROFlag()} color="white" className="nav-icon"/>}
+                            rightIcon={<Icon size={13} icon="chevron-down" color="white" className="nav-icon"/>}
+                            text={i18n.language === 'en' ? 'English' : 'Română'}
+                            className="nav-button"
+                    />
                 </Popover>
+                <NavbarDivider />
                 {isSmallScreen ? <>
                     <Popover
                         interactionKind="hover"
-                        usePortal={false}
                         content={
                             <Menu>
-                                <MenuItem icon="list-detail-view" color="white" text={t('posted_jobs')}
+                                <MenuItem icon="projects" color="white" text={t('posted_jobs')}
                                           onClick={() => navigate('/allJobs')}/>
-                                <MenuItem icon="annotation" color="white"
+                                <MenuItem icon="control" color="white"
                                           text={t('edit_account')} onClick={handleGoToEditAccount}/>
-                                <MenuItem icon="search-around" color="white" text={t('my_profile')}
+                                <MenuItem icon="inbox-geo" color="white" text={t('my_profile')}
                                           onClick={() => navigate('/profile')}/>
-                                <MenuItem icon="helper-management" color="white"
+                                <MenuItem icon="chat" color="white"
                                           text={t('contact')} onClick={() => navigate('/contacts')}/>
                                 <MenuItem icon="log-out" color="white" text={t('logout')} onClick={logout}/>
-                                <MenuItem icon={<Icon size={13} icon="eraser" color="white" className="nav-icon"/>}
+                                <MenuItem icon={<Icon size={14} icon="remove" color="white" className="nav-icon"/>}
                                           className="delete-menu-item" color="white"
                                           text={t('delete_account')}
                                           onClick={handleDeleteAccount}/>
@@ -146,45 +161,57 @@ const HeaderPageEmployer = () => {
                         }
                         placement="bottom-end"
                     >
-                        <Link className="nav-item nav-item-chevron" to="#" isActive={false}>
-                            <Icon size={13} icon="mugshot" color="white" className="nav-icon"/> {employer?.companyName}
-                            <Icon size={13} icon="chevron-down" color="white" className="nav-icon"/>
-                        </Link>
+                        <Button minimal
+                                icon={<Icon size={13} icon="mugshot" color="white" className="nav-icon"/>}
+                                rightIcon={<Icon size={13} icon="chevron-down" color="white" className="nav-icon"/>}
+                                text={employer?.companyName}
+                                className="nav-button"
+                        />
                     </Popover>
                 </> : <>
-                    <Link className="nav-item" to="/allJobs">
-                        <Icon size={13} icon="list-detail-view" color="white" className="nav-icon"/> {t('posted_jobs')}
-                    </Link>
-                    <Link className="nav-item" to="/profile">
-                        <Icon size={13} icon="search-around" color="white" className="nav-icon"/> {t('my_profile')}
-                    </Link>
+                    <Button minimal
+                            text={t('posted_jobs')}
+                            onClick={()=>navigate("/allJobs")}
+                            className="nav-button"
+                            icon={<Icon size={13} icon="projects" color="white" className="nav-icon"/>}
+                    />
+                    <NavbarDivider/>
+                    <Button minimal
+                            text={t('my_profile')}
+                            onClick={()=>navigate("/profile")}
+                            className="nav-button"
+                            icon={<Icon size={13} icon="inbox-geo" color="white" className="nav-icon"/>}
+                    />
+                    <NavbarDivider/>
                     <Popover
                         interactionKind="hover"
-                        usePortal={false}
                         content={
                             <Menu>
-                                <MenuItem icon="annotation" color="white"
+                                <MenuItem icon="control" color="white"
                                           text={t('edit_account')} onClick={handleGoToEditAccount}/>
-                                <MenuItem icon="helper-management" color="white"
+                                <MenuItem icon="chat" color="white"
                                           text={t('contact')} onClick={() => navigate('/contacts')}/>
                                 <MenuItem icon="log-out" color="white" text={t('logout')} onClick={logout}/>
-                                <MenuItem icon={<Icon size={13} icon="eraser" color="white" className="nav-icon"/>}
+                                <MenuItem icon={<Icon size={14} icon="remove" color="white" className="nav-icon"/>}
                                           className="delete-menu-item" color="white"
                                           text={t('delete_account')}
                                           onClick={handleDeleteAccount}/>
                             </Menu>
                         }
                         placement="bottom-end"
+                        className="header-popover"
                     >
-                        <Link className="nav-item" to="#" isActive={false}>
-                            <Icon size={13} icon="mugshot" color="white" className="nav-icon"/> {employer?.companyName}
-                            <Icon size={13} icon="chevron-down" color="white" className="nav-icon"/>
-                        </Link>
+                        <Button minimal
+                                icon={<Icon size={13} icon="mugshot" color="white" className="nav-icon"/>}
+                                rightIcon={<Icon size={13} icon="chevron-down" color="white" className="nav-icon"/>}
+                                text={employer?.companyName}
+                                className="nav-button"
+                        />
                     </Popover>
                 </>}
-                {renderDeleteAccountDialog()}
-            </div>
-        </div>
+            </NavbarGroup>
+            {renderDeleteAccountDialog()}
+        </Navbar>
     );
 };
 

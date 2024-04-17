@@ -37,7 +37,6 @@ const ProfilePage = () => {
         zipCode: "",
         cityName: "",
         regionName: "",
-        countryName: "",
     })
     const [isEditing, setIsEditing] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
@@ -78,7 +77,7 @@ const ProfilePage = () => {
         setIsLoading(true)
         let profileResponse: GetProfileResponse = openedJob.employerProfile
         setProfileInfo(profileResponse)
-        setAddress(`${profileResponse.street}, ${profileResponse.cityName}, ${profileResponse.countryName}`)
+        setAddress(`${profileResponse.street}, ${profileResponse.cityName}, ${t('ro')}`)
         JobService.getNrJobsForEmployer(openedJob.employer.employerId).then((response: any) => {
             setJobNr(response.data)
             setIsLoading(false)
@@ -97,7 +96,7 @@ const ProfilePage = () => {
             .then((response: any) => {
                 let profileResponse: GetProfileResponse = response.data;
                 setProfileInfo(profileResponse)
-                setAddress(`${profileResponse.street}, ${profileResponse.cityName}, ${profileResponse.countryName}`)
+                setAddress(`${profileResponse.street}, ${profileResponse.cityName}, ${t('ro')}`)
                 setIsLoading(false);
                 JobService.getNrJobsForEmployer(employer.employerId)
                     .then((response: any) => {
@@ -154,7 +153,7 @@ const ProfilePage = () => {
                         <div className="profile-heading">{t('location')}</div>
                         <div className="profile-details">
                             <p>{profileInfo.street}, {profileInfo.zipCode}, {profileInfo.cityName}</p>
-                            <p>{t('region')} {profileInfo.regionName}, {profileInfo.countryName}</p>
+                            <p>{t('region')} {profileInfo.regionName}</p>
                             <MapDisplay
                                 address={address}/>
                         </div>
@@ -186,7 +185,6 @@ const ProfilePage = () => {
             zipCode: profileInfo.zipCode,
             city: profileInfo.cityName,
             region: profileInfo.regionName,
-            country: profileInfo.countryName,
             description: profileInfo.description
         }
         return <EditProfileCommon formDataProps={formData} isAddOperationProps={false}

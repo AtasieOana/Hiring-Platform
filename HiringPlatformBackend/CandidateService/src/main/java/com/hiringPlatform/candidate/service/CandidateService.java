@@ -1,13 +1,8 @@
 package com.hiringPlatform.candidate.service;
 
 import com.hiringPlatform.candidate.model.Candidate;
-import com.hiringPlatform.candidate.model.User;
-import com.hiringPlatform.candidate.model.request.UpdateCandidateAccount;
-import com.hiringPlatform.candidate.model.response.CandidateResponse;
 import com.hiringPlatform.candidate.repository.CandidateRepository;
-import com.hiringPlatform.candidate.security.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;

@@ -22,8 +22,7 @@ public class AnswerService {
     @Autowired
     public AnswerService(AnswerRepository answerRepository,
                          CandidateService candidateService,
-                         QuestionService questionService,
-                         JobService jobService) {
+                         QuestionService questionService) {
         this.answerRepository = answerRepository;
         this.candidateService = candidateService;
         this.questionService = questionService;

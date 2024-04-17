@@ -1,10 +1,7 @@
 package com.hiringPlatform.authentication.service;
 
 import com.hiringPlatform.authentication.model.Admin;
-import com.hiringPlatform.authentication.model.User;
 import com.hiringPlatform.authentication.repository.AdminRepository;
-import com.hiringPlatform.authentication.repository.RoleRepository;
-import com.hiringPlatform.authentication.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,13 +12,10 @@ import java.util.Optional;
 @Service
 public class AdminService {
 
-    private final UserRepository userRepository;
-
     private final AdminRepository adminRepository;
 
     @Autowired
-    public AdminService(UserRepository userRepository, AdminRepository adminRepository) {
-        this.userRepository = userRepository;
+    public AdminService(AdminRepository adminRepository) {
         this.adminRepository = adminRepository;
     }
 

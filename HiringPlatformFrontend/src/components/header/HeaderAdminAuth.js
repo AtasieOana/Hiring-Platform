@@ -1,7 +1,16 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
-import '../styles/HeaderAuth.css';
-import {Icon, Menu, MenuItem, Popover} from "@blueprintjs/core";
+import './Header.css';
+import {
+    Alignment,
+    Button,
+    Icon,
+    Menu,
+    MenuItem,
+    Navbar,
+    NavbarGroup,
+    NavbarHeading,
+    Popover
+} from "@blueprintjs/core";
 import {useTranslation} from 'react-i18next';
 import {GBFlag, ROFlag} from "../common/CommonMethods";
 
@@ -17,13 +26,14 @@ const HeaderAdminAuthPage = () => {
     };
 
     return (
-        <div className="header-auth">
-            <div className="company-name-auth">JOBLISTIC</div>
+        <Navbar className="header">
+            <NavbarGroup align={Alignment.LEFT}>
+                <NavbarHeading className="company-name">JOBLISTIC</NavbarHeading>
+            </NavbarGroup>
 
-            <div className="navigation-auth">
+            <NavbarGroup align={Alignment.RIGHT}  className="navigation">
                 <Popover
                     interactionKind="hover"
-                    usePortal={false}
                     content={
                         <Menu className={"menu-language"}>
                             <MenuItem text="English" selected={i18n.language === 'en'}
@@ -36,13 +46,15 @@ const HeaderAdminAuthPage = () => {
                     }
                     position="bottom"
                 >
-                    <div className="nav-item-language nav-item-admin">
-                        <Icon size={13} icon={i18n.language === 'en' ? GBFlag() : ROFlag()} color="white" className="nav-icon"/> {i18n.language === 'en' ? 'English' : 'Română'}
-                        <Icon size={13} icon="chevron-down" color="white" className="nav-icon"/>
-                    </div>
+                    <Button minimal
+                            icon={<Icon size={13} icon={i18n.language === 'en' ? GBFlag() : ROFlag()} color="white" className="nav-icon"/>}
+                            rightIcon={<Icon size={13} icon="chevron-down" color="white" className="nav-icon"/>}
+                            text={i18n.language === 'en' ? 'English' : 'Română'}
+                            className="nav-button"
+                    />
                 </Popover>
-            </div>
-        </div>
+            </NavbarGroup>
+        </Navbar>
     );
 };
 

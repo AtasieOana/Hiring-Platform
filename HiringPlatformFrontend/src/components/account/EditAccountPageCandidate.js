@@ -8,7 +8,7 @@ import {AppToaster} from "../common/AppToaster";
 import {setAuthData} from "../../redux/actions/authActions";
 import HeaderPageCandidate from "../header/HeaderPageCandidate";
 import CandidateJobsTimelineChart from "./chart/CandidateJobsTimelineChart";
-import CandidateApplicationsTimelineChart from "./chart/CandidateApplicationsTimelineChart";
+import CandidateApplicationsTimelineChart from "./chart/CandidateApplicationsStatusChart";
 import CandidateViewApplicationsChart from "./chart/CandidateViewApplicationsChart";
 
 const EditAccountPageCandidate = () => {
@@ -141,7 +141,6 @@ const EditAccountPageCandidate = () => {
                         />
                     </FormGroup>
                     <div className="profile-fields-group">
-
                         <FormGroup
                             label={t('firstname')}
                             intent={errorsAccount.firstname ? Intent.DANGER : Intent.NONE}
@@ -209,7 +208,6 @@ const EditAccountPageCandidate = () => {
                                     />
                                 }
                                 readOnly={!isAccountEdited}
-
                             />
                         </FormGroup>
                         {isAccountEdited && <FormGroup

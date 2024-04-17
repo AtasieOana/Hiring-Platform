@@ -46,8 +46,7 @@ public class ProfileService {
         Profile profile = new Profile();
         // Save address if it not exists already
         Address address = addressService.saveAddressIfNotExist(profileRequest.getZipCode(),
-                profileRequest.getStreet(), profileRequest.getCityName(), profileRequest.getRegionName(),
-                profileRequest.getCountryName());
+                profileRequest.getStreet(), profileRequest.getCityName(), profileRequest.getRegionName());
         // Get image in bytes
         if(profileRequest.getImagine() != null){
             byte[] imageData = profileRequest.getImagine().getBytes();
@@ -89,7 +88,6 @@ public class ProfileService {
             getProfileResponse.setZipCode(profile.getAddress().getZipCode());
             getProfileResponse.setCityName(profile.getAddress().getCity().getCityName());
             getProfileResponse.setRegionName(profile.getAddress().getCity().getRegion().getRegionName());
-            getProfileResponse.setCountryName(profile.getAddress().getCity().getRegion().getCountry().getCountryName());
             return getProfileResponse;
         }
         else{
@@ -107,8 +105,7 @@ public class ProfileService {
         if(profile.isPresent()){
             // Save address if it not exists already
             Address address = addressService.saveAddressIfNotExist(profileRequest.getZipCode(),
-                    profileRequest.getStreet(), profileRequest.getCityName(), profileRequest.getRegionName(),
-                    profileRequest.getCountryName());
+                    profileRequest.getStreet(), profileRequest.getCityName(), profileRequest.getRegionName());
             Profile dbProfile = profile.get();
             dbProfile.setDescription(profileRequest.getDescription());
             dbProfile.setPhone(profileRequest.getPhone());

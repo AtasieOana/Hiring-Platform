@@ -17,5 +17,4 @@ public class GetProfileResponse {
     private String zipCode;
     private String cityName;
     private String regionName;
-    private String countryName;
 }

@@ -13,7 +13,6 @@ const initialState = {
         postingDate: null,
         cityName: "",
         regionName: "",
-        countryName: "",
         employerId: "",
         status: "",
         questions: [],
@@ -38,7 +37,6 @@ const initialState = {
             zipCode: "",
             cityName: "",
             regionName: "",
-            countryName: "",
         }
     }
 };

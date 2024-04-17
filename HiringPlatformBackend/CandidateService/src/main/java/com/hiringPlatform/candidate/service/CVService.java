@@ -34,7 +34,7 @@ public class CVService {
             CVResponse response = new CVResponse();
             response.setCandidateEmail(cv.getCandidate().getUserDetails().getEmail());
             response.setCvName(cv.getCvName());
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String formattedDate = formatter.format(cv.getUploadDate());
             response.setUploadDate(formattedDate);
             response.setCandidateLastname(cv.getCandidate().getLastname());
