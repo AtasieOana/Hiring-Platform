@@ -43,6 +43,10 @@
     background-color: white !important;
 }
 
+.general-details-select button:focus{
+    outline: none !important;
+}
+
 .add-job-dialog-content > div > h4 {
     margin-top: 20px;
 }
@@ -199,8 +203,20 @@
 }
 
 .add-job-address .bp4-form-group {
-    width: calc(33.33% - 10px);
+    width: calc(50% - 10px);
     margin-bottom: 10px;
+}
+
+.add-job-address .bp4-button {
+    background-color: white !important;
+}
+
+.add-job-address button:focus {
+    outline: none !important;
+}
+
+.add-job-address button:focus {
+    outline: none !important;
 }
 
 @media (max-width: 1100px) {

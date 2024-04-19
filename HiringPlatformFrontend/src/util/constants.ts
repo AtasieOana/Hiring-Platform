@@ -7,4 +7,5 @@ export const PROCESSED = "procesat"
 export const UNPROCESSED = "neprocesat"
 export const CLOSED = "inchis"
 export const OPENED = "deschis"
-
+export const BUCHAREST_ENG = "Bucharest"
+export const BUCHAREST_RO = "București"

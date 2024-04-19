@@ -490,6 +490,6 @@
   "number_of_app_daily_employers": "Aplicații primite zilnic",
   "number_of_app_per_job_employers": "Aplicații pentru locurile de muncă",
   "number_of_app_status_employers": "Distribuția statusului aplicațiilor la posturi",
-  "ro": "România"
-
+  "ro": "România",
+  "city_region_err": "A apărut o eroare la încercarea de a prelua orașele."
 }

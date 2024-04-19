@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {Button, ControlGroup, Divider, FormGroup, InputGroup, Intent} from "@blueprintjs/core";
+import React, {useEffect, useState} from 'react';
+import {Button, ControlGroup, Divider, FormGroup, InputGroup, Intent, MenuItem, Position} from "@blueprintjs/core";
 import ReactQuill from "react-quill";
 import {useTranslation} from "react-i18next";
 import {useDispatch, useSelector} from "react-redux";
@@ -9,6 +9,8 @@ import {AppToaster} from "../common/AppToaster";
 import {setProfileActionData} from "../../redux/actions/profileActions";
 import ImageUpload from "../common/ImageUpload";
 import {base64ToImage} from "../common/CommonMethods";
+import {BUCHAREST_ENG, BUCHAREST_RO} from "../../util/constants";
+import {Select} from "@blueprintjs/select";
 
 const EditProfileCommon = ({
                                formDataProps,
@@ -17,11 +19,17 @@ const EditProfileCommon = ({
                                updateEditionState
                            }) => {
 
-    const {t} = useTranslation();
+    const {t, i18n} = useTranslation();
     const [formData, setFormData] = useState(formDataProps);
     const employer = useSelector(state => state.auth.employer);
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const [regionsOption, setRegionsOption] = useState([]);
+    const [regionsCities, setRegionsCities] = useState([]);
+    const [citiesOptions, setCitiesOption] = useState([])
+    const regions = useSelector(state => state.address.regions);
+    const citiesPerRegions = useSelector(state => state.address.citiesPerRegions);
+    const [isComponentMounted, setIsComponentMounted] = useState([]);
 
     const [errors, setErrors] = useState({
         phoneNumber: false,
@@ -32,9 +40,65 @@ const EditProfileCommon = ({
         description: false
     });
 
+    useEffect(() => {
+        let firstRegion = BUCHAREST_RO
+        if(i18n.language === "en"){
+            firstRegion = BUCHAREST_ENG
+        }
+        if(formData.region === undefined || formData.region === ""){
+            setFormData({...formData, city: citiesPerRegions[BUCHAREST_RO][0], region: firstRegion});
+            setCitiesOption(citiesPerRegions[firstRegion])
+        }
+        else{
+            setCitiesOption(citiesPerRegions[formData.region])
+        }
+        setRegionsOption(regions);
+        setRegionsCities(citiesPerRegions);
+        setIsComponentMounted(true)
+    }, []);
+
+    useEffect(() => {
+        const switchLanguage = () => {
+            const { language } = i18n;
+            const isEnglish = language === "en";
+
+            const regionToCheck = isEnglish ? BUCHAREST_RO : BUCHAREST_ENG;
+            const regionToSet = isEnglish ? BUCHAREST_ENG : BUCHAREST_RO;
+
+            if (formData.region === regionToCheck || formData.region === undefined || formData.region === "") {
+                setFormData({...formData, city: regionToSet, region: regionToSet});
+                setCitiesOption(citiesPerRegions[regionToSet]);
+            }
+            else{
+                setCitiesOption(citiesPerRegions[formData.region]);
+            }
+
+            const updatedRegionsOption = regions.map(region => region === regionToCheck ? regionToSet : region);
+            setRegionsOption(updatedRegionsOption);
+            const updatedCitiesPerRegions = { ...citiesPerRegions };
+            delete updatedCitiesPerRegions[regionToCheck];
+            updatedCitiesPerRegions[regionToSet] = [regionToSet];
+            setRegionsCities(updatedCitiesPerRegions);
+        };
+        if(isComponentMounted) {
+            switchLanguage();
+        }
+    }, [i18n.language]);
+
+
     const handleChange = (e) => {
         const {name, value} = e.target;
         setFormData({...formData, [name]: value});
+    };
+
+    const handleCityChange = (city) => {
+        setFormData({...formData, city: city});
+    };
+
+    const handleRegionChange = (region) => {
+        let currentCitiesForRegion = regionsCities[region]
+        setCitiesOption(currentCitiesForRegion);
+        setFormData({...formData, region: region, city: currentCitiesForRegion[0]});
     };
 
     const handleDescChange = (content, _delta, _source, _editor) => {
@@ -140,6 +204,14 @@ const EditProfileCommon = ({
     const handleSubmit = (e) => {
         e.preventDefault();
         if (validateForm()) {
+            let city = formData.city
+            if(city === BUCHAREST_ENG){
+                city = BUCHAREST_RO
+            }
+            let region = formData.region
+            if(region === BUCHAREST_ENG){
+                region = BUCHAREST_RO
+            }
             let request = {
                 imagine: formData.image,
                 description: formData.description,
@@ -147,8 +219,8 @@ const EditProfileCommon = ({
                 site: formData.website,
                 street: formData.street,
                 zipCode: formData.zipCode,
-                cityName: formData.city,
-                regionName: formData.region,
+                cityName: city,
+                regionName: region,
                 employerId: employer.employerId,
             }
             if (isAddOperationProps) {
@@ -171,38 +243,59 @@ const EditProfileCommon = ({
         ]
     };
 
+    const filterOption = (query, item, _index, _exactMatch) => {
+        return item.toLowerCase().indexOf(query.toLowerCase()) > -1;
+    };
+
+    console.log(regionsOption, citiesOptions)
     const renderLeftModule = () => {
         return <div className="left-column">
             <div className="profile-column-title">
                 {t('general_details_dialog')}
             </div>
             <div className="profile-column-content-fields">
+                <FormGroup
+                    label={t('website')}
+                    style={{flex: 1}}
+                    intent={errors.website ? Intent.DANGER : Intent.NONE}
+                    helperText={errors.website ? t('website_err') : ""}
+                    className={"edit-profile-field"}
+                >
+                    <InputGroup
+                        type="text"
+                        name="website"
+                        value={formData.website}
+                        onChange={handleChange}
+                    />
+                </FormGroup>
                 <ControlGroup fill>
+
+                <FormGroup
+                    label={t('phone_number')}
+                    style={{flex: 1}}
+                    intent={errors.phoneNumber ? Intent.DANGER : Intent.NONE}
+                    helperText={errors.phoneNumber ? t('phone_number_err') : ""}
+                    className={"edit-profile-field"}
+                >
+                    <InputGroup
+                        type="text"
+                        name="phoneNumber"
+                        value={formData.phoneNumber}
+                        onChange={handleChange}
+                    />
+                </FormGroup>
                     <FormGroup
-                        label={t('phone_number')}
+                        label={t('zip')}
                         style={{flex: 1}}
-                        intent={errors.phoneNumber ? Intent.DANGER : Intent.NONE}
-                        helperText={errors.phoneNumber ? t('phone_number_err') : ""}
+                        intent={errors.zipCode ? Intent.DANGER : Intent.NONE}
+                        helperText={errors.zipCode ? t('zip_req') : ""}
+                        labelInfo={"*"}
                         className={"edit-profile-field"}
                     >
                         <InputGroup
                             type="text"
-                            name="phoneNumber"
-                            value={formData.phoneNumber}
-                            onChange={handleChange}
-                        />
-                    </FormGroup>
-                    <FormGroup
-                        label={t('website')}
-                        style={{flex: 1}}
-                        intent={errors.website ? Intent.DANGER : Intent.NONE}
-                        helperText={errors.website ? t('website_err') : ""}
-                        className={"edit-profile-field"}
-                    >
-                        <InputGroup
-                            type="text"
-                            name="website"
-                            value={formData.website}
+                            name="zipCode"
+                            value={formData.zipCode}
                             onChange={handleChange}
                         />
                     </FormGroup>
@@ -223,19 +316,38 @@ const EditProfileCommon = ({
                 </FormGroup>
                 <ControlGroup fill>
                     <FormGroup
-                        label={t('zip')}
+                        label={t('region')}
                         style={{flex: 1}}
-                        intent={errors.zipCode ? Intent.DANGER : Intent.NONE}
-                        helperText={errors.zipCode ? t('zip_req') : ""}
+                        intent={errors.region ? Intent.DANGER : Intent.NONE}
+                        helperText={errors.region ? t('region_req') : ""}
                         labelInfo={"*"}
                         className={"edit-profile-field"}
                     >
-                        <InputGroup
-                            type="text"
-                            name="zipCode"
-                            value={formData.zipCode}
-                            onChange={handleChange}
-                        />
+                        <Select
+                            usePortal={false}
+                            items={regionsOption}
+                            itemRenderer={(item, { handleClick, modifiers }) => (
+                                <MenuItem
+                                    key={item}
+                                    text={item}
+                                    onClick={handleClick}
+                                    active={modifiers.active}
+                                />
+                            )}
+                            onItemSelect={(item) => handleRegionChange(item)}
+                            fill={true}
+                            matchTargetWidth={true}
+                            minimal={true}
+                            popoverProps={{ minimal: true, position: Position.TOP}}
+                            activeItem={formData.region}
+                            scrollToActiveItem={true}
+                            filterable={true}
+                            itemPredicate={filterOption}
+                        >
+                            <Button text={formData.region}
+                                    rightIcon="double-caret-vertical"
+                                    fill={true}/>
+                        </Select>
                     </FormGroup>
                     <FormGroup
                         label={t('city')}
@@ -245,31 +357,35 @@ const EditProfileCommon = ({
                         labelInfo={"*"}
                         className={"edit-profile-field"}
                     >
-                        <InputGroup
-                            type="text"
-                            name="city"
-                            value={formData.city}
-                            onChange={handleChange}
-                        />
+                        <Select
+                            usePortal={false}
+                            items={citiesOptions}
+                            itemRenderer={(item, { handleClick, modifiers }) => (
+                                <MenuItem
+                                    key={item}
+                                    text={item}
+                                    onClick={handleClick}
+                                    active={modifiers.active}
+                                />
+                            )}
+                            onItemSelect={(item) => handleCityChange(item)}
+                            fill={true}
+                            matchTargetWidth={true}
+                            resetOnClose={true}
+                            minimal={true}
+                            popoverProps={{ minimal: true, position: Position.TOP}}
+                            activeItem={formData.city}
+                            scrollToActiveItem={true}
+                            filterable={true}
+                            itemPredicate={filterOption}
+                        >
+                            <Button text={formData.city}
+                                    rightIcon="double-caret-vertical"
+                                    fill={true}/>
+                        </Select>
                     </FormGroup>
                 </ControlGroup>
-                <ControlGroup fill>
-                    <FormGroup
-                        label={t('region')}
-                        style={{flex: 1}}
-                        intent={errors.region ? Intent.DANGER : Intent.NONE}
-                        helperText={errors.region ? t('region_req') : ""}
-                        labelInfo={"*"}
-                        className={"edit-profile-field"}
-                    >
-                        <InputGroup
-                            type="text"
-                            name="region"
-                            value={formData.region}
-                            onChange={handleChange}
-                        />
-                    </FormGroup>
-                </ControlGroup>
+
                 <Divider/>
                 <ImageUpload onImageUpload={handleImageUpload} initialImg={imgProp}/>
 

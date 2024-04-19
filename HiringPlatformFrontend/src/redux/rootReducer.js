@@ -4,6 +4,7 @@ import jobReducer from "./reducers/jobReducer";
 import cvReducer from "./reducers/cvReducer";
 import profileReducer from "./reducers/profileReducer";
 import adminReducer from "./reducers/adminReducer";
+import addressReducer from "./reducers/addressReducer";
 
 const rootReducer = combineReducers({
     auth: authReducer,
@@ -11,6 +12,7 @@ const rootReducer = combineReducers({
     cv: cvReducer,
     profile: profileReducer,
     admin: adminReducer,
+    address: addressReducer,
 });
 
 

@@ -3,7 +3,7 @@ import {Link, useNavigate} from 'react-router-dom';
 import {Button, FormGroup, Icon, InputGroup, Intent, Spinner} from '@blueprintjs/core';
 import "../styles/Register.css"
 import {useTranslation} from "react-i18next";
-import {CANDIDATE_ACCOUNT, EMPLOYER_ACCOUNT} from '../../util/constants';
+import {BUCHAREST_RO, CANDIDATE_ACCOUNT, EMPLOYER_ACCOUNT} from '../../util/constants';
 import {
     RegisterCandidateRequest,
     RegisterEmployerRequest,
@@ -20,6 +20,8 @@ import CandidateService from "../../services/candidate.service";
 import {useDispatch} from "react-redux";
 import HeaderAuth from "../header/HeaderAuth";
 import GoogleLogo from "../../resources-photo/GoogleLogo.png";
+import CommonService from "../../services/common.service";
+import {setAddressData} from "../../redux/actions/addressActions";
 
 interface FormErrors {
     emailRequired?: boolean;
@@ -51,7 +53,7 @@ const RegisterPage = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfPassword, setShowConfPassword] = useState(false);
 
-    const {t, i18n} = useTranslation();
+    const {t} = useTranslation();
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [isLoading, setIsLoading] = useState(false);
@@ -68,6 +70,7 @@ const RegisterPage = () => {
         EmployerService.getLoggedEmployer().then((response: any) => {
             let registerResponse = response.data;
             if (registerResponse.token) {
+                getAllCitiesByRegions()
                 dispatch(setAuthData(true, null, registerResponse.employer, registerResponse.token));
                 dispatch(setProfileActionData(response.data.hasProfile));
                 setIsLoading(false)
@@ -81,7 +84,7 @@ const RegisterPage = () => {
             else{
                 setIsLoading(false)
             }
-        }).catch(error => {
+        }).catch(() => {
             navigate("/login")
         })
     }
@@ -90,6 +93,7 @@ const RegisterPage = () => {
         CandidateService.getLoggedCandidate().then((response: any) => {
             let registerResponse = response.data;
             if (registerResponse.token) {
+                getAllCitiesByRegions()
                 dispatch(setAuthData(true, registerResponse.candidate,null, registerResponse.token));
                 dispatch(setProfileActionData(response.data.hasCv));
                 setIsLoading(false)
@@ -103,7 +107,7 @@ const RegisterPage = () => {
             else{
                 setIsLoading(false)
             }
-        }).catch(error => {
+        }).catch(() => {
             navigate("/login")
         })
     }
@@ -282,6 +286,21 @@ const RegisterPage = () => {
                 intent: Intent.DANGER,
             });
         }
+    }
+
+    const getAllCitiesByRegions = () =>{
+        CommonService.getAllCitiesByRegions().then((response) => {
+            const updatedResponseObj = { ...response.data };
+            const newObjKey = 'Bucharest';
+            updatedResponseObj[newObjKey] = ['Bucharest'];
+            dispatch(setAddressData(Object.keys(updatedResponseObj), updatedResponseObj));
+        }).catch(error => {
+            console.error('Error: ', error.message);
+            AppToaster.show({
+                message: t('city_region_err'),
+                intent: Intent.DANGER,
+            });
+        });
     }
 
     let errorActive = false

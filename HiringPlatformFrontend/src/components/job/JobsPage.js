@@ -28,7 +28,6 @@ import HeaderPageEmployer from "../header/HeaderPageEmployer";
 import ProfileService from "../../services/profile.service";
 import AddJobDialog from "./AddJobDialog";
 import {CLOSED, OPENED} from "../../util/constants";
-import OraseComponent from "../common/CititesRegionsSelector";
 
 export const industriesRo = [
     "Toate industriile", "Administrație", "Agricultură", "Arhitectură/Design interior", "Audit",
@@ -824,7 +823,6 @@ const JobsPage = () => {
                             />
                         )}
                     </div>
-                    <OraseComponent/>
                     <AddJobDialog isDialogOpen={isDialogOpen} handleDialogAction={handleDialogAction} handleJobAddition={getJobsAsEmployer}/>
                 </div>
             </div>

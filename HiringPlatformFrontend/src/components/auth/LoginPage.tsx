@@ -5,7 +5,7 @@ import {Button, FormGroup, InputGroup, Intent, Spinner, Text} from "@blueprintjs
 import {useTranslation} from "react-i18next";
 import AuthenticationService from "../../services/authentication.service";
 import {LoginResponse, UserGoogleRequest} from "../../types/auth.types";
-import {CANDIDATE_ACCOUNT, EMPLOYER_ACCOUNT} from "../../util/constants";
+import {BUCHAREST_RO, CANDIDATE_ACCOUNT, EMPLOYER_ACCOUNT} from "../../util/constants";
 import {AppToaster} from "../common/AppToaster";
 import {signInWithGooglePopup} from "../google/firebase.utils";
 import EmployerService from "../../services/employer.service";
@@ -16,10 +16,12 @@ import CandidateService from "../../services/candidate.service";
 import HeaderAuth from "../header/HeaderAuth";
 import {setCvActionData} from "../../redux/actions/cvActions";
 import GoogleLogo from "../../resources-photo/GoogleLogo.png";
+import CommonService from "../../services/common.service";
+import {setAddressData} from "../../redux/actions/addressActions";
 
 const LoginPage = () => {
 
-    const {t, i18n} = useTranslation();
+    const {t} = useTranslation();
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -34,10 +36,26 @@ const LoginPage = () => {
         setShowPassword(!showPassword);
     };
 
+    const getAllCitiesByRegions = () =>{
+        CommonService.getAllCitiesByRegions().then((response) => {
+            const updatedResponseObj = { ...response.data };
+            const newObjKey = 'Bucharest';
+            updatedResponseObj[newObjKey] = ['Bucharest'];
+            dispatch(setAddressData(Object.keys(updatedResponseObj), updatedResponseObj));
+        }).catch(error => {
+            console.error('Error: ', error.message);
+            AppToaster.show({
+                message: t('city_region_err'),
+                intent: Intent.DANGER,
+            });
+        });
+    }
+
     const setEmployerInRedux = () => {
         EmployerService.getLoggedEmployer().then((response: any) => {
             let registerResponse = response.data;
             if (registerResponse.token) {
+                getAllCitiesByRegions()
                 dispatch(setAuthData(true, null, registerResponse.employer, registerResponse.token));
                 dispatch(setProfileActionData(response.data.hasProfile));
                 setIsLoading(false)
@@ -48,7 +66,7 @@ const LoginPage = () => {
                     navigate("/addProfile")
                 }
             }
-        }).catch(error => {
+        }).catch(() => {
             navigate("/login")
         })
     }
@@ -57,6 +75,7 @@ const LoginPage = () => {
         CandidateService.getLoggedCandidate().then((response: any) => {
             let registerResponse = response.data;
             if (registerResponse.token) {
+                getAllCitiesByRegions()
                 dispatch(setAuthData(true, registerResponse.candidate,null, registerResponse.token));
                 dispatch(setCvActionData(response.data.hasCv));
                 setIsLoading(false)
@@ -67,7 +86,7 @@ const LoginPage = () => {
                     navigate("/addCv")
                 }
             }
-        }).catch(error => {
+        }).catch(() => {
             navigate("/login")
         })
     }
@@ -146,6 +165,7 @@ const LoginPage = () => {
                 });
             })
         } catch (error: any) {
+            setIsLoading(false)
             console.error("Error during login: " + error.message);
             AppToaster.show({
                 message: t('login_error'),

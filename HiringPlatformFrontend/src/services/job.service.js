@@ -36,6 +36,7 @@ class JobService {
     }
 
     async getRecommendedJobs(candidateId) {
+        console.log(candidateId)
         return apiCandidate.get("/getRecommendedJobs/" + candidateId);
     }
 }

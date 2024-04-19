@@ -1,5 +1,3 @@
-// authReducer.js
-
 const initialState = {
     isAuthenticated: false,
     admin: {

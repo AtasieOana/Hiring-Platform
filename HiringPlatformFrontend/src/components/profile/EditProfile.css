@@ -198,6 +198,14 @@
     font-size: 13px;
 }
 
+.edit-profile-field .bp4-popover-wrapper button:focus{
+    outline: none !important;
+}
+
+.city-region-button{
+    width: 100%;
+}
+
 @media (max-width: 1250px) {
     .right-column .quill{
         height: 79% !important;

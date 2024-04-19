@@ -489,5 +489,6 @@
   "number_of_app_daily_employers": "Daily applications received",
   "number_of_app_per_job_employers": "Jobs applications",
   "number_of_app_status_employers": "Jobs applications status distribution",
-  "ro": "Romania"
+  "ro": "Romania",
+  "city_region_err": "An error occurred when trying to retrieving the cities."
 }

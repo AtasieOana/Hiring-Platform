@@ -63,6 +63,7 @@ public class JobService {
             job.setWorkMode(addJobRequest.getWorkMode());
             job.setIndustry(addJobRequest.getIndustry());
             Job savedJob = jobRepository.save(job);
+            job.setStatus("deschis");
             // Associate stages
             stageService.associateStageWithJob(addJobRequest.getStages(), savedJob);
             // Associate questions

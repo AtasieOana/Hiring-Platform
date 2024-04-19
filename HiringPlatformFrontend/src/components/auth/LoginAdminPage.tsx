@@ -1,19 +1,20 @@
 import React, {useState} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import "../styles/Login.css"
-import {Button, FormGroup, InputGroup, Intent, Spinner, Text} from "@blueprintjs/core";
+import {Button, FormGroup, InputGroup, Intent, Spinner} from "@blueprintjs/core";
 import {useTranslation} from "react-i18next";
-import AuthenticationService from "../../services/authentication.service";
 import {LoginResponse} from "../../types/auth.types";
 import {AppToaster} from "../common/AppToaster";
 import {useDispatch} from "react-redux";
 import AdminService from "../../services/admin.service";
 import {setAdminData} from "../../redux/actions/adminActions";
 import HeaderAdminAuthPage from "../header/HeaderAdminAuth";
+import CommonService from "../../services/common.service";
+import {setAddressData} from "../../redux/actions/addressActions";
 
 const LoginAdminPage = () => {
 
-    const {t, i18n} = useTranslation();
+    const {t} = useTranslation();
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -26,6 +27,21 @@ const LoginAdminPage = () => {
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
     };
+
+    const getAllCitiesByRegions = () =>{
+        CommonService.getAllCitiesByRegions().then((response) => {
+            const updatedResponseObj = { ...response.data };
+            const newObjKey = 'Bucharest';
+            updatedResponseObj[newObjKey] = ['Bucharest'];
+            dispatch(setAddressData(Object.keys(updatedResponseObj), updatedResponseObj));
+        }).catch(error => {
+            console.error('Error: ', error.message);
+            AppToaster.show({
+                message: t('city_region_err'),
+                intent: Intent.DANGER,
+            });
+        });
+    }
 
     const handleLogin = () => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -40,6 +56,7 @@ const LoginAdminPage = () => {
                     setIsLoading(false)
                 } else {
                     setLoginInvalid(false)
+                    getAllCitiesByRegions()
                     // Set admin in redux
                     dispatch(setAdminData(true, response.data.admin, response.data.token));
                     setIsLoading(false)

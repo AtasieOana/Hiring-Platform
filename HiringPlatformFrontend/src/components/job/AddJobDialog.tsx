@@ -22,6 +22,7 @@ import JobService from "../../services/job.service";
 import ReactQuill from "react-quill";
 import {Stage} from "../../types/job.types";
 import {useSelector} from "react-redux";
+import {BUCHAREST_ENG, BUCHAREST_RO} from "../../util/constants";
 
 const industriesRo = [
     "Administrație", "Agricultură", "Arhitectură/Design interior", "Audit",
@@ -109,12 +110,19 @@ const AddJobDialog = ({isDialogOpen, handleDialogAction, handleJobAddition}: any
     // Job Questions
     const [showQuestionSection, setShowQuestionSection] = useState(false);
     const [questions, setQuestions] = useState([]); // The questions
+    // Address
+    const [regionsOption, setRegionsOption] = useState([]);
+    const [regionsCities, setRegionsCities] = useState([]);
+    const [citiesOptions, setCitiesOption] = useState([])
+    const regions = useSelector((state :any) => state.address.regions);
+    const citiesPerRegions = useSelector((state :any) => state.address.citiesPerRegions);
 
     useEffect(() => {
         setContractType(contracts[0]);
         setEmploymentRegime(regimes[0]);
         setIndustry(industries[0]);
         setWorkMode(works[0]);
+        initializeAddress()
         JobService.getAllStages()
             .then((response: any) => {
                 let stagesResponse = response.data
@@ -141,6 +149,22 @@ const AddJobDialog = ({isDialogOpen, handleDialogAction, handleJobAddition}: any
                 });
             });
     }, [isDialogOpen]);
+
+   const initializeAddress = ()=>{
+       let firstRegion = BUCHAREST_RO
+       if(i18n.language === "en"){
+           firstRegion = BUCHAREST_ENG
+       }
+       setCitiesOption(citiesPerRegions[BUCHAREST_RO])
+       setRegionsOption(regions);
+       setRegionsCities(citiesPerRegions);
+       setCityName(firstRegion)
+       setRegionName(firstRegion)
+   }
+
+    const filterOption = (query: any, item: any, _index: any, _exactMatch: any) => {
+        return item.toLowerCase().indexOf(query.toLowerCase()) > -1;
+    };
 
     /**
      * Reset fields when the modal is closed
@@ -582,6 +606,14 @@ const AddJobDialog = ({isDialogOpen, handleDialogAction, handleJobAddition}: any
             } else {
                 contractTypeDb = "Norma variabila";
             }
+            let city = cityName
+            if(city === BUCHAREST_ENG){
+                city = BUCHAREST_RO
+            }
+            let region = regionName
+            if(region === BUCHAREST_ENG){
+                region = BUCHAREST_RO
+            }
             let request = {
                 title: jobTitle,
                 description: jobDescription,
@@ -590,8 +622,8 @@ const AddJobDialog = ({isDialogOpen, handleDialogAction, handleJobAddition}: any
                 experience: experienceDb,
                 workMode: workModeDb,
                 industry: industry,
-                cityName: cityName,
-                regionName: regionName,
+                cityName: city,
+                regionName: region,
                 questions: questions.map((q: any) => {
                     return {
                         questionText: q.questionText,
@@ -615,6 +647,17 @@ const AddJobDialog = ({isDialogOpen, handleDialogAction, handleJobAddition}: any
             }
             addJob(request)
         }
+    };
+
+    const handleCityChange = (city: string) => {
+        setCityName(city);
+    };
+
+    const handleRegionChange = (region: any) => {
+        let currentCitiesForRegion = regionsCities[region]
+        setCitiesOption(currentCitiesForRegion);
+        setRegionName(region);
+        setCityName(currentCitiesForRegion[0]);
     };
 
     const closeDialog = () => {
@@ -714,30 +757,64 @@ const AddJobDialog = ({isDialogOpen, handleDialogAction, handleJobAddition}: any
                         <div className="add-job-work">
                             <div className="add-job-address">
                                 <FormGroup
-                                    label={t('city')}
-                                    intent={!cityName || (cityName && !/^[A-Za-zăâîșțĂÂÎȘȚ\s\-]*$/.test(cityName)) ? Intent.DANGER : Intent.NONE}
-                                    helperText={!cityName || (cityName && !/^[A-Za-zăâîșțĂÂÎȘȚ\s\-]*$/.test(cityName)) ? t('city_err_job') : ""}
-                                    labelInfo={t('required')}
-                                >
-                                    <InputGroup
-                                        type="text"
-                                        name="city"
-                                        value={cityName}
-                                        onChange={(e) => setCityName(e.target.value)}
-                                    />
-                                </FormGroup>
-                                <FormGroup
                                     label={t('region')}
                                     intent={!regionName || (regionName && !/^[A-Za-zăâîșțĂÂÎȘȚ\s\-]*$/.test(regionName)) ? Intent.DANGER : Intent.NONE}
                                     helperText={!regionName || (regionName && !/^[A-Za-zăâîșțĂÂÎȘȚ\s\-]*$/.test(regionName)) ? t('city_err_job') : ""}
                                     labelInfo={t('required')}
                                 >
-                                    <InputGroup
-                                        type="text"
-                                        name="region"
-                                        value={regionName}
-                                        onChange={(e) => setRegionName(e.target.value)}
-                                    />
+                                    <Select
+                                        items={regionsOption}
+                                        itemRenderer={(item, { handleClick, modifiers }) => (
+                                            <MenuItem
+                                                key={item}
+                                                text={item}
+                                                onClick={handleClick}
+                                                active={modifiers.active}
+                                            />
+                                        )}
+                                        onItemSelect={(item) => handleRegionChange(item)}
+                                        fill={true}
+                                        matchTargetWidth={true}
+                                        popoverProps={{ minimal: true, position: Position.TOP}}
+                                        activeItem={regionName}
+                                        scrollToActiveItem={true}
+                                        filterable={true}
+                                        itemPredicate={filterOption}
+                                    >
+                                        <Button text={regionName}
+                                                rightIcon="double-caret-vertical"
+                                                fill={true}/>
+                                    </Select>
+                                </FormGroup>
+                                <FormGroup
+                                    label={t('city')}
+                                    intent={!cityName || (cityName && !/^[A-Za-zăâîșțĂÂÎȘȚ\s\-]*$/.test(cityName)) ? Intent.DANGER : Intent.NONE}
+                                    helperText={!cityName || (cityName && !/^[A-Za-zăâîșțĂÂÎȘȚ\s\-]*$/.test(cityName)) ? t('city_err_job') : ""}
+                                    labelInfo={t('required')}
+                                >
+                                    <Select
+                                        items={citiesOptions}
+                                        itemRenderer={(item, { handleClick, modifiers }) => (
+                                            <MenuItem
+                                                key={item}
+                                                text={item}
+                                                onClick={handleClick}
+                                                active={modifiers.active}
+                                            />
+                                        )}
+                                        onItemSelect={(item) => handleCityChange(item)}
+                                        fill={true}
+                                        matchTargetWidth={true}
+                                        popoverProps={{ minimal: true, position: Position.TOP}}
+                                        activeItem={cityName}
+                                        scrollToActiveItem={true}
+                                        filterable={true}
+                                        itemPredicate={filterOption}
+                                    >
+                                        <Button text={cityName}
+                                                rightIcon="double-caret-vertical"
+                                                fill={true}/>
+                                    </Select>
                                 </FormGroup>
                             </div>
                             <Divider/>
@@ -752,7 +829,9 @@ const AddJobDialog = ({isDialogOpen, handleDialogAction, handleJobAddition}: any
                                             filterable={false}
                                             itemRenderer={renderContractType}
                                             onItemSelect={(e) => handleContractSwitch(e)}
-                                            popoverProps={{position: Position.RIGHT}}
+                                            popoverProps={{minimal: true, position: Position.RIGHT}}
+                                            activeItem={contractType}
+                                            scrollToActiveItem={true}
                                     >
                                         <Button text={contractType}
                                                 rightIcon="double-caret-vertical"
@@ -770,7 +849,9 @@ const AddJobDialog = ({isDialogOpen, handleDialogAction, handleJobAddition}: any
                                         filterable={false}
                                         itemRenderer={renderEmpRegimeType}
                                         onItemSelect={(e) => handleEmpRegimeSwitch(e)}
-                                        popoverProps={{position: Position.RIGHT}}
+                                        popoverProps={{minimal: true, position: Position.RIGHT}}
+                                        activeItem={employmentRegime}
+                                        scrollToActiveItem={true}
                                     >
                                         <Button text={employmentRegime}
                                                 rightIcon="double-caret-vertical"
@@ -789,7 +870,9 @@ const AddJobDialog = ({isDialogOpen, handleDialogAction, handleJobAddition}: any
                                         itemRenderer={renderIndustryType}
                                         onItemSelect={(e) => handleIndustrySwitch(e)}
                                         itemPredicate={filterIndustries}
-                                        popoverProps={{position: Position.LEFT}}
+                                        popoverProps={{minimal: true, position: Position.LEFT}}
+                                        activeItem={industry}
+                                        scrollToActiveItem={true}
                                     >
                                         <Button text={industry}
                                                 rightIcon="double-caret-vertical"
@@ -807,7 +890,9 @@ const AddJobDialog = ({isDialogOpen, handleDialogAction, handleJobAddition}: any
                                         filterable={false}
                                         itemRenderer={renderWorkModeType}
                                         onItemSelect={(e) => handleWorkModeSwitch(e)}
-                                        popoverProps={{position: Position.RIGHT}}
+                                        popoverProps={{minimal: true, position: Position.RIGHT}}
+                                        activeItem={workMode}
+                                        scrollToActiveItem={true}
                                     >
                                         <Button text={workMode} rightIcon="double-caret-vertical"
                                                 fill={true}/>
@@ -824,7 +909,9 @@ const AddJobDialog = ({isDialogOpen, handleDialogAction, handleJobAddition}: any
                                         filterable={false}
                                         itemRenderer={renderExperienceType}
                                         onItemSelect={(e) => handleExperienceSwitch(e)}
-                                        popoverProps={{position: Position.RIGHT}}
+                                        popoverProps={{minimal: true, position: Position.RIGHT}}
+                                        activeItem={experience}
+                                        scrollToActiveItem={true}
                                     >
                                         <Button text={experience}
                                                 rightIcon="double-caret-vertical"

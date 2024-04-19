@@ -1,30 +1,18 @@
 package com.hiringPlatform.candidate.service;
 
-import com.hiringPlatform.candidate.model.Application;
-import com.hiringPlatform.candidate.model.Employer;
-import com.hiringPlatform.candidate.model.Job;
-import com.hiringPlatform.candidate.model.User;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hiringPlatform.candidate.model.*;
 import com.hiringPlatform.candidate.model.response.JobResponse;
-import com.hiringPlatform.candidate.repository.ApplicationRepository;
-import com.hiringPlatform.candidate.repository.EmployerRepository;
-import com.hiringPlatform.candidate.repository.JobRepository;
-import com.hiringPlatform.candidate.repository.ReviewRepository;
-import org.apache.commons.exec.DefaultExecutor;
-import org.apache.commons.exec.ExecuteException;
-import org.apache.commons.exec.Executor;
+import com.hiringPlatform.candidate.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
-import org.apache.commons.exec.CommandLine;
 
 import java.io.*;
-
 import java.util.*;
 
 @Service
 public class RecommendationSystemService {
-
-    private final UserService userService;
     private final ApplicationRepository applicationRepository;
     private final EmployerRepository employerRepository;
     private final ReviewRepository reviewRepository;
@@ -32,13 +20,11 @@ public class RecommendationSystemService {
     private final JobService jobService;
 
     @Autowired
-    public RecommendationSystemService(UserService userService,
-                                       ApplicationRepository applicationRepository,
+    public RecommendationSystemService(ApplicationRepository applicationRepository,
                                        EmployerRepository employerRepository,
                                        ReviewRepository reviewRepository,
                                        JobRepository jobRepository,
                                        JobService jobService) {
-        this.userService = userService;
         this.applicationRepository = applicationRepository;
         this.employerRepository = employerRepository;
         this.reviewRepository = reviewRepository;
@@ -47,214 +33,84 @@ public class RecommendationSystemService {
     }
 
     /**
-     * Make job recommendation for user
-     * @param userId the id of the user
-      */
+     * Generate job recommendations for a user.
+     *
+     * @param userId the ID of the user
+     * @return a list of recommended jobs
+     */
     public List<JobResponse> generateJobRecommendations(String userId) {
-        User user = userService.getUser(userId);
         List<Job> recommendedJobs;
+        List<Application> applicationsForUsers = applicationRepository.findAll();
+        List<Job> jobs = jobRepository.findAll();
 
-        runRecommendationPythonScript();
-        // If the user doesn't have applications then initial recommendation are used
-        if (!checkIfUserHasApplications(userId)) {
-            // Calculates the similarity between the user and other users based on applications
-            Map<User, Double> similarityScores = calculateSimilarityScores(user);
+        // Map to store application data
+        Map<String, List<String>> applicationData = new HashMap<>();
 
-            // Sort similar users by similarity
-            List<User> similarUsers = sortUsersBySimilarity(similarityScores);
-
-            // Generate recommendations based on other users' interactions with jobs
-            recommendedJobs = generateRecommendedJobs(similarUsers);
-        } else {
-            // Generate initial recommendations
-            recommendedJobs = generateInitialRecommendations();
+        // Populate application data map
+        for (Application application : applicationsForUsers) {
+            String userIdInside = application.getCandidate().getCandidateId();
+            if (!applicationData.containsKey(userIdInside)) {
+                applicationData.put(userIdInside, new ArrayList<>());
+            }
+            applicationData.get(userIdInside).add(application.getJob().getJobId());
         }
 
+        // Map to store job descriptions
+        Map<String, String> jobDescriptions = new HashMap<>();
+        for (Job job : jobs) {
+            jobDescriptions.put(job.getJobId(), job.getDescription().replace('"', ' '));
+        }
+
+        if (!checkIfUserHasApplications(userId)) {
+            recommendedJobs = runRecommendationPythonScript(userId, applicationData, jobDescriptions);
+        } else {
+            recommendedJobs = generateInitialRecommendations();
+        }
 
         return recommendedJobs.stream().map(jobService::buildJobResponse).toList();
     }
 
-    private Map<User, Double> calculateSimilarityScores(User user) {
-        Map<User, Double> similarityScores = new HashMap<>();
-        List<User> allCandidates = userService.findUsersByRole("ROLE_CANDIDATE");
-
-        // Iterate through each user and calculate the similarity to the given user
-        for (User otherUser : allCandidates) {
-            // Avoid calculating similarity to the received user
-            if (!otherUser.getUserId().equals(user.getUserId())) {
-                double similarity = calculatePearsonSimilarity(user, otherUser);
-                similarityScores.put(otherUser, similarity);
-            }
-        }
-
-        return similarityScores;
-    }
-
     /**
-     * Calculates Pearson similarity between two users based on job applications
-     * @param user1 user1
-     * @param user2 user2
-     * @return Pearson similarity
-     */
-    private double calculatePearsonSimilarity(User user1, User user2) {
-        // Get each user's application lists
-        List<Application> applications1 = applicationRepository.findApplicationsForCandidate(user1.getUserId());
-        List<Application> applications2 = applicationRepository.findApplicationsForCandidate(user2.getUserId());
-
-        // Calculates sum of products and sums of squares
-        double sumXY = 0.0;
-        double sumX = 0.0;
-        double sumY = 0.0;
-        double sumXSquare = 0.0;
-        double sumYSquare = 0.0;
-        int n = Math.min(applications1.size(), applications2.size());
-
-        for (int i = 0; i < n; i++) {
-            Application app1 = applications1.get(i);
-            Application app2 = applications2.get(i);
-            // App exists or not for user 1
-            int x = (app1 != null) ? 1 : 0;
-            // App exists or not for user 2
-            int y = (app2 != null) ? 1 : 0;
-
-            sumXY += x * y;
-            sumX += x;
-            sumY += y;
-            sumXSquare += x * x;
-            sumYSquare += y * y;
-        }
-
-        // Calculate the Pearson correlation coefficient
-        double numerator = sumXY - (sumX * sumY / n);
-        double denominator = Math.sqrt((sumXSquare - Math.pow(sumX, 2) / n) *
-                (sumYSquare - Math.pow(sumY, 2) / n));
-
-        if (denominator == 0) {
-            return 0; // Similarity is 0 if the vectors are identical, meaning no correlation
-        }
-
-        return numerator / denominator;
-    }
-
-    /**
-     * Sort users by similarity scores
-     * @param similarityScores the similarity scores
-     * @return sorted users
-     */
-    private List<User> sortUsersBySimilarity(Map<User, Double> similarityScores) {
-        List<User> similarUsers = new ArrayList<>(similarityScores.keySet());
-
-        // Sort users by similarity scores
-        similarUsers.sort((user1, user2) -> {
-            double score1 = similarityScores.get(user1);
-            double score2 = similarityScores.get(user2);
-            return Double.compare(score2, score1);
-        });
-
-        return similarUsers;
-    }
-
-    /**
-     * Generate recommendations based on other users' interactions with jobs
-     * @param similarUsers the sorted user by similarity
-     * @return the jobs sorted by recommendation
-     */
-    private List<Job> generateRecommendedJobs(List<User> similarUsers) {
-        // Set to hold the IDs of added jobs
-        Set<String> addedJobIds = new HashSet<>();
-        List<Job> recommendedJobs = new ArrayList<>();
-
-        // Implement logic to generate recommendations based on other users' interactions with jobs
-        // Iterate through each similar user and add the jobs they applied to the referral list
-        for (User user : similarUsers) {
-            List<Application> userAppliedJobs = applicationRepository.findApplicationsForCandidate(user.getUserId());
-            for (Application application : userAppliedJobs) {
-                Job job = application.getJob();
-                // Checks if the job ID has already been added to the set of added IDs
-                if (!addedJobIds.contains(job.getJobId())) {
-                    recommendedJobs.add(job);
-                    addedJobIds.add(job.getJobId());
-                }
-            }
-        }
-
-        // Find all jobs that are not covered by similar users
-        List<Job> allJobs = jobRepository.findAll();
-        List<Job> uncoveredJobs = new ArrayList<>();
-        for (Job job : allJobs) {
-            if (!addedJobIds.contains(job.getJobId())) {
-                uncoveredJobs.add(job);
-            }
-        }
-
-        // Sort uncovered jobs by the number of applications and reviews
-        uncoveredJobs.sort((job1, job2) -> {
-            Integer applications1 = applicationRepository.findNrOfApplicationForJob(job1.getJobId());
-            Integer applications2 = applicationRepository.findNrOfApplicationForJob(job2.getJobId());
-            Double rating1 = reviewRepository.getAvgGradeForEmployer(job1.getEmployer().getEmployerId());
-            Double rating2 = reviewRepository.getAvgGradeForEmployer(job2.getEmployer().getEmployerId());
-            // Sort in descending order of number of applications
-            if (!Objects.equals(applications1, applications2)) {
-                return Integer.compare(applications2, applications1);
-            }
-            // If the number of apps is the same, sort in descending order of average reviews
-            return Double.compare(rating2, rating1);
-        });
-
-        // Add uncovered jobs to recommended jobs list
-        recommendedJobs.addAll(uncoveredJobs);
-
-        return recommendedJobs;
-    }
-
-    /**
-     *  Generate initial recommendations based on company reviews
-     *  and the number of applications received for each job
+     * Generate initial recommendations based on company reviews
+     * and the number of applications received for each job.
+     *
+     * @return a list of recommended jobs
      */
     private List<Job> generateInitialRecommendations() {
-        // Calculate the nr of applications for each job
         Map<Job, Integer> jobApplications = calculateJobApplications();
-        // Calculate the average of reviews for each company
         Map<Employer, Double> companyRatings = calculateCompanyRatings();
-
-        // Sort jobs by number of applications received and average reviews for each company
         return sortJobsByApplicationsAndRatings(jobApplications, companyRatings);
     }
 
     /**
-     * Sort jobs by number of applications received and average reviews for each company
-     * @param jobApplications applications received
-     * @param companyRatings average reviews
-     * @return sorted jobs
+     * Sort jobs by number of applications received and average reviews for each company.
+     *
+     * @param jobApplications map of jobs and number of applications
+     * @param companyRatings  map of employers and average ratings
+     * @return sorted list of jobs
      */
     private List<Job> sortJobsByApplicationsAndRatings(Map<Job, Integer> jobApplications, Map<Employer, Double> companyRatings) {
         List<Job> sortedJobs = new ArrayList<>(jobApplications.keySet());
-
         sortedJobs.sort((job1, job2) -> {
             Integer applications1 = jobApplications.get(job1);
             Integer applications2 = jobApplications.get(job2);
             Double rating1 = companyRatings.get(job1.getEmployer());
             Double rating2 = companyRatings.get(job2.getEmployer());
-
-            // Sort in descending order of number of applications
             if (!Objects.equals(applications1, applications2)) {
                 return Integer.compare(applications2, applications1);
             }
-
-            // If the number of apps is the same, sort in descending order of average reviews
             return Double.compare(rating2, rating1);
         });
-
         return sortedJobs;
     }
 
     /**
-     * Calculate the number of applications per job
-     * @return a map with jobs as keys and number of applications as value
+     * Calculate the number of applications per job.
+     *
+     * @return a map with jobs as keys and number of applications as values
      */
     private Map<Job, Integer> calculateJobApplications() {
         Map<Job, Integer> jobApplications = new HashMap<>();
-
         List<Job> allJobs = jobRepository.findAll();
         for (Job job : allJobs) {
             Integer nrApps = applicationRepository.findNrOfApplicationForJob(job.getJobId());
@@ -264,12 +120,12 @@ public class RecommendationSystemService {
     }
 
     /**
-     * Calculate the average of reviews grade for each company
-     * @return a map with employers as keys and grade average as value
+     * Calculate the average of reviews grade for each company.
+     *
+     * @return a map with employers as keys and grade average as values
      */
     private Map<Employer, Double> calculateCompanyRatings() {
         Map<Employer, Double> companyRatings = new HashMap<>();
-
         List<Employer> allEmployers = employerRepository.findAll();
         for (Employer employer : allEmployers) {
             Double rating = reviewRepository.getAvgGradeForEmployer(employer.getEmployerId());
@@ -279,31 +135,53 @@ public class RecommendationSystemService {
     }
 
     /**
-     *  Return true if the user doesn't have application and false otherwise
+     * Check if the user has any applications.
+     *
+     * @param userId the ID of the user
+     * @return true if the user has applications, false otherwise
      */
-    private boolean checkIfUserHasApplications(String userId){
+    private boolean checkIfUserHasApplications(String userId) {
         List<Application> applications = applicationRepository.findApplicationsForCandidate(userId);
         return applications.isEmpty();
     }
 
-    private void runRecommendationPythonScript(){
+    private List<Job> runRecommendationPythonScript(String userId, Map<String, List<String>> applicationData, Map<String, String> jobDescriptions) {
         try {
-            // Calea către scriptul Python în resources
             String pythonScriptPath = new ClassPathResource("recommendation_script.py").getFile().getAbsolutePath();
+            ObjectMapper objectMapper = new ObjectMapper();
+            String applicationDataJson = objectMapper.writeValueAsString(applicationData);
+            String jobDescriptionsJson = objectMapper.writeValueAsString(jobDescriptions);
 
-            // Comanda pentru a rula scriptul Python
-            CommandLine commandLine = CommandLine.parse("python " + pythonScriptPath);
+            // Start the Python process
+            ProcessBuilder pb = new ProcessBuilder("python", pythonScriptPath);
+            Process process = pb.start();
 
-            // Executor pentru a rula comanda
-            Executor executor = new DefaultExecutor();
-            executor.execute(commandLine);
+            // Write JSON data to the standard input of the Python process
+            try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(process.getOutputStream()))) {
+                writer.write(userId);
+                writer.newLine();
+                writer.write(applicationDataJson);
+                writer.newLine();
+                writer.write(jobDescriptionsJson);
+                writer.newLine();
+            }
+            // Read output from the Python process
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String jobsId;
+            List<Job> recommendedJobs = new ArrayList<>();
+            while ((jobsId = reader.readLine()) != null) {
+                String cleanedResponse = jobsId.replace("'", "").replaceAll("[\\[\\]\\s+]", "");
+                String[] jobIdArray = cleanedResponse.split(",");
+                for (String jobId : jobIdArray) {
+                    Optional<Job> job = jobRepository.findById(jobId);
+                    job.ifPresent(recommendedJobs::add);
+                }
+            }
 
-        } catch (ExecuteException e) {
-            System.err.println("Execution failed.");
-            e.printStackTrace();
-        } catch (IOException e) {
-            System.err.println("IOException: " + e.getMessage());
-            e.printStackTrace();
+            return recommendedJobs;
+        } catch (Exception e) {
+            // In case of any error, return all jobs
+            return jobRepository.findAll();
         }
     }
 }

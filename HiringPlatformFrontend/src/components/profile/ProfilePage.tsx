@@ -16,10 +16,11 @@ import HeaderPageCandidate from "../header/HeaderPageCandidate";
 import {base64ToImage} from "../common/CommonMethods";
 import {GetProfileResponse} from "../../types/profile.types";
 import ReviewComponent from "../review/ReviewSection";
+import {BUCHAREST_ENG, BUCHAREST_RO} from "../../util/constants";
 
 const ProfilePage = () => {
 
-    const {t} = useTranslation();
+    const {t, i18n} = useTranslation();
     const isAuthenticated = useSelector((state: any) => state.auth.isAuthenticated);
     // Redux state
     const employer = useSelector((state: any) => state.auth.employer);
@@ -76,6 +77,10 @@ const ProfilePage = () => {
     const getProfileAsCandidate = () => {
         setIsLoading(true)
         let profileResponse: GetProfileResponse = openedJob.employerProfile
+        if(profileResponse.regionName === BUCHAREST_RO && i18n.language === "en"){
+            profileResponse.regionName = BUCHAREST_ENG
+            profileResponse.cityName = BUCHAREST_ENG
+        }
         setProfileInfo(profileResponse)
         setAddress(`${profileResponse.street}, ${profileResponse.cityName}, ${t('ro')}`)
         JobService.getNrJobsForEmployer(openedJob.employer.employerId).then((response: any) => {
@@ -95,6 +100,10 @@ const ProfilePage = () => {
         ProfileService.getProfile(employer.userDetails.email)
             .then((response: any) => {
                 let profileResponse: GetProfileResponse = response.data;
+                if(profileResponse.regionName === BUCHAREST_RO && i18n.language === "en"){
+                    profileResponse.regionName = BUCHAREST_ENG
+                    profileResponse.cityName = BUCHAREST_ENG
+                }
                 setProfileInfo(profileResponse)
                 setAddress(`${profileResponse.street}, ${profileResponse.cityName}, ${t('ro')}`)
                 setIsLoading(false);
