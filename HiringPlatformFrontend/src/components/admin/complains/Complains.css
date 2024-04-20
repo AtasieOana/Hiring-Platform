@@ -1,49 +1,52 @@
-.admin-instructions {
-    font-size: 14px;
-    line-height: 1.7;
-    text-align: justify;
-    margin: 20px 5vw 5px;
-}
-
 .complaints-table {
     margin: 10px 5vw 20px;
-    border: 1px solid rgba(17, 20, 24, 0.15) !important;
+    border: none !important;
+    border-collapse: collapse;
+    width: 90%;
+}
+
+.complaints-table th, .complaints-table td {
+    border: none !important;
+    border-right:  1px solid rgba(17, 20, 24, 0.2) !important;
+    padding: 8px;
+    text-align: center;
 }
 
 .complaints-table th {
-    background-color: #fca485 !important;
-    font-weight: bold !important;
-    text-align: center !important;
-    vertical-align: middle !important;
+    background-color: #fca485;
+    font-weight: bold;
 }
 
-.complaints-table td {
-    text-align: center !important;
-    vertical-align: middle !important;
+.user-table-sorted{
+    cursor: pointer;
 }
 
 .complaints-table th:first-of-type {
-    width: 22vw !important;
+    width: 23%;
 }
 
 .complaints-table th:nth-of-type(2) {
-    width: 22vw !important;
+    width: 15%;
 }
 
 .complaints-table th:nth-of-type(3) {
-    width: 12vw !important;
+    width: 12%;
 }
 
 .complaints-table th:nth-of-type(4) {
-    width: 15vw !important;
+    width: 8%;
 }
 
 .complaints-table th:nth-of-type(5) {
-    width: 12vw !important;
+    width: 5%;
 }
 
 .complaints-table th:nth-of-type(6) {
-    width: 7vw !important;
+    width: 10%;
+}
+
+.complaints-table th:last-of-type {
+    width: 2%;
 }
 
 .complaint-actions{
@@ -68,9 +71,8 @@
     height: 5px !important;
 }
 
-.red-status-complaint{
-    color: darkred !important;
-    font-weight: 600;
+.complaints-table-sorted{
+    cursor: pointer;
 }
 
 @media (max-width: 800px) {
@@ -83,6 +85,8 @@
         display: block;
         overflow-x: auto;
         white-space: nowrap;
+        margin: 10px 3vw 20px;
+        width: 94%;
     }
 
     .complaint-show-dialog .ql-editor{

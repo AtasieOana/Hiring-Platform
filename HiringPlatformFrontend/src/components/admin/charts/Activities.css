@@ -1,149 +1,224 @@
-.chart-group{
+.activities-overview {
+    display: flex;
+    margin: 20px 2vw;
+    gap: 1vw;
+}
+
+.activities-overview-card{
+    width: 25%;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    align-items: flex-start;
-    margin: 0 5vw 0;
-}
-
-
-.chart-group:last-of-type{
-    margin-bottom: 25px;
-}
-
-.chart-group:nth-of-type(2){
-    margin-top: 25px;
-}
-
-.chart-background {
-    background-color: rgba(255, 120, 53, 0.1);
-}
-
-.activity-chart{
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    width: 45vw;
-    border: 1px solid darkgrey;
-    padding: 10px;
-    height: 60vh;
-}
-
-.activity-chart-long{
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    width: 45vw;
-    border: 1px solid darkgrey;
-    padding: 10px;
-    height: 50vh;
-}
-
-
-.activity-chart-title{
-    font-weight: 700;
-    font-size: 20px;
-    margin-bottom: 5px;
-}
-
-.activity-chart-desc{
-    font-style: italic;
-    margin-bottom: 5px;
-    text-align: justify;
-}
-
-.activity-chart-display-container{
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
     align-items: center;
+}
+
+.activities-overview-card:first-of-type{
+    margin-left: 2vw;
+    background-color: #e0727f;
+    color: white;
+}
+
+.activities-overview-card:nth-of-type(2){
+    background-color: #e09c72;
+    color: white;
+}
+
+.activities-overview-card:nth-of-type(3){
+    background-color: #66d591;
+    color: white;
+}
+
+.activities-overview-card:nth-of-type(4){
+    background-color: #e072b6;
+    color: white;
+}
+
+.activities-overview-card:last-of-type{
+    margin-right: 2vw;
+    background-color: #4cb2a5;
+    color: white;
+}
+
+.activities-overview-value{
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.activities-overview-title{
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: .02em;
+    text-transform: uppercase;
+    line-height: 1;
+}
+
+.job-experience-charts {
+    display: flex;
+}
+
+.job-experience-chart {
+    text-align: center;
+    margin: 0 -10px;
+    width: 12vw;
+    height: 20vh;
+}
+
+.activities-doughnut-bar-container {
+    display: flex;
+    flex-direction: column;
+    width: 35%;
+    margin-left: 2vw;
+    gap: 10px
+}
+
+.activities-chart-job-category {
+    width: 63%;
+    margin-right: 2vw;
+}
+
+.activities-charts-first-line {
+    display: flex;
+    gap: 2%;
+    margin: 5px 2vw;
+    height: 100%;
+}
+
+.activities-app-status{
+    width: 100%;
+    height: 25vh;
+}
+
+.activities-charts-second-line {
+    margin: 15px 4vw;
+}
+
+.activities-charts-third-line{
+    display: flex;
+    gap: 2%;
+    height: 100%;
+    margin: 5px 2vw 20px;
+}
+
+.activities-chart-top-employees{
+    width: 35%;
+    margin-left: 2vw;
+}
+
+.activities-chart-app-timeline{
+    width: 63%;
+    margin-right: 2vw;
+}
+
+.activities-chart-account-creation{
     width: 100%;
 }
 
-.activity-chart-display{
-    width: 300px;
-    height: 300px;
-    padding: 10px;
-}
 
-.activity-chart-display-long{
-    width: 500px;
-    height: 300px;
-    padding: 10px;
-}
-
-@media (max-width: 1200px) {
-    .chart-group:nth-of-type(2){
-        margin-left: 6vw;
-        margin-right: 5vw;
+@media (max-width: 1150px) {
+    .activities-overview-value{
+        font-size: 18px;
+        font-weight: bold;
     }
-}
 
-@media (max-width: 1100px) {
-    .chart-group{
+    .activities-overview-title{
+        font-size: 14px;
+    }
+
+    .activities-overview-card svg{
+        width: 18px !important;
+        height: 18px !important;
+    }
+
+    .activities-doughnut-bar-container {
+        width: 98%;
+        margin-left: 2vw;
+        margin-right: 2vw;
+        margin-bottom: 10px;
+    }
+
+    .activities-chart-job-category {
+        width: 98%;
+        margin-left: 2vw;
+        margin-right: 2vw;
+    }
+
+    .activities-charts-first-line {
+        flex-direction: column;
+    }
+
+    .activities-charts-third-line{
         display: flex;
         flex-direction: column;
-        justify-content: center;
+    }
+
+    .activities-chart-top-employees{
+        width: 98%;
+        margin-left: 2vw;
+        margin-right: 2vw;
+        margin-bottom: 10px;
+    }
+
+    .activities-chart-app-timeline{
+        width: 98%;
+        margin-left: 2vw;
+        margin-right: 2vw;
+    }
+
+    .activities-chart-account-creation{
+        width: 100%;
+        margin-left: 2vw;
+        margin-right: 2vw;
+    }
+
+    .activities-overview {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 20px 2vw;
+        gap: 1vw;
+    }
+
+    .activities-overview-card{
+        width: calc(33.33% - (2vw + 2px));
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
         align-items: center;
-        margin: 0 5vw;
+        margin-bottom: 1vw;
     }
 
-    .chart-background{
-        background-color: white;
-    }
-
-    .chart-background-small {
-        background-color: rgba(255, 120, 53, 0.1) !important;
-    }
-
-    .activity-chart{
-        width: 80vw;
-        height: 65vh;
-    }
-
-    .activity-chart-display-long{
-        width: 500px;
-        height: 500px;
-        padding: 10px;
-    }
-
-    .activity-chart-long{
-        width: 80vw;
-        height: 50vh;
+    .activities-overview-card:nth-of-type(4){
+        margin-left: 2vw;
     }
 }
 
-@media (max-width: 900px) {
 
-    .chart-group{
+
+@media (max-width: 600px) {
+    .activities-overview {
         display: flex;
-        flex-direction: column;
-        justify-content: center;
+        flex-wrap: wrap;
+        margin: 20px 2vw;
+        gap: 1vw;
+    }
+
+    .activities-overview-card{
+        width: calc(50% - (2vw + 2px));
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
         align-items: center;
-        margin: 0 5vw;
+        margin-bottom: 1vw;
     }
 
-    .chart-background{
-        background-color: white;
+    .activities-overview-card:nth-of-type(4){
+        margin-left: 0;
     }
 
-    .chart-background-small {
-        background-color: rgba(255, 120, 53, 0.1) !important;
+    .activities-overview-card:nth-of-type(3){
+        margin-left: 2vw;
     }
 
-    .activity-chart{
-        width: 80vw;
-        height: 65vh;
-    }
-
-    .activity-chart-display-long{
-        width: 400px;
-        height: 300px;
-        padding: 10px;
-    }
-
-    .activity-chart-long{
-        width: 80vw;
-        height: 50vh;
+    .activities-overview-card:last-of-type{
+        margin-left: 2vw;
     }
 }

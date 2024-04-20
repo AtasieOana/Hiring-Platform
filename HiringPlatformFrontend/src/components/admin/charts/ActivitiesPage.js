@@ -1,30 +1,35 @@
-import React from 'react';
-import JobCategoryChart from "./JobCategoryChart";
+import React from "react";
+import "./Activities.css";
+import OverviewComponent from "./components/OverviewComponent";
 import HeaderAdmin from "../../header/HeaderAdmin";
-import ApplicationStatusChart from "./ApplicationStatusChart";
-import ApplicationsTimelineChart from "./ApplicationsTimelineChart";
-import JobExperienceChart from "./JobExperienceChart";
-import TopEmployersChart from "./TopEmployersChart";
-import AccountCreationChart from "./AccountCreationChart";
-import "./Activities.css"
+import JobExperienceComponent from "./components/JobExperienceComponent";
+import JobCategoryComponent from "./components/JobCategoryComponent";
+import ApplicationStatusComponent from "./components/ApplicationStatusComponent";
+import TopEmployersComponent from "./components/TopEmployersComponent";
+import AccountCreationComponent from "./components/AccountCreationComponent";
+import ApplicationTimelineComponent from "./components/ApplicationTimelineComponent";
 
-const ActivitiesPage = () =>{
-
-    return <div>
-        <HeaderAdmin/>
-        <div className="chart-group">
-            <ApplicationStatusChart/>
-            <JobExperienceChart/>
+const ActivitiesPage = () => {
+  return (
+    <div className="activities-container">
+      <HeaderAdmin />
+      <OverviewComponent />
+      <div className="activities-charts-first-line">
+        <div className="activities-doughnut-bar-container">
+          <JobExperienceComponent />
+          <ApplicationStatusComponent />
         </div>
-        <div className="chart-group">
-            <JobCategoryChart/>
-            <TopEmployersChart/>
-        </div>
-        <div className="chart-group">
-            <ApplicationsTimelineChart/>
-            <AccountCreationChart/>
-        </div>
+        <JobCategoryComponent />
+      </div>
+      <div className="activities-charts-second-line">
+        <AccountCreationComponent />
+      </div>
+      <div className="activities-charts-third-line">
+        <TopEmployersComponent />
+        <ApplicationTimelineComponent />
+      </div>
     </div>
-}
+  );
+};
 
 export default ActivitiesPage;

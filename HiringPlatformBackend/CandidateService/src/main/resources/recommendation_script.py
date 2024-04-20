@@ -10,6 +10,7 @@ import nltk
 from googletrans import Translator
 import sys
 import json
+from joblib import Parallel, delayed
 
 # Descărcarea resurselor NLTK (execută o singură dată)
 nltk.download('stopwords')
@@ -39,12 +40,12 @@ def jaccard_similarity(user1_jobs, user2_jobs):
 
 # Funcție pentru preprocesarea unei propoziții
 def preprocess_sentence(sentence):
-    words = nltk.word_tokenize(sentence, language='english', preserve_line=True)  # Tokenizarea propoziției în cuvinte
-    words = [word.lower() for word in words if word not in string.punctuation]  # Eliminarea semnelor de punctuație și conversia în litere mici
-    stopwords = set(nltk.corpus.stopwords.words('english'))  # Obținerea listei de stopwords în limba engleză
-    words = [word for word in words if word not in stopwords]  # Eliminarea stopwords
-    preprocessed_sentence = ' '.join(words)  # Reconstruirea propoziției preprocesate
-    return preprocessed_sentence
+    words = nltk.word_tokenize(sentence, language='english', preserve_line=True)
+    words = [word.lower() for word in words if word not in string.punctuation]
+    stopwords = set(nltk.corpus.stopwords.words('english'))
+    words = [word for word in words if word not in stopwords]
+    preprocessed_sentence = ' '.join(words)
+    return preprocessed_sentence.translate(str.maketrans('', '', string.punctuation))
 
 # Funcție pentru traducerea textului în limba engleză, dacă este necesar
 def translate_to_english(text, translator):
@@ -52,9 +53,8 @@ def translate_to_english(text, translator):
     return translated_text if detect(translated_text) == 'en' else text
 
 # Funcție pentru calculul similarității de conținut între descrierea utilizatorului și descrierile joburilor
-def calculate_content_similarity(user_description, translated_job_descriptions):
+def calculate_content_similarity(user_description, translated_job_descriptions,tfidf_vectorizer):
     preprocessed_user_description = preprocess_sentence(user_description)
-    tfidf_vectorizer = TfidfVectorizer()
     job_vectors = tfidf_vectorizer.fit_transform(translated_job_descriptions.values())
     user_vector = tfidf_vectorizer.transform([preprocessed_user_description])
     similarities = cosine_similarity(user_vector, job_vectors).flatten()
@@ -93,7 +93,10 @@ def recommend_jobs_combined(user_id, application_data, job_descriptions):
             translated_job_descriptions[job_id] = description
 
     # Calculul similarității de conținut între descrierea utilizatorului și descrierile joburilor
-    content_similarities = calculate_content_similarity(translated_user_description, translated_job_descriptions)
+    tfidf_vectorizer = TfidfVectorizer()
+    content_similarities = calculate_content_similarity(
+        translated_user_description, translated_job_descriptions, tfidf_vectorizer
+    )
 
     job_scores = {}
 

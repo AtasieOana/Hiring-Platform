@@ -1,11 +1,8 @@
 package com.hiringPlatform.admin.service;
 
-import com.hiringPlatform.admin.model.Application;
-import com.hiringPlatform.admin.model.Job;
-import com.hiringPlatform.admin.model.User;
-import com.hiringPlatform.admin.repository.ApplicationRepository;
-import com.hiringPlatform.admin.repository.JobRepository;
-import com.hiringPlatform.admin.repository.UserRepository;
+import com.hiringPlatform.admin.model.*;
+import com.hiringPlatform.admin.model.response.OverviewResponse;
+import com.hiringPlatform.admin.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,13 +20,25 @@ public class ChartService {
 
     private final UserRepository userRepository;
 
+    private final CandidateRepository candidateRepository;
+
+    private final EmployerRepository employerRepository;
+
+    private final AdminRepository adminRepository;
+
     @Autowired
     public ChartService(JobRepository jobRepository,
                         ApplicationRepository applicationRepository,
-                        UserRepository userRepository) {
+                        UserRepository userRepository,
+                        CandidateRepository candidateRepository,
+                        AdminRepository adminRepository,
+                        EmployerRepository employerRepository) {
         this.applicationRepository = applicationRepository;
         this.jobRepository = jobRepository;
         this.userRepository = userRepository;
+        this.candidateRepository = candidateRepository;
+        this.adminRepository = adminRepository;
+        this.employerRepository = employerRepository;
     }
 
     /**
@@ -52,8 +61,8 @@ public class ChartService {
      * A graph showing the percentage of applications that have been accepted,
      * rejected, or are pending.
      */
-    public Map<String, Double> getApplicationStatusPercentage() {
-        Map<String, Double> percentageMap = new HashMap<>();
+    public Map<String, Integer> getApplicationStatusPercentage() {
+        Map<String, Integer> valueMap = new HashMap<>();
         List<Application> applications = applicationRepository.findAll();
         int totalApplications = applications.size();
         int acceptedCount = 0, rejectedCount = 0, pendingCount = 0;
@@ -70,10 +79,10 @@ public class ChartService {
                     break;
             }
         }
-        percentageMap.put("finalizat", ((double) acceptedCount / totalApplications) * 100);
-        percentageMap.put("refuzat", ((double) rejectedCount / totalApplications) * 100);
-        percentageMap.put("in_curs", ((double) pendingCount / totalApplications) * 100);
-        return percentageMap;
+        valueMap.put("finalizat", acceptedCount);
+        valueMap.put("refuzat", rejectedCount);
+        valueMap.put("in_curs", pendingCount);
+        return valueMap;
     }
 
     /**
@@ -171,5 +180,23 @@ public class ChartService {
         }
 
         return usersByRoleAndDate;
+    }
+
+    /**
+     * Display of the number of candidates, employers, admins, jobs and applications
+     */
+    public OverviewResponse getOverview() {
+        OverviewResponse response = new OverviewResponse();
+        List<Job> jobs = jobRepository.findAll();
+        List<Application> applications = applicationRepository.findAll();
+        List<Candidate> candidates = candidateRepository.findAll();
+        List<Employer> employers = employerRepository.findAll();
+        List<Admin> admins = adminRepository.findAll();
+        response.setNumberOfAdmins(admins.size());
+        response.setNumberOfApplications(applications.size());
+        response.setNumberOfCandidates(candidates.size());
+        response.setNumberOfEmployers(employers.size());
+        response.setNumberOfJobs(jobs.size());
+        return response;
     }
 }

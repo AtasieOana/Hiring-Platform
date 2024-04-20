@@ -1,5 +1,6 @@
 package com.hiringPlatform.admin.controller;
 
+import com.hiringPlatform.admin.model.response.OverviewResponse;
 import com.hiringPlatform.admin.service.ChartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -28,8 +29,8 @@ public class ChartController {
     }
 
     @GetMapping("/getApplicationStatusPercentage")
-    public ResponseEntity<Map<String, Double>> getApplicationStatusPercentage() {
-        Map<String, Double> response = chartService.getApplicationStatusPercentage();
+    public ResponseEntity<Map<String, Integer>> getApplicationStatusPercentage() {
+        Map<String, Integer> response = chartService.getApplicationStatusPercentage();
         return ResponseEntity.ok(response);
     }
 
@@ -54,6 +55,12 @@ public class ChartController {
     @GetMapping("/getAccountCreationTrend")
     public ResponseEntity<Map<String, Map<String, Long>>> getAccountCreationTrend() {
         Map<String, Map<String, Long>> response = chartService.getAccountCreationTrend();
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/getOverview")
+    public ResponseEntity<OverviewResponse> getOverview() {
+        OverviewResponse response = chartService.getOverview();
         return ResponseEntity.ok(response);
     }
 

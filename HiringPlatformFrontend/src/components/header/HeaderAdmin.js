@@ -1,7 +1,18 @@
 import React, {useEffect} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import './Header.css';
-import {Icon, Intent, Menu, MenuItem, Popover} from '@blueprintjs/core';
+import {
+    Alignment,
+    Button,
+    Icon,
+    Intent,
+    Menu,
+    MenuItem, Navbar,
+    NavbarDivider,
+    NavbarGroup,
+    NavbarHeading,
+    Popover
+} from '@blueprintjs/core';
 import {useTranslation} from 'react-i18next';
 import {AppToaster} from "../common/AppToaster";
 import AuthenticationService from "../../services/authentication.service";
@@ -54,13 +65,14 @@ const HeaderPageAdmin = () => {
     }
 
     return (
-        <div className="header">
-            <div className="company-name">JOBLISTIC</div>
+        <Navbar className="header">
+            <NavbarGroup align={Alignment.LEFT}>
+                <NavbarHeading className="company-name">JOBLISTIC</NavbarHeading>
+            </NavbarGroup>
 
-            <div className="navigation">
+            <NavbarGroup align={Alignment.RIGHT}  className="navigation">
                 <Popover
                     interactionKind="hover"
-                    usePortal={false}
                     content={
                         <Menu className={"menu-language"}>
                             <MenuItem text="English" selected={i18n.language === 'en'}
@@ -73,15 +85,17 @@ const HeaderPageAdmin = () => {
                     }
                     position="bottom"
                 >
-                    <div className="nav-item-language">
-                        <Icon size={13} icon={i18n.language === 'en' ? GBFlag() : ROFlag()} color="white" className="nav-icon"/> {i18n.language === 'en' ? 'English' : 'Română'}
-                        <Icon size={13} icon="chevron-down" color="white" className="nav-icon"/>
-                    </div>
+                    <Button minimal
+                            icon={<Icon size={13} icon={i18n.language === 'en' ? GBFlag() : ROFlag()} color="white" className="nav-icon"/>}
+                            rightIcon={<Icon size={13} icon="chevron-down" color="white" className="nav-icon"/>}
+                            text={i18n.language === 'en' ? 'English' : 'Română'}
+                            className="nav-button"
+                    />
                 </Popover>
+                <NavbarDivider />
                 {isSmallScreen ? <>
                     <Popover
                         interactionKind="hover"
-                        usePortal={false}
                         content={
                             <Menu>
                                 <MenuItem icon="people" color="white" text={t('allUsers')}
@@ -90,48 +104,63 @@ const HeaderPageAdmin = () => {
                                           onClick={() => navigate('/complains')}/>
                                 <MenuItem icon="chart" color="white" text={t('activities')}
                                           onClick={() => navigate('/activities')}/>
-                                <MenuItem icon="annotation" color="white"
+                                <MenuItem icon="control" color="white"
                                           text={t('edit_account')} onClick={handleGoToEditAccount}/>
                                 <MenuItem icon="log-out" color="white" text={t('logout')} onClick={logout}/>
                             </Menu>
                         }
                         placement="bottom-end"
                     >
-                        <Link className="nav-item nav-item-chevron" to="#" isActive={false}>
-                            <Icon size={13} icon="mugshot" color="white" className="nav-icon"/> {admin?.username}
-                            <Icon size={13} icon="chevron-down" color="white" className="nav-icon"/>
-                        </Link>
+                        <Button minimal
+                                icon={<Icon size={13} icon="mugshot" color="white" className="nav-icon"/>}
+                                rightIcon={<Icon size={13} icon="chevron-down" color="white" className="nav-icon"/>}
+                                text={admin?.username}
+                                className="nav-button"
+                        />
                     </Popover>
                 </> : <>
-                    <Link className="nav-item" to="/allUsers">
-                        <Icon size={13} icon="people" color="white" className="nav-icon"/> {t('allUsers')}
-                    </Link>
-                    <Link className="nav-item" to="/complains">
-                        <Icon size={13} icon="take-action" color="white" className="nav-icon"/> {t('reports')}
-                    </Link>
-                    <Link className="nav-item" to="/activities">
-                        <Icon size={13} icon="chart" color="white" className="nav-icon"/> {t('activities')}
-                    </Link>
+                    <Button minimal
+                            text={t('allUsers')}
+                            onClick={()=>navigate("/allUsers")}
+                            className="nav-button"
+                            icon={<Icon size={13} icon="people" color="white" className="nav-icon"/>}
+                    />
+                    <NavbarDivider />
+                    <Button minimal
+                            text={t('reports')}
+                            onClick={()=>navigate("/complains")}
+                            className="nav-button"
+                            icon={<Icon size={13} icon="take-action" color="white" className="nav-icon"/>}
+                    />
+                    <NavbarDivider />
+                    <Button minimal
+                            text={t('activities')}
+                            onClick={()=>navigate("/activities")}
+                            className="nav-button"
+                            icon={<Icon size={13} icon="chart" color="white" className="nav-icon"/>}
+                    />
+                    <NavbarDivider />
                     <Popover
                         interactionKind="hover"
-                        usePortal={false}
                         content={
                             <Menu>
-                                <MenuItem icon="annotation" color="white"
+                                <MenuItem icon="control" color="white"
                                           text={t('edit_account')} onClick={handleGoToEditAccount}/>
                                 <MenuItem icon="log-out" color="white" text={t('logout')} onClick={logout}/>
                             </Menu>
                         }
                         placement="bottom-end"
                     >
-                        <Link className="nav-item" to="#" isActive={false}>
-                            <Icon size={13} icon="mugshot" color="white" className="nav-icon"/> {admin?.username}
-                            <Icon size={13} icon="chevron-down" color="white" className="nav-icon"/>
-                        </Link>
+                        <Button minimal
+                                icon={<Icon size={13} icon="mugshot" color="white" className="nav-icon"/>}
+                                rightIcon={<Icon size={13} icon="chevron-down" color="white" className="nav-icon"/>}
+                                text={admin?.username}
+                                className="nav-button"
+                        />
                     </Popover>
                 </>}
-            </div>
-        </div>
+            </NavbarGroup>
+        </Navbar>
     );
 };
 
