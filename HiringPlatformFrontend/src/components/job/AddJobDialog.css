@@ -111,7 +111,6 @@
     align-items: flex-start;
     gap: 10px;
     padding: 5px 10px;
-    border: 1px solid #698576;
     border-radius: 5px;
     background-color: #f1f1f1;
 }
@@ -216,6 +215,14 @@
 }
 
 .add-job-address button:focus {
+    outline: none !important;
+}
+
+.add-job-input input:focus{
+    box-shadow: 0 0 0 0 rgba(45, 114, 210, 0), 0 0 0 0 rgba(45, 114, 210, 0), inset 0 0 0 1px rgba(17, 20, 24, 0.2), inset 0 1px 1px rgba(17, 20, 24, 0.5) !important;
+}
+
+.bp4-dialog-footer-actions a:focus{
     outline: none !important;
 }
 

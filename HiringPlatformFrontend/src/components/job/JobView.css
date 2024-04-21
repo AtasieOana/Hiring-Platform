@@ -36,6 +36,11 @@
 
 .show-job-profile-card{
     margin-bottom: 10px;
+    background-color: rgba(224, 156, 115, 0.10) !important;
+}
+
+.show-job-card-details{
+    background-color: rgba(224, 156, 115, 0.10) !important;
 }
 
 .show-job-profile-info {
@@ -105,7 +110,6 @@
 .show-job-title{
     font-weight: bold;
     font-size: 22px;
-    margin: 20px 0 0;
     text-decoration: underline;
 }
 
@@ -113,21 +117,20 @@
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
-    margin-bottom: 10px;
 }
 
 .show-job-card-description .ql-editor {
     overflow: auto;
     max-width: 70vw;
     margin: auto;
-    height: 62vh;
+    height: 65vh;
 }
 
 .show-job-card-description {
     margin-bottom: 10px;
     max-width: 70vw;
     padding: 0 !important;
-    height: 62vh;
+    height: 65vh;
 }
 
 .show-job-card-description-dinamic .ql-editor {
@@ -189,6 +192,78 @@
     align-items: center;
 }
 
+.show-job-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    margin-top: 15px;
+}
+
+.view-candidates-for-job{
+    background-color: white !important;
+    box-shadow: inset 0 0 0 1px #064060, 0 1px 1px rgba(26, 79, 108, 0.1) !important;
+    color: #064060 !important;
+    border-radius: 5px !important;
+    padding: 5px 10px !important;
+}
+
+.view-candidates-for-job:focus{
+    outline: none !important;
+}
+
+.view-candidates-for-job:hover{
+    background-color: rgba(26, 79, 108, 0.1) !important;
+}
+
+.erase-job{
+    background-color: white !important;
+    box-shadow: inset 0 0 0 1px #a96d20, 0 1px 1px rgba(251, 179, 96, 0.1) !important;
+    color: #a96d20 !important;
+    border-radius: 5px !important;
+    padding: 5px 10px !important;
+}
+
+.erase-job:hover{
+    background-color: rgba(251, 179, 96, 0.1) !important;
+}
+
+.erase-job:focus{
+    outline: none !important;
+}
+
+.apply-to-job{
+    background-color: white !important;
+    box-shadow: inset 0 0 0 1px #238551, 0 1px 1px rgba(35, 133, 81, 0.1) !important;
+    color: #238551 !important;
+    border-radius: 5px !important;
+    padding: 5px 10px !important;
+}
+
+.apply-to-job:hover{
+    background-color: rgba(35, 133, 81, 0.1) !important;
+}
+
+.apply-to-job:focus{
+    outline: none !important;
+}
+
+.show-job-edit-desc{
+    background-color: white !important;
+    box-shadow: inset 0 0 0 1px #1e1c1c, 0 1px 1px rgba(30, 28, 28, 0.1) !important;
+    color: #1e1c1c !important;
+    border-radius: 5px !important;
+    padding: 5px 10px !important;
+}
+
+.show-job-edit-desc:hover{
+    background-color: rgba(30, 28, 28, 0.1) !important;
+}
+
+.show-job-edit-desc:focus{
+    outline: none !important;
+}
 
 @media (max-width: 1000px) {
     .show-job-profile-button {
@@ -226,17 +301,17 @@
 
     .show-job-card-description{
         max-width: 100%;
-        height: 75vh;
+        height: 70vh;
     }
 
     .show-job-card-description .ql-editor{
         max-width:100%;
-        height: 75vh;
+        height: 63vh;
     }
 
     .show-job-card-description-static .ql-editor{
         max-width:100%;
-        max-height: 75vh;
+        max-height: 70vh;
     }
 
     .cv-choose-dialog{
@@ -245,75 +320,6 @@
 }
 
 @media (max-width: 900px) {
-    .show-job-profile-button {
-        width: 80%;
-    }
-
-    .show-job-card-description{
-        max-width: 100%;
-        height: 80vh;
-    }
-
-    .show-job-card-description .ql-editor{
-        max-width:100%;
-        height: 80vh;
-    }
-
-    .show-job-card-description-static .ql-editor{
-        max-width:100%;
-        max-height: 80vh;
-    }
-}
-
-@media (max-width: 850px) {
-    .show-job-card-description{
-        height: 83vh;
-    }
-
-    .show-job-card-description .ql-editor{
-        height: 83vh;
-    }
-
-    .show-job-card-description-static .ql-editor{
-        max-height: 83vh;
-    }
-
-    .cv-choose-dialog{
-        width: 90% !important;
-    }
-
-}
-
-@media (max-width: 800px) {
-    .show-job-profile-button {
-        width: 80%;
-    }
-
-    .show-job-card-description{
-        max-width: 100%;
-        height: 92vh;
-    }
-
-    .show-job-card-description .ql-editor{
-        max-width:100%;
-        height: 92vh;
-    }
-
-    .show-job-card-description-static .ql-editor{
-        max-width:100%;
-        max-height: 92vh;
-    }
-
-    .cv-choose-dialog{
-        width: 95% !important;
-    }
-
-    .cv-choose-dialog .bp4-control{
-        font-size: 12px !important;
-    }
-}
-
-@media (max-width: 700px) {
     .show-job-header {
         flex-direction: column;
         justify-content: center;

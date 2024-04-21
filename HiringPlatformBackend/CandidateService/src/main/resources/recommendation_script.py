@@ -12,33 +12,32 @@ import sys
 import json
 from joblib import Parallel, delayed
 
-# Descărcarea resurselor NLTK (execută o singură dată)
+# Downloading NLTK resources (runs only once)
 nltk.download('stopwords')
 nltk.download('punkt')
     
 import numpy as np
 
-# Funcție pentru a calcula Jaccard similarity între doi utilizatori
+# Function to calculate Jaccard similarity between two users
 def jaccard_similarity(user1_jobs, user2_jobs):    
-    # Extrage seturile de joburi pentru fiecare utilizator
+    # Extracts the job sets for each user
     user1_jobs_set = set(user1_jobs)
     user2_jobs_set = set(user2_jobs)
         
-    # Calculează mărimea intersecției și a uniunii seturilor
+    # Computes the size of the intersection and union of sets
     intersection_size = len(user1_jobs_set.intersection(user2_jobs_set))
     union_size = len(user1_jobs_set.union(user2_jobs_set))
     
-
-    # Evită împărțirea la zero
+    # Avoid division by zero
     if union_size == 0:
         return 0.0
     
-    # Calculează similaritatea Jaccard
+    # Calculates Jaccard similarity
     jaccard_similarity = intersection_size / union_size
     return jaccard_similarity
 
 
-# Funcție pentru preprocesarea unei propoziții
+# Function for preprocessing a sentence
 def preprocess_sentence(sentence):
     words = nltk.word_tokenize(sentence, language='english', preserve_line=True)
     words = [word.lower() for word in words if word not in string.punctuation]
@@ -47,12 +46,12 @@ def preprocess_sentence(sentence):
     preprocessed_sentence = ' '.join(words)
     return preprocessed_sentence.translate(str.maketrans('', '', string.punctuation))
 
-# Funcție pentru traducerea textului în limba engleză, dacă este necesar
+# Function to translate text into English if needed
 def translate_to_english(text, translator):
     translated_text = translator.translate(text).text
     return translated_text if detect(translated_text) == 'en' else text
 
-# Funcție pentru calculul similarității de conținut între descrierea utilizatorului și descrierile joburilor
+# Function to calculate content similarity between user description and job descriptions
 def calculate_content_similarity(user_description, translated_job_descriptions,tfidf_vectorizer):
     preprocessed_user_description = preprocess_sentence(user_description)
     job_vectors = tfidf_vectorizer.fit_transform(translated_job_descriptions.values())
@@ -60,39 +59,37 @@ def calculate_content_similarity(user_description, translated_job_descriptions,t
     similarities = cosine_similarity(user_vector, job_vectors).flatten()
     return similarities
 
-# Funcție pentru recomandarea joburilor folosind filtrarea combinată
+# Function for recommending jobs using combined filtering
 def recommend_jobs_combined(user_id, application_data, job_descriptions):
     similar_users = {}
     user_jobs = application_data[user_id]
 
-    # Calculul scorurilor de similaritate între utilizatorul curent și ceilalți utilizatori
-    # Calculul scorurilor de similaritate între utilizatorul curent și ceilalți utilizatori
+    # Calculation of similarity scores between the current user and other users
     for user, jobs in application_data.items():
         if user != user_id:
-            similarity = jaccard_similarity(user_jobs, jobs)  # Folosirea Jaccard Similarity
+            similarity = jaccard_similarity(user_jobs, jobs)  # Using Jaccard Similarity
             similar_users[user] = similarity
     
-    # Sortarea utilizatorilor similari în funcție de scorurile de similaritate
+    # Sort similar users by similarity scores
     similar_users = {k: v for k, v in sorted(similar_users.items(), key=lambda item: item[1], reverse=True)}
 
-    
-    # Concatenarea descrierilor de joburi ale aplicațiilor utilizatorului
+    # Concatenation of user application job descriptions
     user_description = ' '.join([job_descriptions.get(job_id, '') for job_id in user_jobs])
     translator = Translator()
 
-    # Traducerea descrierii utilizatorului în limba engleză, dacă este necesar
+    # Translation of the user description into English, if necessary
     translated_user_description = translate_to_english(user_description, translator)
 
     translated_job_descriptions = {}
 
-    # Traducerea descrierilor joburilor în limba engleză, dacă este necesar
+    # Translation of job descriptions into English, if necessary
     for job_id, description in job_descriptions.items():
         if detect(description) != 'en':
             translated_job_descriptions[job_id] = translate_to_english(description, translator)
         else:
             translated_job_descriptions[job_id] = description
 
-    # Calculul similarității de conținut între descrierea utilizatorului și descrierile joburilor
+    # Calculating content similarity between user description and job descriptions
     tfidf_vectorizer = TfidfVectorizer()
     content_similarities = calculate_content_similarity(
         translated_user_description, translated_job_descriptions, tfidf_vectorizer
@@ -100,36 +97,36 @@ def recommend_jobs_combined(user_id, application_data, job_descriptions):
 
     job_scores = {}
 
-    # Calculul scorului combinat pentru fiecare recomandare de job
+    # Calculation of the combined score for each job recommendation
     for job_id in job_descriptions.keys():
         if job_id not in user_jobs:
             job_index = list(job_descriptions.keys()).index(job_id)
             content_score = content_similarities[job_index]
             collaborative_score = 0
 
-            # Calculul scorului de filtrare colaborativă
+            # Calculating the collaborative filtering score
             for user, similarity in similar_users.items():
                 if job_id in application_data[user]:
-                    collaborative_score += similarity  # Modificare pentru a utiliza similaritatea Pearson în loc de inversul ei
-            # Combinația scorurilor bazate pe conținut și colaborative
+                    collaborative_score += similarity  # Change to use Pearson similarity instead of its inverse
+            # Combination of content-based and collaborative scoring
             combined_score = 0.5 * content_score + 0.5 * collaborative_score
             job_scores[job_id] = combined_score
 
-    # Sortarea joburilor în funcție de scorul combinat
+    # Sort jobs by combined score
     recommended_jobs = sorted(job_scores, key=job_scores.get, reverse=True)
     return recommended_jobs
 
 def main():
-    # Citirea argumentelor din intrarea standard
-    user_id = sys.stdin.readline().strip()  # Eliminarea caracterelor de nouă linie
+    # Reading arguments from standard input
+    user_id = sys.stdin.readline().strip()  # Stripping newline characters
     application_data_json = sys.stdin.readline().strip()
     job_descriptions_json = sys.stdin.readline().strip()
 
-    # Convertirea JSON-urilor în dicționare Python
+    # Converting JSONs to Python dictionaries
     application_data = json.loads(application_data_json)
     job_descriptions = json.loads(job_descriptions_json)
 
-    # Rularea logicii de recomandare
+    # Running recommendation logic
     recommended_jobs = recommend_jobs_combined(user_id, application_data, job_descriptions)
     print(recommended_jobs, flush=True)
 
