@@ -11,11 +11,20 @@ cd Database
 docker build -t joblistic_db:latest -f Dockerfile .
 cd ../../HiringPlatformBackend/AuthenticationService/
 docker build -t authentication_service:latest -f Dockerfile .
-cd ../EmployerService
+cd ../../HiringPlatformBackend/EmployerService/
 docker build -t employer_service:latest -f Dockerfile .
-cd ../../HiringPlatformFrontend/AuthenticationService/
-docker build -t authentication_frontend:latest -f Dockerfile .
+cd ../../HiringPlatformBackend/CandidateService/
+docker build -t candidate_service:latest -f Dockerfile .
+cd ../../HiringPlatformBackend/CommonService/
+docker build -t common_service:latest -f Dockerfile .
+cd ../../HiringPlatformBackend/AdminService/
+docker build -t admin_service:latest -f Dockerfile .
+cd ../../HiringPlatformFrontend/
+docker build -t platform_frontend:latest -f Dockerfile .
+cd ../HiringPlatformDockerConfig/
 docker compose -f docker-compose.yml up
+
+sudo kill -9 `sudo lsof -t -i:8080`
 ```
 
 ```

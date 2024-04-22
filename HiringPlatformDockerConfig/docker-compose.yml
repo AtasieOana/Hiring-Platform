@@ -1,16 +1,6 @@
 version: '3'
 
 services:
-  zipkin:
-    image: ghcr.io/openzipkin/zipkin-slim:${TAG:-latest}
-    container_name: zipkin
-    networks:
-      - platformnet
-    environment:
-      - STORAGE_TYPE=mem
-    ports:
-      - 9411:9411
-
   redis:
     image: redis:latest
     container_name: redis
@@ -19,52 +9,6 @@ services:
     restart: always
     networks:
       - platformnet
-
-  # joblistic_db:
-    # image: container-registry.oracle.com/database/enterprise:latest
-    # container_name: joblistic_db
-    # ports:
-      # - "1521:1521"
-    # environment:
-      # - ORACLE_SID=ORCL
-      # - ORACLE_PWD=oracle
-    # restart: always
-    # volumes:
-      # - oracle-data:/opt/oracle/oradata
-      # - oracle-backup:/opt/oracle/backup
-    # networks:
-      # - platformnet
       
-  # authentication_service:
-    # image: authentication_service:latest
-    # container_name: authentication_service
-    # restart: always
-    # ports:
-      # - "8080:8080"
-    # networks:
-      # - platformnet
-    # environment:
-      # - spring.datasource.url=jdbc:oracle:thin:@joblistic_db:1521:ORCL
-      # - spring.datasource.username=disertatie
-      # - spring.datasource.password=oracle
-      # - spring.data.redis.host=redis
-    # depends_on:
-      # - joblistic_db
-      # - redis   
-      
-  # authentication_frontend:
-    # image: authentication_frontend:latest
-    # container_name: authentication_frontend
-    # restart: always
-    # ports:
-      # - "3000:3000"
-    # networks:
-      # - platformnet
-    # depends_on:
-      # - authentication_service
-      
-volumes:
-  oracle-data:
-  oracle-backup:
 networks:
   platformnet:

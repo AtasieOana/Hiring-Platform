@@ -20,6 +20,7 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
+        try {
         if(stageRepository.findAll().isEmpty()) {
             // Create default stages
             List<String> stages = Arrays.asList("The candidate submitted a resume (Candidatul a depus un CV)", "Employer viewed the application (Angajatorul a vizualizat aplicarea)",
@@ -35,6 +36,9 @@ public class DataInitializer implements CommandLineRunner {
                 stageDb.setStageName(stage);
                 stageRepository.save(stageDb);
             }
+        }
+        } catch (Exception e) {
+            System.out.println("Database not ready");
         }
     }
 }

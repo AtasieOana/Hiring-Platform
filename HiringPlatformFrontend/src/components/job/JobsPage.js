@@ -11,6 +11,7 @@ import {
   Position,
   MenuItem,
   Icon,
+  Spinner,
 } from "@blueprintjs/core";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
@@ -29,7 +30,6 @@ import ProfileService from "../../services/profile.service";
 import AddJobDialog from "./AddJobDialog";
 import { CLOSED, OPENED } from "../../util/constants";
 import ReactPaginate from "react-paginate";
-import { setAddressData } from "../../redux/actions/addressActions";
 import { setFilterData } from "../../redux/actions/filtersActions";
 
 export const industriesRo = [
@@ -234,6 +234,7 @@ const JobsPage = () => {
   const currentPageFromRedux = useSelector(
     (state) => state.filters.currentPage,
   );
+  const [areJobsRetrieved, setAreJobsRetrieved] = useState(true);
 
   /**
    * Method that call the job retrieval on first renderer
@@ -318,7 +319,14 @@ const JobsPage = () => {
         currentPage,
       ),
     );
-  }, [jobs, filters, searchTerm, orderByPostDate, showBasedOnRecommendation]);
+  }, [
+    jobs,
+    filters,
+    searchTerm,
+    orderByPostDate,
+    showBasedOnRecommendation,
+    recommendedJobs,
+  ]);
 
   /**
    * Method to retrieve job list for candidate
@@ -354,12 +362,12 @@ const JobsPage = () => {
         setFilteredJobs(jobsResponse);
         if (recommendedJobsFromRedux && recommendedJobsFromRedux.length > 0) {
           setRecommendedJobs(recommendedJobsFromRedux);
-          console.log(recommendedJobsFromRedux);
         } else {
+          setAreJobsRetrieved(false);
           JobService.getRecommendedJobs(candidate.candidateId)
             .then((responseRecommended) => {
+              setAreJobsRetrieved(true);
               setRecommendedJobs(responseRecommended.data);
-              console.log(responseRecommended.data);
             })
             .catch((error) => {
               console.error("Error: ", error.message);
@@ -1006,7 +1014,9 @@ const JobsPage = () => {
           <div
             className={currentJobs.length > 0 ? "jobs-list" : "jobs-non-ideal"}
           >
-            {currentJobs.length > 0 ? (
+            {showBasedOnRecommendation && !areJobsRetrieved ? (
+              <Spinner className="central-spinner" size={40} />
+            ) : currentJobs.length > 0 ? (
               <div className="jobs-list-show">
                 <div className="just-jobs">
                   {currentJobs.map((job) => (
