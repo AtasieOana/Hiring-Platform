@@ -516,5 +516,16 @@
   "results": "Results",
   "found": "found",
   "view": "View",
-  "sort_by_date": "Sort by date"
+  "sort_by_date": "Sort by date",
+  "day": "day",
+  "days": "days",
+  "month": "month",
+  "months": "months",
+  "week": "week",
+  "weeks": "weeks",
+  "hour": "hour",
+  "hours": "hours",
+  "ago": "ago",
+  "what_we_offer": "What We Offer",
+  "what_we_offer1": "Connecting talent with opportunity"
 }

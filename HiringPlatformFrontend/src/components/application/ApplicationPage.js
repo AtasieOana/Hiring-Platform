@@ -153,10 +153,17 @@ const ApplicationPage = () => {
         let stagesInEnglish = [];
         stageResponse.forEach((stage) => {
           let parts = stage.split(" (");
-          let englishPart = parts[0];
-          let romanianPart = parts[1].substring(0, parts[1].length - 1);
-          stagesInRomanian.push(romanianPart);
-          stagesInEnglish.push(englishPart);
+          if (parts.length > 1) {
+            let englishPart = parts[0];
+            let romanianPart = parts[1].substring(0, parts[1].length - 1);
+            stagesInRomanian.push(romanianPart);
+            stagesInEnglish.push(englishPart);
+          } else {
+            let englishPart = parts[0];
+            let romanianPart = parts[0];
+            stagesInRomanian.push(romanianPart);
+            stagesInEnglish.push(englishPart);
+          }
         });
         setStagesRo(stagesInRomanian);
         setStagesEng(stagesInEnglish);

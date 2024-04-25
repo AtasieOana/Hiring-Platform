@@ -575,11 +575,7 @@ const UsersPage = () => {
                   </Tag>
                 </td>
                 <td>
-                  {
-                    roles[
-                      possibleRoles.findIndex((i) => i === user.userRole) + 1
-                    ]
-                  }
+                  {roles[possibleRoles.findIndex((i) => i === user.userRole)]}
                 </td>
                 <td>{user.usernameCreator}</td>
                 <td>

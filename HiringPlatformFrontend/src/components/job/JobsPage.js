@@ -20,7 +20,7 @@ import { Select } from "@blueprintjs/select";
 import Image from "../../resources-photo/No_profile_image.jpg";
 import { useNavigate } from "react-router-dom";
 import JobService from "../../services/job.service";
-import { formatDate } from "../common/CommonMethods";
+import { calculateTimeDifference, formatDate } from "../common/CommonMethods";
 import { setJobData } from "../../redux/actions/jobActions";
 import { AppToaster } from "../common/AppToaster";
 import "./JobsPage.css";
@@ -31,6 +31,7 @@ import AddJobDialog from "./AddJobDialog";
 import { CLOSED, OPENED } from "../../util/constants";
 import ReactPaginate from "react-paginate";
 import { setFilterData } from "../../redux/actions/filtersActions";
+import JobTime from "./JobTime";
 
 export const industriesRo = [
   "Toate industriile",
@@ -183,8 +184,7 @@ const JobsPage = () => {
   const date = i18n.language === "ro" ? dateRo : dateEn;
   const status = i18n.language === "ro" ? statusRo : statusEn;
 
-  const defaultIndustry =
-    i18n.language === "ro" ? "Toate industriile" : "All industries";
+  const defaultIndustry = "Toate industriile";
   const employer = useSelector((state) => state.auth.employer);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -289,25 +289,23 @@ const JobsPage = () => {
         filters.workMode.includes(job.workMode) &&
         filters.experience.includes(job.experience) &&
         filters.status.includes(job.status) &&
-        (filters.industry.includes(job.industry) ||
-        (filters.industry === i18n.language) === "ro"
-          ? "Toate industriile"
-          : "All industries") &&
+        (filters.industry === job.industry ||
+          filters.industry === "Toate industriile") &&
         (filters.cityName === job.cityName || filters.cityName === "All") &&
         filterByDate(filters.postingDate, job.postingDate)
       );
     });
-    if (employer && employer.employerId !== "") {
-      if (orderByPostDate === 1) {
-        filtered.sort(
-          (a, b) => new Date(a.postingDate) - new Date(b.postingDate),
-        );
-      } else {
-        filtered.sort(
-          (a, b) => new Date(b.postingDate) - new Date(a.postingDate),
-        );
-      }
+
+    if (orderByPostDate === 1) {
+      filtered.sort(
+        (a, b) => new Date(a.postingDate) - new Date(b.postingDate),
+      );
+    } else {
+      filtered.sort(
+        (a, b) => new Date(b.postingDate) - new Date(a.postingDate),
+      );
     }
+
     setFilteredJobs(filtered);
     paginate(filtered, currentPageFiltering);
     dispatch(
@@ -879,7 +877,9 @@ const JobsPage = () => {
               itemRenderer={renderDateType}
               itemPredicate={filterIndustries}
               onItemSelect={(e) =>
-                handleIndustryChange(industriesRo.find((d) => d === e))
+                handleIndustryChange(
+                  industriesRo[industries.findIndex((d) => d === e)],
+                )
               }
               popoverProps={{ position: Position.BOTTOM }}
               activeItem={
@@ -1050,7 +1050,9 @@ const JobsPage = () => {
                         <div className="jobs-detail-text">
                           <div className="jobs-detail">
                             <div className="job-text-date">
-                              {formatDate(job.postingDate)}
+                              {formatDate(job.postingDate)} (
+                              <JobTime postingDate={job.postingDate} />
+                              {t("ago")})
                             </div>
                           </div>
                           <div className="jobs-detail">

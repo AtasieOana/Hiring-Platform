@@ -204,3 +204,24 @@ SELECT * FROM raspunsuri;
 SELECT * FROM aplica; 
 SELECT * FROM recenzii;
 SELECT * FROM reclamatii;
+
+-- Stergerea datelor din tabel
+DELETE FROM reclamatii;
+DELETE FROM recenzii;
+DELETE FROM raspunsuri;
+DELETE FROM aplica;
+DELETE FROM cv;
+DELETE FROM intrebari;
+DELETE FROM contine;
+DELETE FROM etape;
+DELETE FROM locuri_de_munca;
+DELETE FROM token_autentificare;
+DELETE FROM administratori;
+DELETE FROM profiluri;
+DELETE FROM angajatori;
+DELETE FROM candidati;
+DELETE FROM utilizatori;
+DELETE FROM adrese;
+DELETE FROM orase;
+DELETE FROM regiuni;
+DELETE FROM roluri;

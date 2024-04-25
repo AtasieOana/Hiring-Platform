@@ -11,6 +11,7 @@ from googletrans import Translator
 import sys
 import json
 from joblib import Parallel, delayed
+from bs4 import BeautifulSoup
 
 # Downloading NLTK resources (runs only once)
 nltk.download('stopwords')
@@ -39,17 +40,37 @@ def jaccard_similarity(user1_jobs, user2_jobs):
 
 # Function for preprocessing a sentence
 def preprocess_sentence(sentence):
-    words = nltk.word_tokenize(sentence, language='english', preserve_line=True)
+    # Extract text from HTML
+    soup = BeautifulSoup(sentence, "html.parser")
+    text = soup.get_text()
+    # Tokenize words
+    words = nltk.word_tokenize(text, language='english', preserve_line=True)
+    # Convert words to lowercase and remove punctuation
     words = [word.lower() for word in words if word not in string.punctuation]
+    # Remove stopwords
     stopwords = set(nltk.corpus.stopwords.words('english'))
     words = [word for word in words if word not in stopwords]
+    # Join processed words into a sentence
     preprocessed_sentence = ' '.join(words)
-    return preprocessed_sentence.translate(str.maketrans('', '', string.punctuation))
+    # Remove remaining punctuation
+    preprocessed_sentence = preprocessed_sentence.translate(str.maketrans('', '', string.punctuation))
+    return preprocessed_sentence
 
 # Function to translate text into English if needed
 def translate_to_english(text, translator):
-    translated_text = translator.translate(text).text
-    return translated_text if detect(translated_text) == 'en' else text
+    # Split text into chunks of 5000 characters (adjust as needed)
+    chunk_size = 5000
+    chunks = [text[i:i+chunk_size] for i in range(0, len(text), chunk_size)]
+
+    translated_chunks = []
+    for chunk in chunks:
+        # Translate each chunk and append to the list
+        translated_chunk = translator.translate(chunk, src='auto', dest='en').text
+        translated_chunks.append(translated_chunk)
+
+    # Join translated chunks into a single string
+    translated_text = ''.join(translated_chunks)
+    return translated_text
 
 # Function to calculate content similarity between user description and job descriptions
 def calculate_content_similarity(user_description, translated_job_descriptions,tfidf_vectorizer):
@@ -72,29 +93,30 @@ def recommend_jobs_combined(user_id, application_data, job_descriptions):
     
     # Sort similar users by similarity scores
     similar_users = {k: v for k, v in sorted(similar_users.items(), key=lambda item: item[1], reverse=True)}
-
+        
     # Concatenation of user application job descriptions
     user_description = ' '.join([job_descriptions.get(job_id, '') for job_id in user_jobs])
     translator = Translator()
-
+    
     # Translation of the user description into English, if necessary
     translated_user_description = translate_to_english(user_description, translator)
-
+    
     translated_job_descriptions = {}
-
+    
     # Translation of job descriptions into English, if necessary
     for job_id, description in job_descriptions.items():
+        print(job_id, description)
         if detect(description) != 'en':
             translated_job_descriptions[job_id] = translate_to_english(description, translator)
         else:
             translated_job_descriptions[job_id] = description
-
+    
     # Calculating content similarity between user description and job descriptions
     tfidf_vectorizer = TfidfVectorizer()
     content_similarities = calculate_content_similarity(
         translated_user_description, translated_job_descriptions, tfidf_vectorizer
     )
-
+ 
     job_scores = {}
 
     # Calculation of the combined score for each job recommendation
@@ -109,6 +131,7 @@ def recommend_jobs_combined(user_id, application_data, job_descriptions):
                 if job_id in application_data[user]:
                     collaborative_score += similarity  # Change to use Pearson similarity instead of its inverse
             # Combination of content-based and collaborative scoring
+            print(job_id, collaborative_score, content_score)
             combined_score = 0.5 * content_score + 0.5 * collaborative_score
             job_scores[job_id] = combined_score
 
@@ -125,7 +148,7 @@ def main():
     # Converting JSONs to Python dictionaries
     application_data = json.loads(application_data_json)
     job_descriptions = json.loads(job_descriptions_json)
-
+    
     # Running recommendation logic
     recommended_jobs = recommend_jobs_combined(user_id, application_data, job_descriptions)
     print(recommended_jobs, flush=True)

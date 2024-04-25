@@ -518,5 +518,16 @@
   "found": "găsite",
   "view": "Vezi",
   "sort_by_date": "Sortează după dată",
-  "add_new_job_title": "Adaugă un loc de muncă"
+  "add_new_job_title": "Adaugă un loc de muncă",
+  "day": "zi",
+  "days": "zile",
+  "month": "lună",
+  "months": "luni",
+  "week": "săptămână",
+  "weeks": "săptămâni",
+  "hour": "oră",
+  "hours": "ore",
+  "ago": "în urmă",
+  "what_we_offer": "Ce oferim",
+  "what_we_offer1": "Conectarea talentul la oportunități"
 }
