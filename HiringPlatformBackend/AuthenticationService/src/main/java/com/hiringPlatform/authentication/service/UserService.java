@@ -27,17 +27,20 @@ public class UserService {
     private final CandidateService candidateService;
     private final EmployerService employerService;
     private final RestTemplate restTemplate;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
     public UserService(UserRepository userRepository, AuthenticationTokenService authenticationTokenService,
                        RoleRepository roleRepository, CandidateService candidateService,
-                       EmployerService employerService, RestTemplate restTemplate) {
+                       EmployerService employerService, RestTemplate restTemplate,
+                       BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
         this.authenticationTokenService = authenticationTokenService;
         this.roleRepository = roleRepository;
         this.candidateService = candidateService;
         this.employerService = employerService;
         this.restTemplate = restTemplate;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     /**
@@ -55,7 +58,6 @@ public class UserService {
         }
         else {
             User user = new User();
-            BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
             String encodedPassword = bCryptPasswordEncoder.encode(userRequest.getPassword());
             user.setEmail(userRequest.getEmail());
             user.setPassword(encodedPassword);
@@ -85,7 +87,6 @@ public class UserService {
         }
         else {
             User user = new User();
-            BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
             String encodedPassword = bCryptPasswordEncoder.encode(userRequest.getPassword());
             user.setEmail(userRequest.getEmail());
             user.setPassword(encodedPassword);
@@ -110,7 +111,6 @@ public class UserService {
         Optional<User> optionalUser = userRepository.findByEmail(email);
         if(optionalUser.isPresent()){
             if(optionalUser.get().getAccountEnabled() == 1) {
-                BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
                 boolean passwordMatch = bCryptPasswordEncoder.matches(password, optionalUser.get().getPassword());
                 if (!passwordMatch || Objects.equals(optionalUser.get().getUserRole().getRoleName(), "ROLE_ADMIN")) {
                     return null;
@@ -209,7 +209,7 @@ public class UserService {
         return userDB;
     }
 
-    private void activateAccount(String email){
+    protected void activateAccount(String email){
         Optional<User> userOptional = userRepository.findByEmail(email);
         if (userOptional.isPresent()) {
             User user = userOptional.get();
@@ -218,11 +218,10 @@ public class UserService {
         }
     }
 
-    private void updatePassword(String email, String password){
+    protected void updatePassword(String email, String password){
         Optional<User> userOptional = userRepository.findByEmail(email);
         if (userOptional.isPresent()) {
             User user = userOptional.get();
-            BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
             String encodedPassword = bCryptPasswordEncoder.encode(password);
             user.setPassword(encodedPassword);
             userRepository.save(user);

@@ -132,22 +132,6 @@ public class UserController {
         return getLoginResponse(user);
     }
 
-    private ResponseEntity<LoginResponse> getLoginResponse(User user) {
-        String jwtToken = "";
-        LoginResponse loginResponse = new LoginResponse();
-        if(user != null){
-            jwtToken = jwtService.generateToken(new org.springframework.security.core.userdetails.User(user.getEmail(),
-                    user.getPassword(),
-                    mapRolesToAuthorities(user.getUserRole())));
-            loginResponse.setRoleName(user.getUserRole().getRoleName());
-            redisService.saveData("userToken", jwtToken);
-            redisService.saveData("userEmail", user.getEmail());
-        }
-        loginResponse.setToken(jwtToken);
-        loginResponse.setExpiresIn(jwtService.getExpirationTime());
-        return ResponseEntity.ok(loginResponse);
-    }
-
     /**
      * Method used for deleting an account for a user
      * @return boolean
@@ -167,5 +151,21 @@ public class UserController {
     public ResponseEntity<Boolean> deleteUserByAdmin(@RequestBody DeleteUserByAdminRequest request) {
         Boolean data = userService.deleteUserByAdmin(request.getEmailUser(), request.getEmailAdmin(), request.getReason());
         return ResponseEntity.ok(data);
+    }
+
+    private ResponseEntity<LoginResponse> getLoginResponse(User user) {
+        String jwtToken = "";
+        LoginResponse loginResponse = new LoginResponse();
+        if(user != null){
+            jwtToken = jwtService.generateToken(new org.springframework.security.core.userdetails.User(user.getEmail(),
+                    user.getPassword(),
+                    mapRolesToAuthorities(user.getUserRole())));
+            loginResponse.setRoleName(user.getUserRole().getRoleName());
+            redisService.saveData("userToken", jwtToken);
+            redisService.saveData("userEmail", user.getEmail());
+        }
+        loginResponse.setToken(jwtToken);
+        loginResponse.setExpiresIn(jwtService.getExpirationTime());
+        return ResponseEntity.ok(loginResponse);
     }
 }

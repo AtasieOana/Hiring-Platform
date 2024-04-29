@@ -14,9 +14,12 @@ public class AdminService {
 
     private final AdminRepository adminRepository;
 
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
     @Autowired
-    public AdminService(AdminRepository adminRepository) {
+    public AdminService(AdminRepository adminRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.adminRepository = adminRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     /**
@@ -28,7 +31,6 @@ public class AdminService {
     public Admin loginAdmin(String email, String password) {
         Optional<Admin> optionalUser = adminRepository.findByUserDetailsEmail(email);
         if(optionalUser.isPresent()) {
-            BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
             boolean passwordMatch = bCryptPasswordEncoder.matches(password, optionalUser.get().getUserDetails().getPassword());
             if (!passwordMatch || !Objects.equals(optionalUser.get().getUserDetails().getUserRole().getRoleName(), "ROLE_ADMIN")) {
                 return null;
