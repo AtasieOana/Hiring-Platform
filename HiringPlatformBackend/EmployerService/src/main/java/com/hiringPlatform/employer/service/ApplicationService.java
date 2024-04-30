@@ -26,7 +26,6 @@ import static com.hiringPlatform.employer.constant.Constant.SEND_MAIL_URL;
 public class ApplicationService {
 
     private final ApplicationRepository applicationRepository;
-
     private final JobRepository jobRepository;
     private final AnswerService answerService;
     private final StageService stageService;
@@ -115,7 +114,7 @@ public class ApplicationService {
         applicationResponse.setStageName(contains.getStage().getStageName());
         applicationResponse.setStageNr(contains.getStageNr());
         applicationResponse.setAllStages(stageService.getAllStagesForJob(a.getJob().getJobId()));
-        applicationResponse.setAllAnswers(answerService.getAnswersForJobQuestions(a.getJob().getJobId()));
+        applicationResponse.setAllAnswers(answerService.getAnswersForJobQuestions(a.getJob().getJobId(), a.getCandidate().getCandidateId()));
         return applicationResponse;
     }
 

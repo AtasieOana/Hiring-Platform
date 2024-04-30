@@ -24,15 +24,16 @@ public class UserService {
 
     private final ProfileService profileService;
 
-
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
     public UserService(EmployerRepository employerRepository, ProfileService profileService,
-                       RedisService redisService, JwtService jwtService) {
+                       RedisService redisService, JwtService jwtService, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.employerRepository = employerRepository;
         this.redisService = redisService;
         this.profileService = profileService;
         this.jwtService = jwtService;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     /**
@@ -75,7 +76,6 @@ public class UserService {
             Employer employerToBeSaved = optionalUser.get();
             User userDetails = employerToBeSaved.getUserDetails();
             if(!employerAccount.getNewPassword().isEmpty()) {
-                BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
                 String encodedPassword = bCryptPasswordEncoder.encode(employerAccount.getNewPassword());
                 userDetails.setPassword(encodedPassword);
             }

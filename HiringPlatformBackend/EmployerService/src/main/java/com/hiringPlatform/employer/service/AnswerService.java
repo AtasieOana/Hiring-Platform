@@ -18,8 +18,8 @@ public class AnswerService {
         this.answerRepository = answerRepository;
     }
 
-    public List<AnswerHelperRequest> getAnswersForJobQuestions(String jobId){
-        return answerRepository.findAnswersByJob(jobId).stream().map(a -> {
+    public List<AnswerHelperRequest> getAnswersForJobQuestions(String jobId, String candidateId){
+        return answerRepository.findAnswersByJobAndCandidateId(jobId, candidateId).stream().map(a -> {
             AnswerHelperRequest answer = new AnswerHelperRequest();
             answer.setAnswer(a.getAnswerText());
             answer.setQuestionText(a.getQuestion().getQuestionText());

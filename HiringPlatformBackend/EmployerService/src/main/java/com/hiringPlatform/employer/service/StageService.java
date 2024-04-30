@@ -27,7 +27,7 @@ public class StageService {
         this.containsRepository = containsRepository;
     }
 
-    private Stage saveStageIfNotExist(String name){
+    protected Stage saveStageIfNotExist(String name){
         Optional<Stage> stage = stageRepository.findByStageName(name);
         if(stage.isPresent()){
             return stage.get();

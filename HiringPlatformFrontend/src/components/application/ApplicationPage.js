@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./ApplicationPage.css";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import { AppToaster } from "../common/AppToaster";
+import { AppToaster, AppToasterTop } from "../common/AppToaster";
 import {
   Button,
   Card,
@@ -405,8 +405,8 @@ const ApplicationPage = () => {
         reason: reason,
       };
       AppService.refuseApplicationEmployer(request)
-        .then((response) => {
-          AppToaster.show({
+        .then(() => {
+          AppToasterTop.show({
             message: t("apps_stop_success"),
             intent: Intent.SUCCESS,
           });
@@ -417,7 +417,7 @@ const ApplicationPage = () => {
         })
         .catch((error) => {
           console.error("Error: ", error.message);
-          AppToaster.show({
+          AppToasterTop.show({
             message: t("apps_stop_err"),
             intent: Intent.DANGER,
           });
@@ -436,8 +436,8 @@ const ApplicationPage = () => {
         reason: reason,
       };
       AppService.refuseApplicationCandidate(request)
-        .then((response) => {
-          AppToaster.show({
+        .then(() => {
+          AppToasterTop.show({
             message: t("apps_stop_success"),
             intent: Intent.SUCCESS,
           });
@@ -448,7 +448,7 @@ const ApplicationPage = () => {
         })
         .catch((error) => {
           console.error("Error: ", error.message);
-          AppToaster.show({
+          AppToasterTop.show({
             message: t("apps_stop_err"),
             intent: Intent.DANGER,
           });
@@ -518,8 +518,8 @@ const ApplicationPage = () => {
       candidateId: currentApp.candidateId,
     };
     AppService.setNextStage(request)
-      .then((response) => {
-        AppToaster.show({
+      .then(() => {
+        AppToasterTop.show({
           message: t("apps_next_success"),
           intent: Intent.SUCCESS,
         });
@@ -530,7 +530,7 @@ const ApplicationPage = () => {
       })
       .catch((error) => {
         console.error("Error: ", error.message);
-        AppToaster.show({
+        AppToasterTop.show({
           message: t("apps_next_err"),
           intent: Intent.DANGER,
         });
@@ -549,19 +549,11 @@ const ApplicationPage = () => {
       })
       .catch((error) => {
         console.error("Error: ", error.message);
-        AppToaster.show({
+        AppToasterTop.show({
           message: t("apps_next_err"),
           intent: Intent.DANGER,
         });
       });
-  };
-
-  /**
-   * Methods used for viewing a job
-   */
-  const viewJob = (job) => {
-    dispatch(setJobData(job));
-    navigate("/viewJob");
   };
 
   const openComplainDialog = (email) => {
@@ -574,7 +566,7 @@ const ApplicationPage = () => {
     }
   };
 
-  const closeComplainDialog = (email) => {
+  const closeComplainDialog = () => {
     setComplaintDialogOpen(false);
     setComplainedUserEmail("");
     setComplainantUserEmail("");

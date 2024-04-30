@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.Base64;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -39,7 +38,7 @@ public class ProfileController {
     @PostMapping("/addEmployerProfile")
     public ResponseEntity<String> addEmployerProfile(@ModelAttribute CreateProfileRequest profileRequest) throws IOException {
         Profile profile = profileService.addEmployerProfile(profileRequest);
-        return ResponseEntity.ok(profileRequest.getEmployerId());
+        return ResponseEntity.ok(profile.getEmployer().getEmployerId());
     }
 
     /**

@@ -105,7 +105,6 @@ def recommend_jobs_combined(user_id, application_data, job_descriptions):
     
     # Translation of job descriptions into English, if necessary
     for job_id, description in job_descriptions.items():
-        print(job_id, description)
         if detect(description) != 'en':
             translated_job_descriptions[job_id] = translate_to_english(description, translator)
         else:
@@ -131,7 +130,6 @@ def recommend_jobs_combined(user_id, application_data, job_descriptions):
                 if job_id in application_data[user]:
                     collaborative_score += similarity  # Change to use Pearson similarity instead of its inverse
             # Combination of content-based and collaborative scoring
-            print(job_id, collaborative_score, content_score)
             combined_score = 0.5 * content_score + 0.5 * collaborative_score
             job_scores[job_id] = combined_score
 

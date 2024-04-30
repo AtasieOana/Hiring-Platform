@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface AnswerRepository extends JpaRepository<Answer, String> {
 
-    @Query("SELECT e FROM Answer e WHERE e.question.job.jobId = :jobId")
-    List<Answer> findAnswersByJob(String jobId);
+    @Query("SELECT e FROM Answer e WHERE e.question.job.jobId = :jobId AND e.candidate.candidateId = :candidateId")
+    List<Answer> findAnswersByJobAndCandidateId(String jobId, String candidateId);
 
 }

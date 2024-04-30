@@ -169,9 +169,8 @@ public class RecommendationSystemService {
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String jobsId;
             List<Job> recommendedJobs = new ArrayList<>();
-            System.out.println("intra");
             while ((jobsId = reader.readLine()) != null) {
-                System.out.println(jobsId);
+                System.out.println("Recommendations" + jobsId);
                 String cleanedResponse = jobsId.replace("'", "").replaceAll("[\\[\\]\\s+]", "");
                 String[] jobIdArray = cleanedResponse.split(",");
                 for (String jobId : jobIdArray) {
