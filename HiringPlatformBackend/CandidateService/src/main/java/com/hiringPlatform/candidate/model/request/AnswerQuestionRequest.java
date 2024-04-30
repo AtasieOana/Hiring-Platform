@@ -1,9 +1,6 @@
 package com.hiringPlatform.candidate.model.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
@@ -11,6 +8,7 @@ import java.util.List;
 @Setter
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class AnswerQuestionRequest {
 
     String candidateId;

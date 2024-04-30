@@ -6,13 +6,11 @@ import com.hiringPlatform.candidate.model.request.UpdateCandidateAccount;
 import com.hiringPlatform.candidate.model.response.CandidateResponse;
 import com.hiringPlatform.candidate.model.response.GetLoggedUserResponse;
 import com.hiringPlatform.candidate.repository.CandidateRepository;
-import com.hiringPlatform.candidate.repository.UserRepository;
 import com.hiringPlatform.candidate.security.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -26,19 +24,20 @@ public class UserService {
 
     private final CVService cvService;
 
-    private final UserRepository userRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
 
     @Autowired
     public UserService(CandidateRepository candidateRepository,
                        RedisService redisService,
                        JwtService jwtService,
                        CVService cvService,
-                       UserRepository userRepository) {
+                       BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.candidateRepository = candidateRepository;
         this.redisService = redisService;
         this.jwtService = jwtService;
         this.cvService = cvService;
-        this.userRepository = userRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     /**
@@ -81,7 +80,6 @@ public class UserService {
             Candidate candidateToBeSaved = optionalUser.get();
             User userDetails = candidateToBeSaved.getUserDetails();
             if(!candidateAccount.getNewPassword().isEmpty()) {
-                BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
                 String encodedPassword = bCryptPasswordEncoder.encode(candidateAccount.getNewPassword());
                 userDetails.setPassword(encodedPassword);
             }
@@ -101,14 +99,4 @@ public class UserService {
             return null;
         }
     }
-
-    public List<User> findUsersByRole(String roleName){
-        return userRepository.findAllByUserRole_RoleName(roleName);
-    }
-
-    public User getUser(String userId){
-        Optional<User> optionalUser = userRepository.findById(userId);
-        return optionalUser.orElse(null);
-    }
-
 }

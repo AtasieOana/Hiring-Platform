@@ -1,6 +1,5 @@
 package com.hiringPlatform.candidate.service;
 
-import com.hiringPlatform.candidate.model.Contains;
 import com.hiringPlatform.candidate.model.Question;
 import com.hiringPlatform.candidate.model.request.QuestionHelperRequest;
 import com.hiringPlatform.candidate.repository.QuestionRepository;

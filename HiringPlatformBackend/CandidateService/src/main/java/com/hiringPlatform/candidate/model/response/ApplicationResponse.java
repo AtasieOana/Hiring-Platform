@@ -1,6 +1,5 @@
 package com.hiringPlatform.candidate.model.response;
 
-import com.hiringPlatform.candidate.model.Job;
 import com.hiringPlatform.candidate.model.request.StageHelperRequest;
 import lombok.*;
 

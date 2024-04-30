@@ -64,7 +64,6 @@ public class ChartService {
     public Map<String, Integer> getApplicationStatusPercentage() {
         Map<String, Integer> valueMap = new HashMap<>();
         List<Application> applications = applicationRepository.findAll();
-        int totalApplications = applications.size();
         int acceptedCount = 0, rejectedCount = 0, pendingCount = 0;
         for (Application application : applications) {
             switch (application.getStatus()) {

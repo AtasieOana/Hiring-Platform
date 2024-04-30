@@ -3,12 +3,10 @@ package com.hiringPlatform.admin.service;
 import com.hiringPlatform.admin.exception.EmailAlreadyExistsException;
 import com.hiringPlatform.admin.model.*;
 import com.hiringPlatform.admin.model.request.AddAdminRequest;
-import com.hiringPlatform.admin.model.response.AdminResponse;
 import com.hiringPlatform.admin.model.response.LoginAdminResponse;
 import com.hiringPlatform.admin.model.response.UserResponse;
 import com.hiringPlatform.admin.repository.RoleRepository;
 import com.hiringPlatform.admin.repository.UserRepository;
-import com.hiringPlatform.admin.security.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,8 +22,8 @@ public class UserService {
     private final AdminService adminService;
     private final RoleRepository roleRepository;
     private final RedisService redisService;
-    private final JwtService jwtService;
 
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
     public UserService(UserRepository userRepository,
@@ -34,7 +32,7 @@ public class UserService {
                        AdminService adminService,
                        RoleRepository roleRepository,
                        RedisService redisService,
-                       JwtService jwtService
+                       BCryptPasswordEncoder bCryptPasswordEncoder
                        ) {
         this.userRepository = userRepository;
         this.candidateService = candidateService;
@@ -42,9 +40,8 @@ public class UserService {
         this.adminService = adminService;
         this.roleRepository = roleRepository;
         this.redisService = redisService;
-        this.jwtService = jwtService;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
-
 
     public List<UserResponse> getUserList(){
         List<User> userList = userRepository.findAll();
@@ -92,7 +89,6 @@ public class UserService {
             // Save edited user in db
             User userToBeSaved = optionalUser.get();
             if(!newPassword.isEmpty()) {
-                BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
                 String encodedPassword = bCryptPasswordEncoder.encode(newPassword);
                 userToBeSaved.setPassword(encodedPassword);
             }
@@ -133,7 +129,6 @@ public class UserService {
             // Save user in db
             User user = new User();
             user.setEmail(request.getEmail());
-            BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
             String encodedPassword = bCryptPasswordEncoder.encode(request.getPassword());
             user.setPassword(encodedPassword);
             user.setRegistrationDate(new Date());
