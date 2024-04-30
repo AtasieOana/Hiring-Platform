@@ -22,15 +22,15 @@ public class ReviewService {
 
     private final ReviewRepository reviewRepository;
     private final UserService userService;
-    private final EmployeeService employeeService;
+    private final EmployerService employerService;
     private final CandidateService candidateService;
 
     @Autowired
     public ReviewService(ReviewRepository reviewRepository, UserService userService,
-                         EmployeeService employeeService, CandidateService candidateService) {
+                         EmployerService employerService, CandidateService candidateService) {
         this.reviewRepository = reviewRepository;
         this.userService = userService;
-        this.employeeService = employeeService;
+        this.employerService = employerService;
         this.candidateService = candidateService;
     }
 
@@ -40,7 +40,7 @@ public class ReviewService {
         review.setGrade(addReviewRequest.getGrade());
         User user = userService.getUser(addReviewRequest.getUserId());
         review.setUser(user);
-        Employer employer = employeeService.getEmployer(addReviewRequest.getEmployerId());
+        Employer employer = employerService.getEmployer(addReviewRequest.getEmployerId());
         review.setEmployer(employer);
         review.setCommentDate(new Date());
         if(!Objects.equals(addReviewRequest.getParentReviewId(), "") && addReviewRequest.getParentReviewId() != null){
@@ -58,6 +58,7 @@ public class ReviewService {
         }
         return buildReviewResponse(reviewRepository.save(review));
     }
+
     public List<ReviewResponse> getAllReviewsForEmployer(String employerId){
         return reviewRepository.findReviewsByEmployerEmployerId(employerId)
                 .stream().map(this::buildReviewResponse).toList();
@@ -102,9 +103,9 @@ public class ReviewService {
         }
         reviewResponse.setEmployerId(review.getEmployer().getEmployerId());
         // Choose review name
-        String name = "";
+        String name;
         if(Objects.equals(review.getUser().getUserRole().getRoleName(), "ROLE_EMPLOYER")){
-            Employer employer = employeeService.getEmployer(review.getUser().getUserId());
+            Employer employer = employerService.getEmployer(review.getUser().getUserId());
             name = employer.getCompanyName();
         }
         else{
