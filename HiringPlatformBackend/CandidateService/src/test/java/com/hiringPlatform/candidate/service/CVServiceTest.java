@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
@@ -93,6 +94,29 @@ public class CVServiceTest {
     public void testGetCV() {
         // Given
         CV cv = buildCV();
+
+        // When
+        when(cvRepository.findById(anyString())).thenReturn(Optional.of(cv));
+
+        // Then
+        CV result = cvService.getCv( "1");
+        assertEquals(result, cv);
+    }
+
+    @Test
+    public void testGetCVNotPresent() {
+        // When
+        when(cvRepository.findById(anyString())).thenReturn(Optional.empty());
+
+        // Then
+        CV result = cvService.getCv( "1");
+        assertNull(result);
+    }
+
+    @Test
+    public void testDeleteCv() {
+        // Given
+        CV cv = buildCV();
         ArrayList<CV> cvs = new ArrayList<>();
         cvs.add(cv);
         CVResponse cvResponse = buildCVResponse();
@@ -109,7 +133,7 @@ public class CVServiceTest {
     }
 
     @Test
-    public void testGetCVNotPresent() {
+    public void testDeleteCVNotPresent() {
         // Given
         List<CVResponse> cvResponses = new ArrayList<>();
 

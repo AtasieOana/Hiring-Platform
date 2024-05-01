@@ -24,7 +24,7 @@ public class AdminController {
     }
 
     @GetMapping("/getAdmin/{adminId}")
-    public ResponseEntity<AdminResponse> getUserList(@PathVariable String adminId) {
+    public ResponseEntity<AdminResponse> getAdmin(@PathVariable String adminId) {
         AdminResponse response = adminService.getAdminResponse(adminId);
         return ResponseEntity.ok(response);
     }

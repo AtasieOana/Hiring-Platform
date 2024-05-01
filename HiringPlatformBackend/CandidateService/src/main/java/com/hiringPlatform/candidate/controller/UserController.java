@@ -26,7 +26,7 @@ public class UserController {
      * @return null if the user is not logged, the user otherwise
      */
     @GetMapping("/getLoggedUser")
-    public ResponseEntity<GetLoggedUserResponse> login() {
+    public ResponseEntity<GetLoggedUserResponse> getLoggedUser() {
         GetLoggedUserResponse user =  userService.getLoggedUser();
         return ResponseEntity.ok(user);
     }

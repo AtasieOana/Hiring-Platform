@@ -327,6 +327,7 @@ const UsersPage = () => {
               onClick={handleAddUser}
               disabled={
                 !emailRegex.test(email) ||
+                existUserWithSameEmail ||
                 confirmPassword !== password ||
                 password.length < 5 ||
                 !usernameRegex.test(username) ||
