@@ -37,8 +37,8 @@ CREATE TABLE orase (
 
 CREATE TABLE adrese (
     id_adresa VARCHAR2(36) CONSTRAINT pk_adresa PRIMARY KEY,
-    strada VARCHAR(255)  NOT NULL,
-    cod_postal VARCHAR(255)  NOT NULL,
+    strada VARCHAR(255) NOT NULL,
+    cod_postal VARCHAR(255) NOT NULL,
     id_oras VARCHAR2(36) CONSTRAINT fk_adresa_oras REFERENCES orase(id_oras)
 );
 
@@ -56,7 +56,9 @@ CREATE TABLE utilizatori (
     data_inregistrare DATE NOT NULL,
     cont_activat NUMBER(1) NOT NULL,
     id_rol VARCHAR2(36) CONSTRAINT fk_utilizator_rol REFERENCES roluri(id_rol),
-    CONSTRAINT utilizator_email_unic UNIQUE (email)
+    CONSTRAINT utilizator_email_unic UNIQUE (email),
+    CONSTRAINT email_valid CHECK (REGEXP_LIKE(email, '^[^\s@]+@[^\s@]+\.[^\s@]+$')),
+    CONSTRAINT parola_lungime_corecta CHECK (LENGTH(parola) >= 5)
 );
 
 CREATE TABLE candidati (
