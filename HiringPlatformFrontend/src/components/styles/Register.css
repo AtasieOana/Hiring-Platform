@@ -62,7 +62,7 @@
     margin: 0 auto !important;
     display: block !important;
     background-color: #ffaf84 !important;
-    width: 50%;
+    width: 68%;
     text-align: center !important;
     color: black !important;
     font-weight: 600;
@@ -186,6 +186,20 @@
     padding: 5px;
 }
 
+.google-button-register{
+    width: 68% !important;
+}
+
+.google-button-first{
+    margin-bottom: 15px !important;
+}
+
+@media (max-width: 1350px) {
+    .register-button, .google-button-register{
+        width: 90% !important;
+    }
+}
+
 @media (max-width: 1100px) {
     .register-container-form {
         width: 80vw;
@@ -199,8 +213,8 @@
 }
 
 @media (max-width: 600px) {
-    .register-button, .google-button{
-        width: 70%;
+    .register-button, .google-button-register{
+        width: 90% !important;
     }
 
     .register-container-form {

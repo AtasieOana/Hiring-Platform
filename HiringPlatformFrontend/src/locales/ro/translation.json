@@ -72,6 +72,8 @@
   "zip": "Codul poștal",
   "zip_req": "Codul poștal este obligatoriu.",
   "sign_google": "Conectează-te cu Google",
+  "sign_google_employer": "Conectează-te cu Google drept angajator",
+  "sign_google_candidate": "Conectează-te cu Google drept candidat",
   "notfound": "Pagina nu a fost găsită.",
   "notfound2": "Ne pare rău, dar pagina pe care o căutați nu există!",
   "logout": "Deconectare",
