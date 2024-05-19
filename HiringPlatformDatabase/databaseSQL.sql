@@ -57,7 +57,7 @@ CREATE TABLE utilizatori (
     cont_activat NUMBER(1) NOT NULL,
     id_rol VARCHAR2(36) CONSTRAINT fk_utilizator_rol REFERENCES roluri(id_rol),
     CONSTRAINT utilizator_email_unic UNIQUE (email),
-    CONSTRAINT email_valid CHECK (REGEXP_LIKE(email, '^[^\s@]+@[^\s@]+\.[^\s@]+$')),
+    CONSTRAINT email_valid CHECK (REGEXP_LIKE(email, '.+@.+\..+')),
     CONSTRAINT parola_lungime_corecta CHECK (LENGTH(parola) >= 5)
 );
 
@@ -190,6 +190,8 @@ CREATE TABLE reclamatii (
 
 -- Verificarea datelor
 SELECT * FROM roluri;
+SELECT * FROM orase;
+SELECT * FROM regiuni;
 SELECT * FROM utilizatori;
 SELECT * FROM administratori;
 SELECT * FROM candidati;

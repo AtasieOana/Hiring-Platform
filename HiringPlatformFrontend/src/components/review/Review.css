@@ -98,6 +98,10 @@
     align-items: center;
 }
 
+.review-button:focus{
+    outline: none !important;
+}
+
 .review-content{
     display: flex;
     flex-direction: row;

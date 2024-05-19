@@ -10,7 +10,7 @@
 
 .register-container-form{
     background-color: white;
-    width: 45vw;
+    width: 50vw;
     margin: 4vh auto 3vh;
     border-radius: 5px;
     height: 84vh;
@@ -62,7 +62,7 @@
     margin: 0 auto !important;
     display: block !important;
     background-color: #ffaf84 !important;
-    width: 68%;
+    width: 50%;
     text-align: center !important;
     color: black !important;
     font-weight: 600;
@@ -194,9 +194,20 @@
     margin-bottom: 15px !important;
 }
 
+.sign_google_account{
+    display: flex;
+    gap: 10px;
+}
+
 @media (max-width: 1350px) {
     .register-button, .google-button-register{
-        width: 90% !important;
+        width: 50% !important;
+    }
+}
+
+@media (max-width: 1200px) {
+    .register-container-form {
+        width: 60vw;
     }
 }
 
@@ -206,21 +217,34 @@
     }
 }
 
-@media (max-width: 700px) {
+@media (max-width: 710px) {
     .register-container-form {
         width: 90vw;
     }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 630px) {
     .register-button, .google-button-register{
         width: 90% !important;
     }
 
     .register-container-form {
-        margin: 2vh auto 2vh;
+        margin: 1vh auto 1vh;
         border-radius: 5px;
         height: 90vh;
+        width: 98vw;
+    }
+
+    .sign_google_account{
+        gap: 3px;
+    }
+}
+
+@media (max-width: 560px) {
+    .google-button-register .bp4-button-text {
+        font-size: 13px;
+        letter-spacing: 0.5px;
+        gap: 1.5%;
     }
 }
 

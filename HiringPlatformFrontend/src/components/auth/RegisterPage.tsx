@@ -278,6 +278,7 @@ const RegisterPage = () => {
           message: t("auth_error"),
           intent: Intent.DANGER,
         });
+        setIsLoading(false);
       });
   };
 
@@ -545,30 +546,32 @@ const RegisterPage = () => {
               <div className="text-or-separator">
                 <span className="text-or">OR</span>
               </div>
-              <Button
-                className="google-button google-button-register google-button-first"
-                small={true}
-                onClick={() => logGoogleUser(CANDIDATE_ACCOUNT)}
-              >
-                <img
-                  className="google-button-img"
-                  src={GoogleLogo}
-                  alt="Google Logo"
-                />
-                {t("sign_google_candidate")}
-              </Button>
-              <Button
-                className="google-button google-button-register"
-                small={true}
-                onClick={() => logGoogleUser(EMPLOYER_ACCOUNT)}
-              >
-                <img
-                  className="google-button-img"
-                  src={GoogleLogo}
-                  alt="Google Logo"
-                />
-                {t("sign_google_employer")}
-              </Button>
+              <div className="sign_google_account">
+                <Button
+                  className="google-button google-button-register google-button-first"
+                  small={true}
+                  onClick={() => logGoogleUser(CANDIDATE_ACCOUNT)}
+                >
+                  <img
+                    className="google-button-img"
+                    src={GoogleLogo}
+                    alt="Google Logo"
+                  />
+                  {t("sign_google_candidate")}
+                </Button>
+                <Button
+                  className="google-button google-button-register"
+                  small={true}
+                  onClick={() => logGoogleUser(EMPLOYER_ACCOUNT)}
+                >
+                  <img
+                    className="google-button-img"
+                    src={GoogleLogo}
+                    alt="Google Logo"
+                  />
+                  {t("sign_google_employer")}
+                </Button>
+              </div>
             </div>
           )}
         </div>
@@ -633,30 +636,32 @@ const RegisterPage = () => {
               <div className="text-or-separator">
                 <span className="text-or">OR</span>
               </div>
-              <Button
-                className="google-button google-button-register google-button-first"
-                small={true}
-                onClick={() => logGoogleUser(CANDIDATE_ACCOUNT)}
-              >
-                <img
-                  className="google-button-img"
-                  src={GoogleLogo}
-                  alt="Google Logo"
-                />
-                {t("sign_google_candidate")}
-              </Button>
-              <Button
-                className="google-button google-button-register"
-                small={true}
-                onClick={() => logGoogleUser(EMPLOYER_ACCOUNT)}
-              >
-                <img
-                  className="google-button-img"
-                  src={GoogleLogo}
-                  alt="Google Logo"
-                />
-                {t("sign_google_employer")}
-              </Button>
+              <div className="sign_google_account">
+                <Button
+                  className="google-button google-button-register google-button-first"
+                  small={true}
+                  onClick={() => logGoogleUser(CANDIDATE_ACCOUNT)}
+                >
+                  <img
+                    className="google-button-img"
+                    src={GoogleLogo}
+                    alt="Google Logo"
+                  />
+                  {t("sign_google_candidate")}
+                </Button>
+                <Button
+                  className="google-button google-button-register"
+                  small={true}
+                  onClick={() => logGoogleUser(EMPLOYER_ACCOUNT)}
+                >
+                  <img
+                    className="google-button-img"
+                    src={GoogleLogo}
+                    alt="Google Logo"
+                  />
+                  {t("sign_google_employer")}
+                </Button>
+              </div>
             </div>
           )}
         </div>

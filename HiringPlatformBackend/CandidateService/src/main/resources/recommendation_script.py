@@ -128,7 +128,7 @@ def recommend_jobs_combined(user_id, application_data, job_descriptions):
             # Calculating the collaborative filtering score
             for user, similarity in similar_users.items():
                 if job_id in application_data[user]:
-                    collaborative_score += similarity  # Change to use Pearson similarity instead of its inverse
+                    collaborative_score += similarity 
             # Combination of content-based and collaborative scoring
             combined_score = 0.5 * content_score + 0.5 * collaborative_score
             job_scores[job_id] = combined_score
