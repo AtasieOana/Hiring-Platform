@@ -2,65 +2,32 @@
 
 ### Application name: *Joblistic*
 
-### Running the app
+### Application motivation
+The application will be aimed for students and recent graduates. In order to simplify their job search process, job listings will be limited to those targeting entry-level experience. Additionally, since these may be some of their first experiences in the job market, the hiring system will be more transparent. Posting a job within the application will require the employer to describe all the recruitment steps, allowing both the employer and the applicant to track this process.
 
+### Repository content
+This repository contains the code developed for the application. It is structured in 4 subfolders: backend, frontend, docker (used for integration with Redis) and database.
+
+The backend is sectioned into 5 microservices, each of them containing:
+- methods for the authentication system
+- methods for candidates
+- methods for employers
+- methods for administrators
+- common methods
+
+### Tehnologies
+- Database with Oracle
+- Backend with Java with Spring Boot
+- Frontend with React
+  
+### Running the app
 ```
 sudo service docker start
-HiringPlatformDockerConfig/
-cd Database
-docker build -t joblistic_db:latest -f Dockerfile .
-cd ../../HiringPlatformBackend/AuthenticationService/
-docker build -t authentication_service:latest -f Dockerfile .
-cd ../../HiringPlatformBackend/EmployerService/
-docker build -t employer_service:latest -f Dockerfile .
-cd ../../HiringPlatformBackend/CandidateService/
-docker build -t candidate_service:latest -f Dockerfile .
-cd ../../HiringPlatformBackend/CommonService/
-docker build -t common_service:latest -f Dockerfile .
-cd ../../HiringPlatformBackend/AdminService/
-docker build -t admin_service:latest -f Dockerfile .
-cd ../../HiringPlatformFrontend/
-docker build -t platform_frontend:latest -f Dockerfile .
-cd ../HiringPlatformDockerConfig/
+Go to HiringPlatformDockerConfig directory
 docker compose -f docker-compose.yml up
 
+If it's the case
 sudo kill -9 `sudo lsof -t -i:8080`
 ```
 
-```
-docker exec -it joblistic_db sqlplus / as sysdba
-SQL> alter session set "_ORACLE_SCRIPT"=true;
-
-Session altered.
-
-SQL> CREATE USER disertatie IDENTIFIED BY oracle;
-
-User created.
-
-SQL> GRANT ALL PRIVILEGES TO disertatie;
- docker exec -it joblistic_db bash -c "source /home/oracle/.bashrc; sqlplus /nolog"
-connect sys/oracle@ORCLDB as sysdba;
-SQL> grant all privileges to disertatie;
-
-Grant succeeded.
-
-SQL> grant all privileges to sys;
-
-Grant succeeded.
-docker exec -it joblistic_db sqlplus  disertatie/oracle
-```
-
-### Models app: 
-* https://www.hirist.com/
-* https://www.jobly.fi/en
-
-### Colors:
-The **60-30-10** rule is used:
-* primary color (occupies 60% of the page): white
-* secondary color (occupies 30% of the page): beige (#e09c73)
-* accent color (occupies 10% of the page): green (#698576)
-
-Color ideas:
-* https://colors.muz.li/color/f9cbc1
-* https://colors.muz.li/color/fff0db
-* https://colors.muz.li/color/fbc094
+Also run each microservice `mvn spring-boot:run` and the frontend with `npm start`.
