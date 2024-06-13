@@ -41,7 +41,7 @@ public class RecommendationSystemService {
     public List<JobResponse> generateJobRecommendations(String userId) {
         List<Job> recommendedJobs;
         List<Application> applicationsForUsers = applicationRepository.findAll();
-        List<Job> jobs = jobRepository.findAll();
+        List<Job> jobs = jobRepository.findOpenedJobs();
 
         // Map to store application data
         Map<String, List<String>> applicationData = new HashMap<>();
@@ -182,6 +182,7 @@ public class RecommendationSystemService {
             return recommendedJobs;
         } catch (Exception e) {
             // In case of any error, return all jobs
+            System.out.println(e.getMessage());
             return jobRepository.findAll();
         }
     }

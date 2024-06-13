@@ -10,7 +10,6 @@ import nltk
 from googletrans import Translator
 import sys
 import json
-from joblib import Parallel, delayed
 from bs4 import BeautifulSoup
 
 # Downloading NLTK resources (runs only once)
@@ -105,7 +104,7 @@ def recommend_jobs_combined(user_id, application_data, job_descriptions):
     
     # Translation of job descriptions into English, if necessary
     for job_id, description in job_descriptions.items():
-        if detect(description) != 'en':
+        if detect(description[:100]) != 'en':
             translated_job_descriptions[job_id] = translate_to_english(description, translator)
         else:
             translated_job_descriptions[job_id] = description

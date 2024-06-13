@@ -25,6 +25,8 @@ import { setCvActionData } from "../../redux/actions/cvActions";
 import GoogleLogo from "../../resources-photo/GoogleLogo.png";
 import CommonService from "../../services/common.service";
 import { setAddressData } from "../../redux/actions/addressActions";
+import JobService from "../../services/job.service";
+import { setFilterData } from "../../redux/actions/filtersActions";
 
 const LoginPage = () => {
   const { t } = useTranslation();
@@ -94,6 +96,30 @@ const LoginPage = () => {
       .then((response: any) => {
         let registerResponse = response.data;
         if (registerResponse.token) {
+          JobService.getRecommendedJobs(registerResponse.candidate.candidateId)
+            .then((responseRecommended) => {
+              dispatch(
+                setFilterData(
+                  {
+                    contractType: [],
+                    employmentRegime: [],
+                    experience: [],
+                    industry: "",
+                    workMode: [],
+                    cityName: "",
+                    postingDate: "",
+                    status: [],
+                  },
+                  0,
+                  false,
+                  responseRecommended.data,
+                  0,
+                ),
+              );
+            })
+            .catch((error) => {
+              console.error("Error: ", error.message);
+            });
           getAllCitiesByRegions();
           dispatch(
             setAuthData(
@@ -135,6 +161,10 @@ const LoginPage = () => {
               setCandidateInRedux();
             } else if (loginResponse.roleName === EMPLOYER_ACCOUNT) {
               setEmployerInRedux();
+            } else {
+              setLoginInvalid(true);
+              setIsLoading(false);
+              setIsLoading(false);
             }
           }
         })

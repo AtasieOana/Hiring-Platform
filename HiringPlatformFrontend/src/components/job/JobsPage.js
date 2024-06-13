@@ -192,7 +192,12 @@ const JobsPage = () => {
   const [filteredJobs, setFilteredJobs] = useState([]);
 
   const [jobs, setJobs] = useState([]);
-  const [recommendedJobs, setRecommendedJobs] = useState([]);
+  const recommendedJobsFromRedux = useSelector(
+    (state) => state.filters.recommendedJobs,
+  );
+  const [recommendedJobs, setRecommendedJobs] = useState([
+    ...recommendedJobsFromRedux,
+  ]);
   const [showBasedOnRecommendation, setShowBasedOnRecommendation] =
     useState(false);
   const [orderByPostDate, setOrderByPostDate] = useState(0);
@@ -227,9 +232,6 @@ const JobsPage = () => {
   );
   const viewsForJobFromRedux = useSelector(
     (state) => state.filters.viewsForJob,
-  );
-  const recommendedJobsFromRedux = useSelector(
-    (state) => state.filters.recommendedJobs,
   );
   const currentPageFromRedux = useSelector(
     (state) => state.filters.currentPage,
@@ -295,15 +297,16 @@ const JobsPage = () => {
         filterByDate(filters.postingDate, job.postingDate)
       );
     });
-
-    if (orderByPostDate === 1) {
-      filtered.sort(
-        (a, b) => new Date(a.postingDate) - new Date(b.postingDate),
-      );
-    } else {
-      filtered.sort(
-        (a, b) => new Date(b.postingDate) - new Date(a.postingDate),
-      );
+    if (!showBasedOnRecommendation) {
+      if (orderByPostDate === 1) {
+        filtered.sort(
+          (a, b) => new Date(a.postingDate) - new Date(b.postingDate),
+        );
+      } else {
+        filtered.sort(
+          (a, b) => new Date(b.postingDate) - new Date(a.postingDate),
+        );
+      }
     }
 
     setFilteredJobs(filtered);
@@ -999,6 +1002,7 @@ const JobsPage = () => {
                     activeItem={
                       orderByPostDate === 1 ? sortDate[1] : sortDate[0]
                     }
+                    disabled={showBasedOnRecommendation}
                   >
                     <Button
                       text={orderByPostDate === 1 ? sortDate[1] : sortDate[0]}

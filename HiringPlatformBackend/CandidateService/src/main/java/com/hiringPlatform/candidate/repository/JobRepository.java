@@ -15,4 +15,7 @@ public interface JobRepository extends JpaRepository<Job, String> {
 
     @Query("SELECT l FROM Job l WHERE l.status = 'deschis' ORDER BY l.postingDate DESC ")
     List<Job> findAllJobsOrderByDate();
+
+    @Query("SELECT l FROM Job l WHERE l.status = 'deschis'")
+    List<Job> findOpenedJobs();
 }
