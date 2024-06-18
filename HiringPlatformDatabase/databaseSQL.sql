@@ -229,3 +229,4 @@ DELETE FROM adrese;
 DELETE FROM orase;
 DELETE FROM regiuni;
 DELETE FROM roluri;
+COMMIT;

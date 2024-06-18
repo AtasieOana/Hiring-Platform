@@ -28,7 +28,12 @@ import HeaderPageCandidate from "../header/HeaderPageCandidate";
 import HeaderPageEmployer from "../header/HeaderPageEmployer";
 import ProfileService from "../../services/profile.service";
 import AddJobDialog from "./AddJobDialog";
-import { CLOSED, OPENED } from "../../util/constants";
+import {
+  BUCHAREST_ENG,
+  BUCHAREST_RO,
+  CLOSED,
+  OPENED,
+} from "../../util/constants";
 import ReactPaginate from "react-paginate";
 import { setFilterData } from "../../redux/actions/filtersActions";
 import JobTime from "./JobTime";
@@ -1085,7 +1090,22 @@ const JobsPage = () => {
                             <div className="jobs-detail">
                               <Icon icon="route" className="icon" />
                               <div className="job-text">
-                                {job.cityName}, {job.regionName}
+                                {job.cityName === BUCHAREST_RO &&
+                                i18n.language === "en"
+                                  ? BUCHAREST_ENG
+                                  : job.cityName === BUCHAREST_ENG &&
+                                      i18n.language === "ro"
+                                    ? BUCHAREST_RO
+                                    : job.cityName}
+                                ,
+                                {" " +
+                                  (job.regionName === BUCHAREST_RO &&
+                                  i18n.language === "en"
+                                    ? BUCHAREST_ENG
+                                    : job.regionName === BUCHAREST_ENG &&
+                                        i18n.language === "ro"
+                                      ? BUCHAREST_RO
+                                      : job.regionName)}
                               </div>
                             </div>
                             <div className="jobs-detail">

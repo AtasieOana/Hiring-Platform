@@ -21,6 +21,7 @@ import {
   MenuItem,
   NonIdealState,
   Position,
+  Spinner,
   Tag,
   TextArea,
   Tooltip,
@@ -66,6 +67,7 @@ const ApplicationPage = () => {
   const [isStopDialogOpen, setIsStopDialogOpen] = useState(false);
   const [reason, setReason] = useState("");
   const [reasonValid, setReasonValid] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [filters, setFilters] = useState({
     status: possibleStatus,
@@ -513,6 +515,7 @@ const ApplicationPage = () => {
   };
 
   const goToNextStep = () => {
+    setIsLoading(true);
     let request = {
       jobId: currentApp.job.jobId,
       candidateId: currentApp.candidateId,
@@ -523,12 +526,14 @@ const ApplicationPage = () => {
           message: t("apps_next_success"),
           intent: Intent.SUCCESS,
         });
+        setIsLoading(false);
         setIsDrawerOpen(false);
         setIsStopDialogOpen(false);
         setReason("");
         getAllApplicationsForJob();
       })
       .catch((error) => {
+        setIsLoading(false);
         console.error("Error: ", error.message);
         AppToasterTop.show({
           message: t("apps_next_err"),
@@ -880,14 +885,18 @@ const ApplicationPage = () => {
               ))}
             </div>
             <div className="app-card-footer">
-              {currentApp.status === possibleStatus[1] && (
-                <Button
-                  onClick={() => goToNextStep()}
-                  intent={Intent.SUCCESS}
-                  className={"app-next-step-button user-button-for-outline"}
-                >
-                  {t("next_step_app")}
-                </Button>
+              {isLoading ? (
+                <Spinner className="central-spinner" size={20} />
+              ) : (
+                currentApp.status === possibleStatus[1] && (
+                  <Button
+                    onClick={() => goToNextStep()}
+                    intent={Intent.SUCCESS}
+                    className={"app-next-step-button user-button-for-outline"}
+                  >
+                    {t("next_step_app")}
+                  </Button>
+                )
               )}
             </div>
           </Card>

@@ -164,7 +164,6 @@ const LoginPage = () => {
             } else {
               setLoginInvalid(true);
               setIsLoading(false);
-              setIsLoading(false);
             }
           }
         })
@@ -215,12 +214,15 @@ const LoginPage = () => {
         .then((response: any) => {
           if (response.data.token === "") {
             setLoginInvalid(true);
+            setIsLoading(false);
           } else {
             setLoginInvalid(false);
             if (response.data.roleName === CANDIDATE_ACCOUNT) {
               setCandidateInRedux();
             } else if (response.data.roleName === EMPLOYER_ACCOUNT) {
               setEmployerInRedux();
+            } else {
+              setIsLoading(false);
             }
           }
         })
