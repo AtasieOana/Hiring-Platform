@@ -16,6 +16,7 @@ import {
   InputGroup,
   Intent,
   NonIdealState,
+  Spinner,
   TextArea,
   Tooltip,
 } from "@blueprintjs/core";
@@ -78,6 +79,7 @@ const AllCvPage = () => {
     experience: [],
   });
   const isSmallScreen = useMediaQuery("(max-width: 700px)");
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (candidate && candidate.candidateId !== "") {
@@ -91,6 +93,7 @@ const AllCvPage = () => {
   }, []);
 
   const getCvsForCandidate = () => {
+    setIsLoading(true);
     CandidateService.getCvListForCandidate(candidate.candidateId)
       .then((response) => {
         let cvList = response.data;
@@ -105,8 +108,10 @@ const AllCvPage = () => {
         });
         setData(dataCV);
         setSortedData(dataCV);
+        setIsLoading(false);
       })
       .catch((error) => {
+        setIsLoading(false);
         console.error("Error: ", error.message);
         AppToaster.show({
           message: t("cv_list_err"),
@@ -1090,7 +1095,6 @@ const AllCvPage = () => {
     );
   };
 
-  console.log(data.length);
   return (
     <div>
       <HeaderPageCandidate />
@@ -1192,36 +1196,40 @@ const AllCvPage = () => {
               </tr>
             </thead>
             <tbody>
-              {sortedData.map((item) => (
-                <tr key={item.cvId}>
-                  <td>{item.cvName}</td>
-                  <td>{item.uploadDate}</td>
-                  <td className="cv-actions">
-                    <Tooltip content={t("view_cv")}>
-                      <Icon
-                        icon="list-detail-view"
-                        intent={Intent.PRIMARY}
-                        style={{ marginRight: "10px" }}
-                        onClick={() => {
-                          handleOpenCV(item);
-                        }}
-                      />
-                    </Tooltip>
-                    {data.length > 1 && (
-                      <Tooltip content={t("delete_cv")}>
+              {isLoading ? (
+                <Spinner className="cv-spinner" size={40} />
+              ) : (
+                sortedData.map((item) => (
+                  <tr key={item.cvId}>
+                    <td>{item.cvName}</td>
+                    <td>{item.uploadDate}</td>
+                    <td className="cv-actions">
+                      <Tooltip content={t("view_cv")}>
                         <Icon
-                          icon="eraser"
-                          intent={Intent.DANGER}
+                          icon="list-detail-view"
+                          intent={Intent.PRIMARY}
+                          style={{ marginRight: "10px" }}
                           onClick={() => {
-                            setCvToDelete(item);
-                            setIsDeleteDialogOpen(true);
+                            handleOpenCV(item);
                           }}
                         />
                       </Tooltip>
-                    )}
-                  </td>
-                </tr>
-              ))}
+                      {data.length > 1 && (
+                        <Tooltip content={t("delete_cv")}>
+                          <Icon
+                            icon="eraser"
+                            intent={Intent.DANGER}
+                            onClick={() => {
+                              setCvToDelete(item);
+                              setIsDeleteDialogOpen(true);
+                            }}
+                          />
+                        </Tooltip>
+                      )}
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>

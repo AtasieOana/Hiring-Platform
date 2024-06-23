@@ -106,8 +106,9 @@ def recommend_jobs_combined(user_id, application_data, job_descriptions):
     for job_id, description in job_descriptions.items():
         if detect(description[:100]) != 'en':
             translated_job_descriptions[job_id] = translate_to_english(description, translator)
+            translated_job_descriptions[job_id] = preprocess_sentence(translated_job_descriptions[job_id])
         else:
-            translated_job_descriptions[job_id] = description
+            translated_job_descriptions[job_id] = preprocess_sentence(description)
     
     # Calculating content similarity between user description and job descriptions
     tfidf_vectorizer = TfidfVectorizer()
@@ -121,7 +122,10 @@ def recommend_jobs_combined(user_id, application_data, job_descriptions):
     for job_id in job_descriptions.keys():
         if job_id not in user_jobs:
             job_index = list(job_descriptions.keys()).index(job_id)
-            content_score = content_similarities[job_index]
+            content_score_calculated = content_similarities[job_index]
+            content_score = 0
+            if content_score_calculated >= 0.2:  
+                content_score = content_similarities[job_index]
             collaborative_score = 0
 
             # Calculating the collaborative filtering score
@@ -130,7 +134,10 @@ def recommend_jobs_combined(user_id, application_data, job_descriptions):
                     collaborative_score += similarity 
             # Combination of content-based and collaborative scoring
             combined_score = 0.5 * content_score + 0.5 * collaborative_score
-            job_scores[job_id] = combined_score
+            
+            # Take into consideration only scores over 0
+            if combined_score > 0:
+                job_scores[job_id] = combined_score 
 
     # Sort jobs by combined score
     recommended_jobs = sorted(job_scores, key=job_scores.get, reverse=True)

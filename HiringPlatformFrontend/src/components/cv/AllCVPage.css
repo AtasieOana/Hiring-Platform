@@ -58,6 +58,15 @@
     border-radius: 5px !important;
 }
 
+.cv-spinner{
+    align-items: center !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    overflow: visible !important;
+    vertical-align: middle !important;
+    margin-top: 10px !important;
+}
+
 .add-cv-option:hover {
     background: none !important;
 }
