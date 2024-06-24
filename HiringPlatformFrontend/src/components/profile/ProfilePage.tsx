@@ -238,7 +238,6 @@ const ProfilePage = () => {
     if (profileInfo.imagine) {
       image = base64ToImage(`data:image/jpeg;base64,${profileInfo.imagine}`);
     }
-    console.log(image, profileInfo.imagine);
     return (
       <EditProfileCommon
         formDataProps={formData}

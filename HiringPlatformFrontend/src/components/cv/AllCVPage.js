@@ -164,6 +164,22 @@ const AllCvPage = () => {
     addCV(cvFile, false, cvFile.name.slice(0, -4));
   };
 
+  const fileExists = (fileName, data) => {
+    return data.some((cv) => cv.cvName === fileName);
+  };
+
+  const generateUniqueFileName = (baseName, existingFiles) => {
+    let fileName = baseName;
+    let suffix = 1;
+
+    while (fileExists(`${fileName}.pdf`, existingFiles)) {
+      fileName = `${baseName}_${suffix}`;
+      suffix++;
+    }
+
+    return `${fileName}`;
+  };
+
   const addCV = (file, isStandard = true, fileNameUploaded = "") => {
     // Set file name
     let uuidWithoutDashes = candidate.candidateId.replace(/-/g, "");
@@ -174,13 +190,14 @@ const AllCvPage = () => {
       ).length;
       fileName = `${uuidWithoutDashes}_${candidate.lastname}_${candidate.firstname}_Standard_${nrStandard + 1}.pdf`;
     } else {
-      let nrWithName = data.filter(
-        (cv) => cv.cvName.slice(0, -4) === fileNameUploaded,
-      ).length;
+      const existingFiles = data.filter((cv) =>
+        cv.cvName.startsWith(fileNameUploaded),
+      );
+
       let fileNameAfter =
-        nrWithName === 0
+        existingFiles.length === 0
           ? fileNameUploaded
-          : fileNameUploaded + "_" + (nrWithName + 1);
+          : generateUniqueFileName(fileNameUploaded, existingFiles);
       fileName = `${uuidWithoutDashes}_${fileNameAfter}.pdf`;
     }
 
@@ -213,6 +230,7 @@ const AllCvPage = () => {
           let dataCopy = [...dataCV];
           dataCopy.sort(compareUploadDate);
           setSortedData(dataCopy);
+          setCvFile(null);
         });
       })
       .catch((error) => {

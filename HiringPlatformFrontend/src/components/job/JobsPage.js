@@ -269,6 +269,10 @@ const JobsPage = () => {
     }
   }, []);
 
+  useEffect(() => {
+    setRecommendedJobs(recommendedJobsFromRedux);
+  }, [recommendedJobsFromRedux]);
+
   /**
    * Method that handle the filtering
    */
@@ -277,7 +281,6 @@ const JobsPage = () => {
     if (currentPageFromRedux) {
       currentPageFiltering = currentPageFromRedux;
     }
-    setCurrentPage(currentPageFiltering);
     let allJobs;
     if (showBasedOnRecommendation) {
       allJobs = [...recommendedJobs];
@@ -322,7 +325,7 @@ const JobsPage = () => {
         orderByPostDate,
         showBasedOnRecommendation,
         recommendedJobs,
-        currentPage,
+        currentPageFiltering,
       ),
     );
   }, [
@@ -1184,6 +1187,7 @@ const JobsPage = () => {
                           : "pagination-next-label"
                       }
                       renderOnZeroPageCount={null}
+                      forcePage={currentPage}
                     />
                   )}
                 </div>

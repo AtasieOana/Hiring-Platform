@@ -45,6 +45,7 @@ import ReactQuillDynamic from "../common/reactQuill/ReactQuillDinamic";
 import CandidateService from "../../services/candidate.service";
 import AppService from "../../services/app.service";
 import { OPENED } from "../../util/constants";
+import { setFilterData } from "../../redux/actions/filtersActions";
 
 const JobView = () => {
   const { t, i18n } = useTranslation();
@@ -101,6 +102,19 @@ const JobView = () => {
   const [questionWithAnswers, setQuestionWithAnswers] = useState([]);
   const [applied, setApplied] = useState([]);
 
+  // For keeping the filters and recommended jobs
+  const filtersForJobsFromRedux = useSelector(
+    (state) => state.filters.filtersForJobs,
+  );
+  const sortDateForJobsFromRedux = useSelector(
+    (state) => state.filters.sortDateForJobs,
+  );
+  const viewsForJobFromRedux = useSelector(
+    (state) => state.filters.viewsForJob,
+  );
+  const currentPageFromRedux = useSelector(
+    (state) => state.filters.currentPage,
+  );
   /**
    * Method that verify if a job is opened
    */
@@ -498,6 +512,21 @@ const JobView = () => {
           message: t("submit_apply"),
           intent: Intent.SUCCESS,
         });
+        JobService.getRecommendedJobs(candidate.candidateId)
+          .then((responseRecommended) => {
+            dispatch(
+              setFilterData(
+                filtersForJobsFromRedux,
+                sortDateForJobsFromRedux,
+                viewsForJobFromRedux,
+                responseRecommended.data,
+                currentPageFromRedux,
+              ),
+            );
+          })
+          .catch((error) => {
+            console.error("Error: ", error.message);
+          });
       })
       .catch((error) => {
         console.error("Error: ", error.message);
