@@ -20,7 +20,7 @@ import { Select } from "@blueprintjs/select";
 import Image from "../../resources-photo/No_profile_image.jpg";
 import { useNavigate } from "react-router-dom";
 import JobService from "../../services/job.service";
-import { calculateTimeDifference, formatDate } from "../common/CommonMethods";
+import { formatDate } from "../common/CommonMethods";
 import { setJobData } from "../../redux/actions/jobActions";
 import { AppToaster } from "../common/AppToaster";
 import "./JobsPage.css";
@@ -318,6 +318,9 @@ const JobsPage = () => {
     }
 
     setFilteredJobs(filtered);
+    if (parseInt(filtered.length / jobsPerPage) < currentPageFiltering) {
+      currentPageFiltering = parseInt(filtered.length / jobsPerPage);
+    }
     paginate(filtered, currentPageFiltering);
     dispatch(
       setFilterData(
@@ -452,10 +455,14 @@ const JobsPage = () => {
     if (view === viewRo[0] || view === viewEn[0]) {
       setShowBasedOnRecommendation(false);
     } else {
+      handlePageClick(0);
       setShowBasedOnRecommendation(true);
     }
   };
 
+  /**
+   * Choose how to sort the jobs by date
+   */
   const handleDateSortChange = (sort) => {
     if (sort === dateSortRo[0] || sort === dateSortEn[0]) {
       setOrderByPostDate(0);
@@ -478,14 +485,6 @@ const JobsPage = () => {
       status: [possibleStatus[1]],
       postingDate: possibleDates[0],
     });
-  };
-
-  /**
-   * Choose how to sort the jobs by date
-   */
-  const toggleSort = () => {
-    let newOrder = orderByPostDate === 1 ? 0 : 1;
-    setOrderByPostDate(newOrder);
   };
 
   /**

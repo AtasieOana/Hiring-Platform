@@ -44,7 +44,7 @@ const ApplicationTimelineComponent = () => {
           labels: Object.keys(applicationsByDate),
           datasets: [
             {
-              label: "Număr de aplicații încărcate",
+              label: "Număr de aplicări încărcate",
               fill: false,
               lineTension: 0.1,
               backgroundColor: "rgba(75,192,192,0.4)",

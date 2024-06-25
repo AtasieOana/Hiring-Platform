@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS, registerables } from "chart.js";
-import { AppToaster } from "../../common/AppToaster";
 import { Intent } from "@blueprintjs/core";
 import { useTranslation } from "react-i18next";
 import CandidateService from "../../../services/candidate.service";
@@ -38,7 +37,7 @@ const CandidateJobsTimelineChart = () => {
           labels: Object.keys(applicationsByDate),
           datasets: [
             {
-              label: "Număr de aplicații încărcate",
+              label: "Număr de aplicări încărcate",
               borderWidth: 1,
               backgroundColor: ["#f9cbc1"],
               borderColor: "rgba(0,0,0,1)",

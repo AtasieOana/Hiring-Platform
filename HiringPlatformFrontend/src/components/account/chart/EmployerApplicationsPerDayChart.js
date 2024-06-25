@@ -38,7 +38,7 @@ const EmployerApplicationsPerDayChart = (employerId) => {
           labels: Object.keys(applicationsByDate),
           datasets: [
             {
-              label: "Număr de aplicații per zi",
+              label: "Număr de aplicări per zi",
               borderWidth: 1,
               backgroundColor: ["#FF6384"],
               borderColor: "rgba(0,0,0,1)",
