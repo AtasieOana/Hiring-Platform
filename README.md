@@ -19,15 +19,4 @@ The backend is sectioned into 5 microservices, each of them containing:
 - Database with Oracle
 - Backend with Java with Spring Boot
 - Frontend with React
-  
-### Running the app
-```
-sudo service docker start
-Go to HiringPlatformDockerConfig directory
-docker compose -f docker-compose.yml up
 
-If it's the case
-sudo kill -9 `sudo lsof -t -i:8080`
-```
-
-Also run each microservice `mvn spring-boot:run` and the frontend with `npm start`.
